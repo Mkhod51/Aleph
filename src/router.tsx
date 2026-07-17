@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { AppLayout } from './ui/AppLayout';
 import { HomePage } from './pages/HomePage';
+import { PlayPage } from './pages/PlayPage';
+import { ResultsPage } from './pages/ResultsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
@@ -16,14 +18,8 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      {
-        path: 'play',
-        element: <ComingSoonPage title="Sprint" milestone="M1" />,
-      },
-      {
-        path: 'play/:preset',
-        element: <ComingSoonPage title="Sprint" milestone="M1" />,
-      },
+      { path: 'play', element: <PlayPage /> },
+      { path: 'play/:preset', element: <PlayPage /> },
       { path: 'sims', element: <ComingSoonPage title="Sims" milestone="M3" /> },
       {
         path: 'sims/:id',
@@ -42,10 +38,7 @@ export const router = createBrowserRouter([
       },
       { path: 'srs', element: <ComingSoonPage title="Flashcards" milestone="M5" /> },
       { path: 'settings', element: <SettingsPage /> },
-      {
-        path: 'results/:sessionId',
-        element: <ComingSoonPage title="Results" milestone="M1" />,
-      },
+      { path: 'results/:sessionId', element: <ResultsPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

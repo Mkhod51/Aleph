@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { TopBar } from './TopBar';
 import { useSettingsStore } from '@/store/useSettingsStore';
 import { applyTheme, watchSystemTheme } from '@/store/theme';
@@ -10,6 +10,10 @@ import { applyTheme, watchSystemTheme } from '@/store/theme';
  */
 export function AppLayout() {
   const theme = useSettingsStore((s) => s.theme);
+  const location = useLocation();
+  // The top bar is hidden during play — the question is the whole interface
+  // (doc 07 §1/§3).
+  const isPlay = location.pathname.startsWith('/play');
 
   useEffect(() => {
     applyTheme(theme);
@@ -19,10 +23,16 @@ export function AppLayout() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-bg text-text">
-      <TopBar />
-      <main className="mx-auto w-full max-w-content flex-1 px-4 py-6 sm:px-6">
-        <Outlet />
-      </main>
+      {!isPlay && <TopBar />}
+      {isPlay ? (
+        <main className="flex-1">
+          <Outlet />
+        </main>
+      ) : (
+        <main className="mx-auto w-full max-w-content flex-1 px-4 py-6 sm:px-6">
+          <Outlet />
+        </main>
+      )}
     </div>
   );
 }
