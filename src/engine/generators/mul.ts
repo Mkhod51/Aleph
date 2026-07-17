@@ -30,6 +30,24 @@ export function generateMul1x2(rng: Rng, cfg: GeneratorConfig): Question {
   };
 }
 
+/** MUL_1x3 — a ∈ [3,9], b ∈ [101,999]. Answer: integer product. */
+export const mul1x3Defaults: GeneratorConfig = { aMin: 3, aMax: 9, bMin: 101, bMax: 999 };
+
+export function generateMul1x3(rng: Rng, cfg: GeneratorConfig): Question {
+  const a = intInRange(rng, cfg.aMin ?? 3, cfg.aMax ?? 9);
+  const b = intInRange(rng, cfg.bMin ?? 101, cfg.bMax ?? 999);
+  const product = a * b;
+  return {
+    skill: 'MUL_1x3',
+    prompt: `${a} × ${b}`,
+    operands: [a, b],
+    answer: { value: product, display: String(product) },
+    format: 'integer',
+    difficulty: mulDifficulty(a, b, product),
+    factKey: mulFactKey(a, b),
+  };
+}
+
 /**
  * MUL_2x2 — a,b ∈ [13,99], excluding operands ending in 0 (tier 1 may allow
  * them via allowRoundMultiples). Answer: integer product.

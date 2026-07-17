@@ -43,4 +43,7 @@ export {
   divDifficulty,
   digitCount,
   isUnround,
+  nextAdaptiveRating,
+  tierFromRating,
+  ADAPTIVE_START,
 } from './difficulty';

@@ -21,6 +21,28 @@ export function clampDifficulty(n: number): number {
   return clamp(n);
 }
 
+/**
+ * Adaptive drill rating — doc 04 §7. Per-tag rating r ∈ [1,3] (start 1.5). After
+ * each answer: fast-correct → +0.08; slow-correct → +0.02; wrong → −0.15.
+ */
+export const ADAPTIVE_START = 1.5;
+
+export function nextAdaptiveRating(
+  rating: number,
+  outcome: { correct: boolean; fast: boolean },
+): number {
+  let r = rating;
+  if (!outcome.correct) r -= 0.15;
+  else if (outcome.fast) r += 0.08;
+  else r += 0.02;
+  return Math.max(1, Math.min(3, r));
+}
+
+/** The generator tier to use for a rating (round, clamped to 1–3). */
+export function tierFromRating(rating: number): 1 | 2 | 3 {
+  return Math.max(1, Math.min(3, Math.round(rating))) as 1 | 2 | 3;
+}
+
 /** Number of decimal digits in the integer part of |n|. */
 export function digitCount(n: number): number {
   return String(Math.abs(Math.trunc(n))).length;

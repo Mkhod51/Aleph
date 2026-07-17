@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getResultData, type ResultData } from '@/store/sessionService';
 import { bandsForSession } from '@/store/bands';
 import { bandFor, BAND_DISCLAIMER } from '@/content/bands';
+import { techniqueForTag } from '@/content/techniques';
+import { buildDrillFromTag, useDrillStore } from '@/store/drills';
+import type { SkillTag } from '@/engine';
 import type { Attempt } from '@/store/types';
 import {
   formatAccuracy,
@@ -70,6 +73,15 @@ export function ResultsPage() {
     [navigate, navSession],
   );
   const onDashboard = useCallback(() => navigate('/stats'), [navigate]);
+
+  const setPending = useDrillStore((s) => s.setPending);
+  const drillLike = useCallback(
+    (tag: SkillTag) => {
+      setPending(buildDrillFromTag(tag, { count: 10, input: 'flow', tierMode: 'adaptive' }));
+      navigate('/drills/play');
+    },
+    [navigate, setPending],
+  );
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -190,7 +202,8 @@ export function ResultsPage() {
               <th className="py-2 pr-3 font-medium">You</th>
               <th className="py-2 pr-3 font-medium">Answer</th>
               <th className="py-2 pr-3 text-right font-medium">Latency</th>
-              <th className="py-2 font-medium">Skill</th>
+              <th className="py-2 pr-3 font-medium">Skill</th>
+              <th className="py-2 font-medium">Coach</th>
             </tr>
           </thead>
           <tbody className="font-mono tabular-nums">
@@ -215,7 +228,31 @@ export function ResultsPage() {
                 <td className="py-2 pr-3 text-right text-text-dim">
                   {formatLatency(a.totalMs)}
                 </td>
-                <td className="py-2 font-sans text-xs text-text-dim">{a.skill}</td>
+                <td className="py-2 pr-3 font-sans text-xs text-text-dim">{a.skill}</td>
+                <td className="py-2 font-sans text-xs">
+                  {(() => {
+                    const tech = techniqueForTag(a.skill);
+                    return (
+                      <span className="flex gap-2">
+                        {tech && (
+                          <Link
+                            to={`/learn/${tech.slug}`}
+                            className="text-accent hover:underline"
+                          >
+                            trick {tech.id}
+                          </Link>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => drillLike(a.skill)}
+                          className="text-accent hover:underline"
+                        >
+                          drill
+                        </button>
+                      </span>
+                    );
+                  })()}
+                </td>
               </tr>
             ))}
           </tbody>
