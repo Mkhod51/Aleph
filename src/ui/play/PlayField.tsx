@@ -18,12 +18,15 @@ export function PlayField({
   question,
   input,
   onInputChange,
+  onSubmit,
   fontSize,
   inputRef,
 }: {
   question: Question;
   input: string;
   onInputChange: (raw: string) => void;
+  /** Test-input mode: commit on Enter (flow mode leaves this undefined). */
+  onSubmit?: () => void;
   fontSize: Settings['questionFontSize'];
   inputRef: RefObject<HTMLInputElement>;
 }) {
@@ -40,6 +43,12 @@ export function PlayField({
         ref={inputRef}
         value={input}
         onChange={(e) => onInputChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && onSubmit) {
+            e.preventDefault();
+            onSubmit();
+          }
+        }}
         onPaste={(e) => e.preventDefault()}
         autoFocus
         autoComplete="off"

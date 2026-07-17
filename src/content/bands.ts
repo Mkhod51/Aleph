@@ -44,5 +44,12 @@ export function bandFor(score: number, bands: Band[]): Band {
   return result;
 }
 
+/** Band set for a sim's band kind. */
+export function bandsForKind(kind: 'optiver' | 'flow' | null): Band[] | null {
+  if (kind === 'optiver') return OPTIVER_BANDS;
+  if (kind === 'flow') return FLOW_BANDS;
+  return null;
+}
+
 /** Honest suffix required wherever a band label is shown (decision log item 6). */
 export const BAND_DISCLAIMER = 'community-reported';

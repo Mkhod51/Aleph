@@ -7,6 +7,7 @@ import {
   type SkillTag,
 } from '@/engine';
 import { bandFor, SPRINT_BANDS } from '@/content/bands';
+import { SIMS } from '@/content/sims';
 import { localDateKey } from '@/lib/format';
 import { sessionRepo } from './repos/sessionRepo';
 import { factRepo } from './repos/factRepo';
@@ -45,6 +46,17 @@ export interface DashboardData {
   factReferenceMedianMs: number;
   perDay: Record<string, number>;
   records: PersonalBest[];
+  simReadiness: SimReadiness[];
+}
+
+export interface SimReadiness {
+  simId: string;
+  name: string;
+  bandKind: 'optiver' | 'flow' | null;
+  count: number; // question count (gauge max)
+  attempts: number;
+  best: number;
+  latest: number;
 }
 
 function questionsIn(s: Session): number {
@@ -153,6 +165,23 @@ export async function loadDashboard(): Promise<DashboardData> {
     facts.filter((f) => f.attempts >= 3).map((f) => f.medianLatencyMs),
   );
 
+  const simReadiness: SimReadiness[] = [];
+  for (const sim of SIMS) {
+    const runs = completed.filter((s) => s.mode === 'sim' && s.simId === sim.id && s.official);
+    if (runs.length === 0) continue;
+    const scores = runs.map((s) => s.score);
+    const latest = runs.sort((a, b) => b.startedAt - a.startedAt)[0] as Session;
+    simReadiness.push({
+      simId: sim.id,
+      name: sim.name,
+      bandKind: sim.bandKind,
+      count: sim.count,
+      attempts: runs.length,
+      best: Math.max(...scores),
+      latest: latest.score,
+    });
+  }
+
   return {
     hasData: sessions.length > 0,
     totalSessions: completed.length,
@@ -167,5 +196,6 @@ export async function loadDashboard(): Promise<DashboardData> {
     factReferenceMedianMs,
     perDay,
     records,
+    simReadiness,
   };
 }

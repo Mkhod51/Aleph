@@ -45,6 +45,8 @@ export interface Canonical {
   display: string;
   /** Lowest-terms parts, present when the format allows fraction input. */
   fraction?: { num: number; den: number };
+  /** True for rounded repeating decimals — grading accepts 2-dp or 4-dp forms. */
+  approx?: boolean;
 }
 
 export interface Question {
