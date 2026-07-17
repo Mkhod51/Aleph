@@ -5,6 +5,7 @@ import {
   type Settings,
 } from '@/store/useSettingsStore';
 import type { ThemeSetting } from '@/store/theme';
+import { DataSettings } from '@/ui/DataSettings';
 import { APP_NAME } from '@/lib/brand';
 
 const THEMES: { value: ThemeSetting; label: string }[] = [
@@ -166,6 +167,8 @@ export function SettingsPage() {
           </Row>
         </div>
       </Card>
+
+      <DataSettings />
 
       <Card>
         <Eyebrow>About</Eyebrow>
