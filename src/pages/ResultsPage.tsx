@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getResultData, type ResultData } from '@/store/sessionService';
+import { bandsForSession } from '@/store/bands';
+import { bandFor, BAND_DISCLAIMER } from '@/content/bands';
 import type { Attempt } from '@/store/types';
 import {
   formatAccuracy,
@@ -91,6 +93,8 @@ export function ResultsPage() {
   }
 
   const { session, vitals } = { session: data.session, vitals: data.session.vitals };
+  const bands = bandsForSession(session);
+  const band = bands ? bandFor(session.score, bands) : null;
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
@@ -105,6 +109,17 @@ export function ResultsPage() {
               {session.completed ? 'correct' : 'abandoned'}
             </span>
           </div>
+          {band && (
+            <div className="mt-1 flex items-center gap-2 text-sm">
+              <span
+                className="inline-block h-2 w-2 rounded-full"
+                style={{ backgroundColor: band.color }}
+                aria-hidden
+              />
+              <span className="font-medium text-text">{band.label}</span>
+              <span className="text-text-dim">· {BAND_DISCLAIMER}</span>
+            </div>
+          )}
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
             {data.deltaVsLast7 !== null && (
               <span className="text-text-dim">
