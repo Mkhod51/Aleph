@@ -16,6 +16,11 @@ function clamp(n: number): number {
   return Math.max(MIN_DIFFICULTY, Math.min(MAX_DIFFICULTY, n));
 }
 
+/** Clamp a computed difficulty into the valid range (for extended generators). */
+export function clampDifficulty(n: number): number {
+  return clamp(n);
+}
+
 /** Number of decimal digits in the integer part of |n|. */
 export function digitCount(n: number): number {
   return String(Math.abs(Math.trunc(n))).length;

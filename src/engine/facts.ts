@@ -15,3 +15,18 @@ export function mulFactKey(a: number, b: number): string | null {
   const hi = Math.max(a, b);
   return `mul:${lo}×${hi}`;
 }
+
+/** Squares: `sq:n`. */
+export function squareFactKey(n: number): string {
+  return `sq:${n}`;
+}
+
+/** Powers of two: `pow2:n`. */
+export function pow2FactKey(n: number): string {
+  return `pow2:${n}`;
+}
+
+/** Fraction conversions: `frac:n/d` (lowest terms). */
+export function fracFactKey(num: number, den: number): string {
+  return `frac:${num}/${den}`;
+}
