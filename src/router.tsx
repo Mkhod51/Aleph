@@ -9,6 +9,10 @@ import { SettingsPage } from './pages/SettingsPage';
 import { SimsIndexPage } from './pages/SimsIndexPage';
 import { SimLobbyPage } from './pages/SimLobbyPage';
 import { SimPlayPage } from './pages/SimPlayPage';
+import { LearnPage } from './pages/LearnPage';
+import { LearnDetailPage } from './pages/LearnDetailPage';
+import { DrillsPage } from './pages/DrillsPage';
+import { DrillPlayPage } from './pages/DrillPlayPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
 
@@ -41,12 +45,10 @@ export const router = createBrowserRouter([
       { path: 'sims', element: <SimsIndexPage /> },
       { path: 'sims/:id', element: <SimLobbyPage /> },
       { path: 'sims/:id/play', element: <SimPlayPage /> },
-      { path: 'drills', element: <ComingSoonPage title="Drills" milestone="M4" /> },
-      { path: 'learn', element: <ComingSoonPage title="Learn" milestone="M4" /> },
-      {
-        path: 'learn/:slug',
-        element: <ComingSoonPage title="Technique" milestone="M4" />,
-      },
+      { path: 'drills', element: <DrillsPage /> },
+      { path: 'drills/play', element: <DrillPlayPage /> },
+      { path: 'learn', element: <LearnPage /> },
+      { path: 'learn/:slug', element: <LearnDetailPage /> },
       { path: 'stats', element: <LazyStats /> },
       {
         path: 'daily',

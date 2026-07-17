@@ -35,6 +35,36 @@ export function generateFracAdd(rng: Rng, _cfg: GeneratorConfig): Question {
   };
 }
 
+const FRAC_COMPARE_DENOMS = [2, 3, 4, 5, 6, 7, 8, 9, 11, 12] as const;
+
+/**
+ * FRAC_COMPARE — "Which is larger?" between two proper fractions whose values
+ * differ by ≥ 0.05 (no coin-flips, doc 04 §3). Answer: choice key 1 or 2.
+ */
+export function generateFracCompare(rng: Rng, _cfg: GeneratorConfig): Question {
+  let a = 1;
+  let b = 2;
+  let c = 1;
+  let d = 3;
+  for (let i = 0; i < 20; i++) {
+    b = pick(rng, FRAC_COMPARE_DENOMS);
+    d = pick(rng, FRAC_COMPARE_DENOMS);
+    a = intInRange(rng, 1, b - 1);
+    c = intInRange(rng, 1, d - 1);
+    if (Math.abs(a / b - c / d) >= 0.05) break;
+  }
+  const firstLarger = a / b > c / d;
+  return {
+    skill: 'FRAC_COMPARE',
+    prompt: `Larger?  ① ${a}/${b}   ② ${c}/${d}`,
+    operands: [a, b, c, d],
+    answer: { value: firstLarger ? 1 : 2, display: firstLarger ? '1' : '2' },
+    format: 'choice',
+    difficulty: clampDifficulty(5),
+    factKey: null,
+  };
+}
+
 const FRAC_TO_DEC_DENOMS = [2, 3, 4, 5, 6, 8, 9, 10, 12, 16, 20, 25] as const;
 
 /** Does d/gcd terminate as a decimal (only factors 2 and 5)? */

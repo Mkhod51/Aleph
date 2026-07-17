@@ -6,9 +6,10 @@ import { generateAdd3D, add3dDefaults } from '../generators/add';
 import { generateSub3D, sub3dDefaults } from '../generators/sub';
 import { generateMul2x2, mul2x2Defaults } from '../generators/mul';
 import { generateDivToDec } from '../generators/div';
+import { generateMul1x3, mul1x3Defaults } from '../generators/mul';
 import { generateAddDec, generateMulDec } from '../generators/dec';
-import { generateFracAdd, generateFracToDec } from '../generators/frac';
-import { generatePctOf } from '../generators/pct';
+import { generateFracAdd, generateFracToDec, generateFracCompare } from '../generators/frac';
+import { generatePctOf, generatePctReverse, generatePctChange } from '../generators/pct';
 import { generateMissingAdd, generateMissingMul } from '../generators/missing';
 import { generateSquare, generatePow2, squareDefaults, pow2Defaults } from '../generators/recall';
 
@@ -122,6 +123,43 @@ describe('extended generators — exactness & ranges (doc 04 §3, §10.2)', () =
       expect(q.prompt).toContain('□');
       const [a, b] = q.operands as [number, number];
       expect(a * b).toBe(q.answer.value * a);
+    });
+  });
+
+  it('MUL_1x3 in ranges, exact', () => {
+    eachSample(20, generateMul1x3, mul1x3Defaults, (q) => {
+      const [a, b] = q.operands as [number, number];
+      expect(a).toBeGreaterThanOrEqual(3);
+      expect(a).toBeLessThanOrEqual(9);
+      expect(b).toBeGreaterThanOrEqual(101);
+      expect(b).toBeLessThanOrEqual(999);
+      expect(q.answer.value).toBe(a * b);
+    });
+  });
+
+  it('PCT_REVERSE integer answer solves □% of b = c', () => {
+    eachSample(21, generatePctReverse, {}, (q) => {
+      const [b, c] = q.operands as [number, number];
+      expect(Number.isInteger(q.answer.value)).toBe(true);
+      expect((q.answer.value * b) / 100).toBe(c);
+    });
+  });
+
+  it('PCT_CHANGE gives the clean % change; new is an integer', () => {
+    eachSample(22, generatePctChange, {}, (q) => {
+      const [oldV, newV] = q.operands as [number, number];
+      expect(Number.isInteger(newV)).toBe(true);
+      expect(Math.round(oldV * (1 + q.answer.value / 100))).toBe(newV);
+    });
+  });
+
+  it('FRAC_COMPARE picks the larger fraction (gap ≥ 0.05)', () => {
+    eachSample(23, generateFracCompare, {}, (q) => {
+      const [a, b, c, d] = q.operands as [number, number, number, number];
+      expect(q.format).toBe('choice');
+      expect(Math.abs(a / b - c / d)).toBeGreaterThanOrEqual(0.05);
+      const larger = a / b > c / d ? '1' : '2';
+      expect(q.answer.display).toBe(larger);
     });
   });
 
