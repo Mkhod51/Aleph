@@ -10,6 +10,36 @@ import type { ProfileId, SkillTag, WeightMap } from './types';
  */
 export const PROFILES: Partial<Record<ProfileId, WeightMap>> = {
   zetamac: { ADD_2D: 25, SUB_2D: 25, MUL_1x2: 25, DIV_EXACT: 25 },
+  // Firm mixes are estimates reconstructed from candidate reports (doc 04 §5).
+  optiver: {
+    ADD_2D: 10,
+    ADD_3D: 8,
+    SUB_2D: 8,
+    SUB_3D: 6,
+    MUL_1x2: 12,
+    MUL_2x2: 8,
+    DIV_EXACT: 10,
+    ADD_DEC: 8,
+    MUL_DEC: 6,
+    DIV_TO_DEC: 6,
+    FRAC_ADD: 5,
+    FRAC_TO_DEC: 5,
+    PCT_OF: 4,
+    MISSING_ADD: 2,
+    MISSING_MUL: 2,
+  },
+  flow: {
+    ADD_2D: 15,
+    ADD_3D: 10,
+    SUB_2D: 12,
+    SUB_3D: 8,
+    MUL_1x2: 15,
+    MUL_2x2: 10,
+    DIV_EXACT: 12,
+    ADD_DEC: 8,
+    MUL_DEC: 5,
+    PCT_OF: 5,
+  },
 };
 
 /**

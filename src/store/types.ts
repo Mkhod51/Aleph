@@ -13,8 +13,10 @@ import type {
  * future sync backend (doc 08 §8).
  */
 
+import type { SimId } from '@/content/sims';
+
 export type SessionMode = 'sprint' | 'sim' | 'drill' | 'daily' | 'srs' | 'gaps';
-export type SimId = 'optiver80' | 'flow60' | 'akuna80' | 'custom' | 'sequences';
+export type { SimId };
 
 /**
  * Per-skill-tag summary denormalized onto each session so the dashboard's skill

@@ -6,6 +6,9 @@ import { HomePage } from './pages/HomePage';
 import { PlayPage } from './pages/PlayPage';
 import { ResultsPage } from './pages/ResultsPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { SimsIndexPage } from './pages/SimsIndexPage';
+import { SimLobbyPage } from './pages/SimLobbyPage';
+import { SimPlayPage } from './pages/SimPlayPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
 
@@ -35,11 +38,9 @@ export const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'play', element: <PlayPage /> },
       { path: 'play/:preset', element: <PlayPage /> },
-      { path: 'sims', element: <ComingSoonPage title="Sims" milestone="M3" /> },
-      {
-        path: 'sims/:id',
-        element: <ComingSoonPage title="Sim lobby" milestone="M3" />,
-      },
+      { path: 'sims', element: <SimsIndexPage /> },
+      { path: 'sims/:id', element: <SimLobbyPage /> },
+      { path: 'sims/:id/play', element: <SimPlayPage /> },
       { path: 'drills', element: <ComingSoonPage title="Drills" milestone="M4" /> },
       { path: 'learn', element: <ComingSoonPage title="Learn" milestone="M4" /> },
       {

@@ -12,8 +12,9 @@ export function AppLayout() {
   const theme = useSettingsStore((s) => s.theme);
   const location = useLocation();
   // The top bar is hidden during play — the question is the whole interface
-  // (doc 07 §1/§3).
-  const isPlay = location.pathname.startsWith('/play');
+  // (doc 07 §1/§3). Covers sprint play and sim play (/sims/:id/play).
+  const isPlay =
+    location.pathname.startsWith('/play') || /^\/sims\/[^/]+\/play$/.test(location.pathname);
 
   useEffect(() => {
     applyTheme(theme);

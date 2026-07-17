@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
 import { Heatmap } from '@/ui/stats/Heatmap';
 import { Calendar } from '@/ui/stats/Calendar';
+import { BandGauge } from '@/ui/BandGauge';
 import { loadDashboard, type DashboardData, type SkillRow } from '@/store/dashboard';
-import { SPRINT_BANDS, BAND_DISCLAIMER } from '@/content/bands';
+import { SPRINT_BANDS, BAND_DISCLAIMER, bandsForKind } from '@/content/bands';
 import {
   formatAccuracy,
   formatLatency,
@@ -190,6 +191,29 @@ export function StatsPage() {
           )}
         </Card>
       </div>
+
+      {/* 6. Sim readiness */}
+      {data.simReadiness.length > 0 && (
+        <Card>
+          <Eyebrow>Sim readiness · {BAND_DISCLAIMER}</Eyebrow>
+          <div className="mt-3 flex flex-col gap-5">
+            {data.simReadiness.map((r) => {
+              const bands = bandsForKind(r.bandKind);
+              return (
+                <div key={r.simId}>
+                  <div className="mb-1 flex items-baseline justify-between text-sm">
+                    <span className="text-text">{r.name}</span>
+                    <span className="font-mono tabular-nums text-text-dim">
+                      latest {r.latest} · best {r.best}
+                    </span>
+                  </div>
+                  {bands && <BandGauge bands={bands} max={r.count} value={r.latest} />}
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      )}
 
       {/* 5. Consistency calendar */}
       <Card>

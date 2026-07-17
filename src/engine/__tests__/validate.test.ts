@@ -100,6 +100,55 @@ describe('committed grading (doc 04 §6)', () => {
   });
 });
 
+describe('multi / fraction grading (doc 04 §6)', () => {
+  const threeQuarters: Question = {
+    skill: 'FRAC_ADD',
+    prompt: '1/4 + 1/2',
+    operands: [],
+    answer: { value: 0.75, display: '3/4', fraction: { num: 3, den: 4 } },
+    format: 'multi',
+    difficulty: 5,
+    factKey: null,
+  };
+
+  it('accepts exact, unreduced, decimal, and mixed forms', () => {
+    expect(validate(threeQuarters, '3/4').correct).toBe(true);
+    expect(validate(threeQuarters, '6/8').correct).toBe(true); // unreduced
+    expect(validate(threeQuarters, '0.75').correct).toBe(true); // decimal
+    expect(validate(threeQuarters, '1/2').correct).toBe(false);
+  });
+
+  it('accepts mixed numbers', () => {
+    const oneAndThreeQuarters: Question = {
+      ...threeQuarters,
+      answer: { value: 1.75, display: '1 3/4', fraction: { num: 7, den: 4 } },
+    };
+    expect(validate(oneAndThreeQuarters, '1 3/4').correct).toBe(true);
+    expect(validate(oneAndThreeQuarters, '7/4').correct).toBe(true);
+    expect(validate(oneAndThreeQuarters, '1.75').correct).toBe(true);
+  });
+});
+
+describe('repeating decimal grading (doc 04 §6)', () => {
+  const oneSixth: Question = {
+    skill: 'FRAC_TO_DEC',
+    prompt: '1/6 ≈',
+    operands: [1, 6],
+    answer: { value: 1 / 6, display: '0.1667', approx: true },
+    format: 'decimal',
+    difficulty: 6,
+    factKey: 'frac:1/6',
+  };
+
+  it('accepts both 2-dp and 4-dp rounded forms, rejects far answers', () => {
+    expect(validate(oneSixth, '0.17').correct).toBe(true);
+    expect(validate(oneSixth, '0.1667').correct).toBe(true);
+    expect(validate(oneSixth, '0.166').correct).toBe(true);
+    expect(validate(oneSixth, '0.2').correct).toBe(false);
+    expect(validate(oneSixth, '0.15').correct).toBe(false);
+  });
+});
+
 describe('acceptsChar (doc 07 §5 input filtering)', () => {
   it('integer accepts digits and minus, not dot or slash', () => {
     const qi = q('integer', 1);

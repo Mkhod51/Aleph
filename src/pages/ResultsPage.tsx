@@ -59,8 +59,16 @@ export function ResultsPage() {
     [data, sortMode],
   );
 
-  const onAgain = useCallback(() => navigate('/play'), [navigate]);
-  const onNew = useCallback(() => navigate('/'), [navigate]);
+  const navSession = data && data !== 'missing' ? data.session : null;
+  const onAgain = useCallback(() => {
+    if (navSession?.mode === 'sim' && navSession.simId) {
+      navigate(`/sims/${navSession.simId}/play`);
+    } else navigate('/play');
+  }, [navigate, navSession]);
+  const onNew = useCallback(
+    () => navigate(navSession?.mode === 'sim' ? '/sims' : '/'),
+    [navigate, navSession],
+  );
   const onDashboard = useCallback(() => navigate('/stats'), [navigate]);
 
   useEffect(() => {

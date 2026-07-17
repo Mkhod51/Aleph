@@ -37,6 +37,25 @@ describe('distribution profiles (doc 04 §5, §10.3)', () => {
   });
 
   it('throws for profiles not yet available', () => {
-    expect(() => resolveProfile('optiver')).toThrow(/not available/);
+    expect(() => resolveProfile('sequences')).toThrow(/not available/);
+  });
+
+  it('optiver / flow draw every tag within ±2 pp of its weight', () => {
+    for (const profile of ['optiver', 'flow'] as const) {
+      const { tags, weights } = resolveProfile(profile);
+      const total = weights.reduce((a, b) => a + b, 0);
+      const stream = createQuestionStream({ seed: 4242, profile });
+      const counts: Record<string, number> = {};
+      const N = 20000;
+      for (let i = 0; i < N; i++) {
+        const q = stream.next();
+        counts[q.skill] = (counts[q.skill] ?? 0) + 1;
+      }
+      tags.forEach((tag, i) => {
+        const expected = ((weights[i] as number) / total) * 100;
+        const actual = ((counts[tag] ?? 0) / N) * 100;
+        expect(Math.abs(actual - expected)).toBeLessThanOrEqual(2);
+      });
+    }
   });
 });
