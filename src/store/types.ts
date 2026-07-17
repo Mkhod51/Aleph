@@ -16,6 +16,16 @@ import type {
 export type SessionMode = 'sprint' | 'sim' | 'drill' | 'daily' | 'srs' | 'gaps';
 export type SimId = 'optiver80' | 'flow60' | 'akuna80' | 'custom' | 'sequences';
 
+/**
+ * Per-skill-tag summary denormalized onto each session so the dashboard's skill
+ * breakdown aggregates over sessions (small) instead of scanning attempts (doc
+ * 08 §5). `medianMs` is the median totalMs of that tag's correct answers in the
+ * session (0 when none correct).
+ */
+export type SkillBreakdown = Partial<
+  Record<SkillTag, { attempts: number; correct: number; medianMs: number }>
+>;
+
 export interface Session {
   id: string; // ULID (time-sortable)
   mode: SessionMode;
@@ -31,6 +41,7 @@ export interface Session {
   completed: boolean; // false = abandoned
   official: boolean; // false for daily-challenge replays
   extended: boolean; // sprint with non-Zetamac content
+  skillBreakdown?: SkillBreakdown; // denormalized per-tag summary (doc 08 §5)
 }
 
 export interface Attempt {

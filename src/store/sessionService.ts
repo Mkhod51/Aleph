@@ -1,5 +1,6 @@
 import {
   ENGINE_VERSION,
+  median,
   scoreSession,
   type ScoringRule,
   type SessionPlan,
@@ -10,7 +11,77 @@ import { db } from './db';
 import { pbKey } from './presets';
 import { sessionRepo } from './repos/sessionRepo';
 import { attemptRepo } from './repos/attemptRepo';
-import type { Attempt, PersonalBest, Session, SessionMode, SimId } from './types';
+import type {
+  Attempt,
+  FactStat,
+  PersonalBest,
+  Session,
+  SessionMode,
+  SimId,
+  SkillBreakdown,
+} from './types';
+
+const FACT_LATENCY_RING = 20; // keep the last N correct latencies per fact (doc 05 §1)
+
+/** Per-tag summary denormalized onto the session (doc 08 §5). */
+function computeSkillBreakdown(drafts: AttemptDraft[]): SkillBreakdown {
+  const byTag = new Map<SkillTag, { attempts: number; correct: number; ms: number[] }>();
+  for (const d of drafts) {
+    let e = byTag.get(d.skill);
+    if (!e) {
+      e = { attempts: 0, correct: 0, ms: [] };
+      byTag.set(d.skill, e);
+    }
+    e.attempts++;
+    if (d.correct) {
+      e.correct++;
+      e.ms.push(d.totalMs);
+    }
+  }
+  const out: SkillBreakdown = {};
+  for (const [tag, e] of byTag) {
+    out[tag] = { attempts: e.attempts, correct: e.correct, medianMs: median(e.ms) };
+  }
+  return out;
+}
+
+/** Fold this session's fact attempts into the incremental FactStats. */
+async function updateFactStats(drafts: AttemptDraft[], at: number): Promise<void> {
+  const byFact = new Map<string, { attempts: number; correct: number; ms: number[] }>();
+  for (const d of drafts) {
+    if (!d.factKey) continue;
+    let e = byFact.get(d.factKey);
+    if (!e) {
+      e = { attempts: 0, correct: 0, ms: [] };
+      byFact.set(d.factKey, e);
+    }
+    e.attempts++;
+    if (d.correct) {
+      e.correct++;
+      e.ms.push(d.totalMs);
+    }
+  }
+
+  for (const [factKey, e] of byFact) {
+    const existing = await db.factStats.get(factKey);
+    const attempts = (existing?.attempts ?? 0) + e.attempts;
+    const correct = (existing?.correct ?? 0) + e.correct;
+    const latencies = [...(existing?.latencies ?? []), ...e.ms].slice(-FACT_LATENCY_RING);
+    const medianLatencyMs = median(latencies);
+    const stat: FactStat = {
+      factKey,
+      attempts,
+      correct,
+      latencies,
+      medianLatencyMs,
+      // Full weak logic (with a family reference median) is applied at read time;
+      // the stored flag uses the accuracy rule (doc 03 §6).
+      weak: attempts >= 3 && correct / attempts < 0.7,
+      updatedAt: at,
+    };
+    await db.factStats.put(stat);
+  }
+}
 
 /** One recorded question, before it gets an id/sessionId at finalize time. */
 export interface AttemptDraft {
@@ -73,6 +144,7 @@ export async function finalizeSession(
     completed: input.completed,
     official: input.official,
     extended: input.extended,
+    skillBreakdown: computeSkillBreakdown(input.attempts),
   };
 
   const attempts: Attempt[] = input.attempts.map((a) => ({
@@ -91,18 +163,23 @@ export async function finalizeSession(
     at: a.at,
   }));
 
-  await db.transaction('rw', db.sessions, db.attempts, db.personalBests, async () => {
-    await db.sessions.add(session);
-    if (attempts.length) await db.attempts.bulkAdd(attempts);
-    if (input.completed && input.official) {
-      const key = pbKey(input.mode, input.configHash);
-      const existing = await db.personalBests.get(key);
-      if (!existing || score > existing.score) {
-        const pb: PersonalBest = { key, score, sessionId, at: input.startedAt };
-        await db.personalBests.put(pb);
+  await db.transaction(
+    'rw',
+    [db.sessions, db.attempts, db.personalBests, db.factStats],
+    async () => {
+      await db.sessions.add(session);
+      if (attempts.length) await db.attempts.bulkAdd(attempts);
+      await updateFactStats(input.attempts, input.startedAt);
+      if (input.completed && input.official) {
+        const key = pbKey(input.mode, input.configHash);
+        const existing = await db.personalBests.get(key);
+        if (!existing || score > existing.score) {
+          const pb: PersonalBest = { key, score, sessionId, at: input.startedAt };
+          await db.personalBests.put(pb);
+        }
       }
-    }
-  });
+    },
+  );
 
   return { sessionId };
 }

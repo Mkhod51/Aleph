@@ -23,6 +23,16 @@ export { ENGINE_VERSION } from './version';
 export { createQuestionStream } from './stream';
 export { validate, matchesLive, acceptsChar, type ValidationResult } from './validate';
 export { scoreSession, median, percentile } from './scoring';
+export {
+  targetMsForTag,
+  rollingAverage,
+  trendDirection,
+  masteryLevel,
+  isWeakFact,
+  quartileAccuracy,
+  fatigueDelta,
+  type Mastery,
+} from './stats';
 export { PROFILES, resolveProfile, type ResolvedProfile } from './profiles';
 export { GENERATORS, getGenerator, resolveConfig } from './generators/registry';
 export { mulFactKey } from './facts';
