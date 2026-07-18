@@ -13,8 +13,10 @@ import { LearnPage } from './pages/LearnPage';
 import { LearnDetailPage } from './pages/LearnDetailPage';
 import { DrillsPage } from './pages/DrillsPage';
 import { DrillPlayPage } from './pages/DrillPlayPage';
+import { DailyPage } from './pages/DailyPage';
+import { DailyPlayPage } from './pages/DailyPlayPage';
+import { SrsReviewPage } from './pages/SrsReviewPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { ComingSoonPage } from './pages/ComingSoonPage';
 
 // The dashboard (and its Recharts chunk) load only when /stats is visited.
 const StatsPage = lazy(() =>
@@ -50,11 +52,9 @@ export const router = createBrowserRouter([
       { path: 'learn', element: <LearnPage /> },
       { path: 'learn/:slug', element: <LearnDetailPage /> },
       { path: 'stats', element: <LazyStats /> },
-      {
-        path: 'daily',
-        element: <ComingSoonPage title="Daily challenge" milestone="M5" />,
-      },
-      { path: 'srs', element: <ComingSoonPage title="Flashcards" milestone="M5" /> },
+      { path: 'daily', element: <DailyPage /> },
+      { path: 'daily/play', element: <DailyPlayPage /> },
+      { path: 'srs', element: <SrsReviewPage /> },
       { path: 'settings', element: <SettingsPage /> },
       { path: 'results/:sessionId', element: <ResultsPage /> },
       { path: '*', element: <NotFoundPage /> },

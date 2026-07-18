@@ -1,48 +1,30 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Clock } from '@/ui/play/Clock';
 import { Countdown } from '@/ui/play/Countdown';
 import { PauseOverlay } from '@/ui/play/PauseOverlay';
 import { PlayField } from '@/ui/play/PlayField';
 import { usePlayEngine } from '@/ui/play/usePlayEngine';
 import { useSettingsStore } from '@/store/useSettingsStore';
-import {
-  usePresetStore,
-  findPreset,
-} from '@/store/usePresetStore';
-import { buildPlanFromPreset, presetHasAnyOp } from '@/store/presets';
+import { buildDailyPlan, todayKey } from '@/store/daily';
 import { finalizeSession } from '@/store/sessionService';
 
 type Phase = 'countdown' | 'playing' | 'paused' | 'ending';
 
-export function PlayPage() {
+/** Daily challenge — a date-seeded 120 s sprint (doc 03 §5). */
+export function DailyPlayPage() {
   const navigate = useNavigate();
-  const [params] = useSearchParams();
   const settings = useSettingsStore();
-  const preset = usePresetStore((s) => findPreset(s.custom, s.selectedId));
-
-  // One plan (and seed) per play session — remounting /play makes a fresh one.
-  // `?seconds=` overrides the duration (used by the onboarding 60 s baseline).
-  const secondsOverride = params.get('seconds');
-  const built = useMemo(() => {
-    const base = buildPlanFromPreset(preset);
-    return secondsOverride ? { ...base, durationMs: Number(secondsOverride) * 1000 } : base;
-  }, [preset, secondsOverride]);
-  const playable = presetHasAnyOp(preset);
-
+  const built = useMemo(() => buildDailyPlan(todayKey()), []);
   const engine = usePlayEngine(built.plan);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [phase, setPhase] = useState<Phase>(
-    settings.countdown ? 'countdown' : 'playing',
-  );
-
-  const startedAtRef = useRef<number>(Date.now());
+  const [phase, setPhase] = useState<Phase>(settings.countdown ? 'countdown' : 'playing');
+  const startedAtRef = useRef(Date.now());
   const elapsedRef = useRef(0);
   const endedRef = useRef(false);
 
   const beginPlay = useCallback(() => {
-    // startedAt is when play actually begins (after any countdown).
     startedAtRef.current = Date.now();
     setPhase('playing');
   }, []);
@@ -52,33 +34,28 @@ export function PlayPage() {
       if (endedRef.current) return;
       endedRef.current = true;
       setPhase('ending');
-      const drafts = engine.finalizeDrafts();
-      const durationMs = completed
-        ? built.durationMs
-        : Math.round(elapsedRef.current);
       try {
         const { sessionId } = await finalizeSession({
           plan: built.plan,
-          mode: built.mode,
+          mode: 'daily',
           configHash: built.configHash,
           scoring: built.scoring,
           extended: built.extended,
           startedAt: startedAtRef.current,
-          durationMs,
+          durationMs: completed ? built.durationMs : Math.round(elapsedRef.current),
           completed,
-          official: true,
-          attempts: drafts,
+          official: true, // finalizeSession recomputes official for daily
+          attempts: engine.finalizeDrafts(),
         });
         navigate(`/results/${sessionId}`, { replace: true });
       } catch (err) {
-        console.error('Failed to finalize session', err);
-        navigate('/', { replace: true });
+        console.error('Failed to finalize daily', err);
+        navigate('/daily', { replace: true });
       }
     },
     [built, engine, navigate],
   );
 
-  // Esc pauses/resumes (doc 03 §1.2).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
@@ -89,48 +66,22 @@ export function PlayPage() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // Tab-hidden auto-pauses sprints so hidden time is excluded (doc 08 §3).
-  useEffect(() => {
-    const onVis = () => {
-      if (document.hidden) setPhase((p) => (p === 'playing' ? 'paused' : p));
-    };
-    document.addEventListener('visibilitychange', onVis);
-    return () => document.removeEventListener('visibilitychange', onVis);
-  }, []);
-
-  // Keep the input focused while playing.
   useEffect(() => {
     if (phase === 'playing') inputRef.current?.focus();
   }, [phase, engine.question]);
 
-  if (!playable) {
-    return (
-      <div className="flex min-h-[60dvh] flex-col items-center justify-center gap-3 text-center">
-        <p className="text-text">This preset has no operations enabled.</p>
-        <button
-          type="button"
-          onClick={() => navigate('/settings')}
-          className="rounded-btn border border-border px-4 py-2 text-sm text-text-dim hover:border-accent hover:text-text"
-        >
-          Edit presets
-        </button>
-      </div>
-    );
-  }
-
-  const showTopRow = phase === 'playing' || phase === 'paused';
+  const showTop = phase === 'playing' || phase === 'paused';
 
   return (
     <div
       className="flex min-h-[calc(100dvh-2px)] flex-col"
       onClick={() => phase === 'playing' && inputRef.current?.focus()}
     >
-      {/* Top row: clock centered, score top-right (both hideable, doc 07 §4) */}
       <div className="relative flex h-16 items-center justify-center px-6">
-        {showTopRow && (
+        {showTop && (
           <Clock
             durationMs={built.durationMs}
-            running={phase === 'playing' || phase === 'paused'}
+            running={showTop}
             paused={phase === 'paused'}
             hidden={!settings.clockVisible}
             onExpire={() => void endSession(true)}
@@ -139,17 +90,16 @@ export function PlayPage() {
             }}
           />
         )}
-        {showTopRow && settings.scoreVisible && (
-          <div
-            className="absolute right-6 font-mono text-2xl tabular-nums text-text-dim"
-            aria-label="Score"
-          >
+        {showTop && (
+          <div className="absolute left-6 font-mono text-sm text-text-dim">Daily</div>
+        )}
+        {showTop && settings.scoreVisible && (
+          <div className="absolute right-6 font-mono text-2xl tabular-nums text-text-dim">
             {engine.score}
           </div>
         )}
       </div>
 
-      {/* Center stage */}
       <div className="flex flex-1 items-center justify-center px-4 pb-16">
         {phase === 'countdown' && <Countdown onDone={beginPlay} />}
         {phase === 'paused' && (

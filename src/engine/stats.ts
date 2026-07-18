@@ -1,4 +1,4 @@
-import type { SkillTag } from './types';
+import type { SkillTag, WeightMap } from './types';
 import { median } from './scoring';
 
 /**
@@ -108,6 +108,41 @@ export function quartileAccuracy(correct: boolean[]): number[] {
 export function fatigueDelta(correct: boolean[]): number {
   const q = quartileAccuracy(correct);
   return (q[3] as number) - (q[0] as number);
+}
+
+/**
+ * Fix-My-Gaps composition (doc 03 §6): a weight map drawing `weakShare` of
+ * questions from weak tags and the rest from a random pool (retrieval variety).
+ * Weights sum to 100.
+ */
+export function composeGapWeights(
+  weakTags: SkillTag[],
+  poolTags: SkillTag[],
+  weakShare = 0.7,
+): WeightMap {
+  const out: WeightMap = {};
+  const add = (t: SkillTag, w: number) => {
+    out[t] = (out[t] ?? 0) + w;
+  };
+
+  if (weakTags.length === 0) {
+    const share = 100 / poolTags.length;
+    for (const t of poolTags) add(t, share);
+    return out;
+  }
+
+  const randomTags = poolTags.filter((t) => !weakTags.includes(t));
+  if (randomTags.length === 0) {
+    const share = 100 / weakTags.length;
+    for (const t of weakTags) add(t, share);
+    return out;
+  }
+
+  const weakEach = (weakShare * 100) / weakTags.length;
+  const randEach = ((1 - weakShare) * 100) / randomTags.length;
+  for (const t of weakTags) add(t, weakEach);
+  for (const t of randomTags) add(t, randEach);
+  return out;
 }
 
 /** Running median of a bounded latency sample (re-exported for convenience). */

@@ -1,5 +1,6 @@
 import {
   masteryLevel,
+  quartileAccuracy,
   rollingAverage,
   targetMsForTag,
   trendDirection,
@@ -10,6 +11,7 @@ import { bandFor, SPRINT_BANDS } from '@/content/bands';
 import { SIMS } from '@/content/sims';
 import { localDateKey } from '@/lib/format';
 import { sessionRepo } from './repos/sessionRepo';
+import { attemptRepo } from './repos/attemptRepo';
 import { factRepo } from './repos/factRepo';
 import { personalBestRepo } from './repos/personalBestRepo';
 import { ZETAMAC_DEFAULT_CONFIG_HASH } from './bands';
@@ -47,6 +49,8 @@ export interface DashboardData {
   perDay: Record<string, number>;
   records: PersonalBest[];
   simReadiness: SimReadiness[];
+  /** Mean accuracy per session-quartile over the last 10 sessions (doc 05 §4 card 7). */
+  fatigue: number[] | null;
 }
 
 export interface SimReadiness {
@@ -182,6 +186,22 @@ export async function loadDashboard(): Promise<DashboardData> {
     });
   }
 
+  // Fatigue: mean accuracy by session-quartile over the last 10 sessions. Bounded
+  // scan (≤ 10 sessions), not the default aggregate view (doc 08 §5).
+  const last10 = [...completed].sort((a, b) => b.startedAt - a.startedAt).slice(0, 10);
+  let fatigue: number[] | null = null;
+  if (last10.length >= 3) {
+    const perSession = await Promise.all(
+      last10.map(async (s) => {
+        const atts = await attemptRepo.bySession(s.id);
+        return quartileAccuracy(atts.map((a) => a.correct));
+      }),
+    );
+    fatigue = [0, 1, 2, 3].map(
+      (q) => perSession.reduce((sum, p) => sum + (p[q] ?? 0), 0) / perSession.length,
+    );
+  }
+
   return {
     hasData: sessions.length > 0,
     totalSessions: completed.length,
@@ -197,5 +217,6 @@ export async function loadDashboard(): Promise<DashboardData> {
     perDay,
     records,
     simReadiness,
+    fatigue,
   };
 }

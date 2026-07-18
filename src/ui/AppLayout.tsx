@@ -3,6 +3,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { TopBar } from './TopBar';
 import { useSettingsStore } from '@/store/useSettingsStore';
 import { applyTheme, watchSystemTheme } from '@/store/theme';
+import { useStreakStore } from '@/store/streak';
+import { todayKey } from '@/store/daily';
 
 /**
  * Root layout: keeps the resolved theme in sync with the setting (and the OS
@@ -16,6 +18,8 @@ export function AppLayout() {
   const isPlay =
     location.pathname.startsWith('/play') ||
     location.pathname === '/drills/play' ||
+    location.pathname === '/daily/play' ||
+    location.pathname === '/srs' ||
     /^\/sims\/[^/]+\/play$/.test(location.pathname);
 
   useEffect(() => {
@@ -23,6 +27,11 @@ export function AppLayout() {
     if (theme !== 'system') return;
     return watchSystemTheme(() => applyTheme('system'));
   }, [theme]);
+
+  // Streak transitions run on app open (no background timers, doc 05 §6).
+  useEffect(() => {
+    useStreakStore.getState().reconcile(todayKey());
+  }, []);
 
   return (
     <div className="flex min-h-dvh flex-col bg-bg text-text">
