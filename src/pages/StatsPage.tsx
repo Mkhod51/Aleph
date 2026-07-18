@@ -223,6 +223,34 @@ export function StatsPage() {
         </div>
       </Card>
 
+      {/* 7. Fatigue */}
+      {data.fatigue && (
+        <Card>
+          <Eyebrow>Fatigue · accuracy by quartile · last 10</Eyebrow>
+          <div className="mt-3 flex items-end gap-3">
+            {data.fatigue.map((acc, q) => (
+              <div key={q} className="flex flex-1 flex-col items-center gap-1">
+                <div className="flex h-24 w-full items-end">
+                  <div
+                    className="w-full rounded-sm bg-accent/70"
+                    style={{ height: `${Math.max(4, acc * 100)}%` }}
+                  />
+                </div>
+                <span className="text-xs text-text-dim">Q{q + 1}</span>
+                <span className="font-mono text-xs tabular-nums text-text-dim">
+                  {formatAccuracy(acc)}
+                </span>
+              </div>
+            ))}
+          </div>
+          {data.fatigue[3]! - data.fatigue[0]! < -0.08 && (
+            <p className="mt-2 text-xs text-accent">
+              Accuracy drops late in sessions — build stamina with longer drills.
+            </p>
+          )}
+        </Card>
+      )}
+
       {/* 8. Records */}
       <Card>
         <Eyebrow>Records</Eyebrow>

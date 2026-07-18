@@ -40,6 +40,7 @@ function currentSettings(): Settings {
     sound: s.sound,
     questionFontSize: s.questionFontSize,
     leftHandedKeypad: s.leftHandedKeypad,
+    onboarded: s.onboarded,
   };
 }
 

@@ -14,6 +14,8 @@ export interface Settings {
   sound: boolean; // key clicks / end buzzer (default off)
   questionFontSize: 'S' | 'M' | 'L' | 'XL';
   leftHandedKeypad: boolean; // mobile on-screen keypad mirror
+  // Onboarding is shown exactly once (doc 03 §12).
+  onboarded: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -25,6 +27,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sound: false,
   questionFontSize: 'L',
   leftHandedKeypad: false,
+  onboarded: false,
 };
 
 interface SettingsStore extends Settings {
@@ -62,6 +65,7 @@ export const useSettingsStore = create<SettingsStore>()(
         sound: s.sound,
         questionFontSize: s.questionFontSize,
         leftHandedKeypad: s.leftHandedKeypad,
+        onboarded: s.onboarded,
       }),
       onRehydrateStorage: () => (state) => {
         if (state) applyTheme(state.theme);

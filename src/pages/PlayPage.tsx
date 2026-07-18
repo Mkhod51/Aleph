@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Clock } from '@/ui/play/Clock';
 import { Countdown } from '@/ui/play/Countdown';
 import { PauseOverlay } from '@/ui/play/PauseOverlay';
@@ -17,11 +17,17 @@ type Phase = 'countdown' | 'playing' | 'paused' | 'ending';
 
 export function PlayPage() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
   const settings = useSettingsStore();
   const preset = usePresetStore((s) => findPreset(s.custom, s.selectedId));
 
   // One plan (and seed) per play session — remounting /play makes a fresh one.
-  const built = useMemo(() => buildPlanFromPreset(preset), [preset]);
+  // `?seconds=` overrides the duration (used by the onboarding 60 s baseline).
+  const secondsOverride = params.get('seconds');
+  const built = useMemo(() => {
+    const base = buildPlanFromPreset(preset);
+    return secondsOverride ? { ...base, durationMs: Number(secondsOverride) * 1000 } : base;
+  }, [preset, secondsOverride]);
   const playable = presetHasAnyOp(preset);
 
   const engine = usePlayEngine(built.plan);

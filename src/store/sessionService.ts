@@ -11,6 +11,10 @@ import { db } from './db';
 import { pbKey } from './presets';
 import { sessionRepo } from './repos/sessionRepo';
 import { attemptRepo } from './repos/attemptRepo';
+import { dailyRepo } from './repos/dailyRepo';
+import { enrollWeakFacts } from './srs';
+import { todayKey } from './daily';
+import { useStreakStore } from './streak';
 import type {
   Attempt,
   FactStat,
@@ -128,6 +132,13 @@ export async function finalizeSession(
   }));
   const { score, vitals } = scoreSession(input.scoring, lite, input.durationMs);
 
+  // A daily is official only on the first completion of the local day; later
+  // plays that day are unofficial replays (doc 03 §5).
+  const dailyDate = input.mode === 'daily' ? todayKey(input.startedAt) : null;
+  const firstDailyToday =
+    dailyDate != null && input.completed && !(await dailyRepo.get(dailyDate));
+  const official = input.mode === 'daily' ? firstDailyToday : input.official;
+
   const sessionId = ulid(input.startedAt);
   const session: Session = {
     id: sessionId,
@@ -142,7 +153,7 @@ export async function finalizeSession(
     score,
     vitals,
     completed: input.completed,
-    official: input.official,
+    official,
     extended: input.extended,
     skillBreakdown: computeSkillBreakdown(input.attempts),
   };
@@ -170,7 +181,7 @@ export async function finalizeSession(
       await db.sessions.add(session);
       if (attempts.length) await db.attempts.bulkAdd(attempts);
       await updateFactStats(input.attempts, input.startedAt);
-      if (input.completed && input.official) {
+      if (input.completed && official) {
         const key = pbKey(input.mode, input.configHash);
         const existing = await db.personalBests.get(key);
         if (!existing || score > existing.score) {
@@ -180,6 +191,20 @@ export async function finalizeSession(
       }
     },
   );
+
+  // Record the daily and advance the streak on the first official completion.
+  if (dailyDate && official) {
+    await dailyRepo.put({ date: dailyDate, sessionId, score });
+    useStreakStore.getState().recordDaily(dailyDate);
+  }
+
+  // Weak facts are auto-enrolled into the SRS "weak" deck (doc 03 §6 / 05 §5).
+  // Non-critical: never block navigation to results on it.
+  try {
+    await enrollWeakFacts(input.startedAt);
+  } catch (err) {
+    console.error('weak-fact enrollment failed', err);
+  }
 
   return { sessionId };
 }

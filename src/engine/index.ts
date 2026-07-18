@@ -31,8 +31,22 @@ export {
   isWeakFact,
   quartileAccuracy,
   fatigueDelta,
+  composeGapWeights,
   type Mastery,
 } from './stats';
+export {
+  SRS_INTERVALS_DAYS,
+  SRS_MAX_BOX,
+  SRS_DEFAULT_TARGET_MS,
+  SRS_REQUEUE_MS,
+  promoted,
+  nextBox,
+  nextDueAt,
+  isDue,
+  startOfLocalDay,
+  addLocalDays,
+  type Box,
+} from './srs';
 export { PROFILES, resolveProfile, type ResolvedProfile } from './profiles';
 export { GENERATORS, getGenerator, resolveConfig } from './generators/registry';
 export { mulFactKey } from './facts';
