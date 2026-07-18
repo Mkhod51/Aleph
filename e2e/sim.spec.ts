@@ -15,6 +15,7 @@ const SETTINGS = {
     sound: false,
     questionFontSize: 'L',
     leftHandedKeypad: false,
+    onboarded: true,
   },
   version: 1,
 };
