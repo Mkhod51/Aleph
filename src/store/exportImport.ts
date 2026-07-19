@@ -35,7 +35,6 @@ function currentSettings(): Settings {
   return {
     theme: s.theme,
     countdown: s.countdown,
-    countdownSkip: s.countdownSkip,
     clockVisible: s.clockVisible,
     scoreVisible: s.scoreVisible,
     sound: s.sound,

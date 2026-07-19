@@ -150,13 +150,8 @@ export function SettingsPage() {
               onChange={(v) => s.update({ scoreVisible: v })}
             />
           </Row>
-          <Row label="Sound (key clicks / end buzzer)">
-            <Toggle
-              label="Sound"
-              checked={s.sound}
-              onChange={(v) => s.update({ sound: v })}
-            />
-          </Row>
+          {/* Sound toggle hidden until audio is wired (M6, P2) — a control that
+              does nothing erodes trust. The `sound` setting is kept for then. */}
           <Row label="Question font size">
             <Segmented
               ariaLabel="Question font size"

@@ -7,6 +7,3 @@ export const APP_NAME = 'Aleph';
 
 /** Wordmark glyph placeholder (doc 07 §4 uses ◆; doc 10 §4 suggests א / ℵ₀ later). */
 export const APP_MARK = '◆';
-
-/** Optional tagline candidate (doc 10 §5) — not shown by default. */
-export const APP_TAGLINE = 'Arithmetic, at trading speed.';
