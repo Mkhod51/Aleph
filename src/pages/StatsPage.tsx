@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
+import { Button } from '@/ui/Button';
 import { Heatmap } from '@/ui/stats/Heatmap';
 import { Calendar } from '@/ui/stats/Calendar';
 import { BandGauge } from '@/ui/BandGauge';
@@ -80,11 +81,7 @@ export function StatsPage() {
     };
   }, []);
 
-  if (!data) {
-    return <p className="py-16 text-center text-text-dim">Loading dashboard…</p>;
-  }
-
-  if (!data.hasData) {
+  if (data && !data.hasData) {
     return (
       <div className="mx-auto max-w-lg py-16 text-center">
         <h1 className="font-mono text-2xl font-semibold text-text">Dashboard</h1>
@@ -93,13 +90,26 @@ export function StatsPage() {
           score trends, a skill breakdown, a times-table heatmap and a consistency
           calendar.
         </p>
-        <button
-          type="button"
+        <Button
+          variant="primary"
+          size="md"
           onClick={() => navigate('/play')}
-          className="mt-4 rounded-btn bg-accent px-5 py-2 font-medium text-bg hover:brightness-110"
+          className="mt-4"
         >
           Play a sprint
-        </button>
+        </Button>
+      </div>
+    );
+  }
+
+  // C6: render the page shell immediately and reserve vertical space so the brief
+  // IndexedDB read never flashes a centered "Loading…" line that then jumps the
+  // whole layout in. No spinner, no skeleton shimmer — just a stable container.
+  if (!data) {
+    return (
+      <div className="mx-auto flex max-w-content flex-col gap-6">
+        <h1 className="font-mono text-2xl font-semibold text-text">Dashboard</h1>
+        <div className="min-h-[60vh]" aria-hidden />
       </div>
     );
   }
@@ -132,7 +142,7 @@ export function StatsPage() {
         {data.sprintSeries.length > 0 ? (
           <div className="mt-3">
             <Suspense
-              fallback={<div className="h-[240px] animate-pulse rounded bg-surface-2" />}
+              fallback={<div className="h-[240px] rounded bg-surface-2" />}
             >
               <ScoreChart
                 data={data.sprintSeries}
@@ -262,13 +272,13 @@ export function StatsPage() {
                   <td className="py-1.5 text-text-dim">{pb.key}</td>
                   <td className="py-1.5 text-right text-text">{pb.score}</td>
                   <td className="py-1.5 text-right">
-                    <button
-                      type="button"
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => navigate(`/results/${pb.sessionId}`)}
-                      className="text-xs text-accent hover:underline"
                     >
                       view
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}

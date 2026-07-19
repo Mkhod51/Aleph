@@ -1,5 +1,6 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
+import { Button } from '@/ui/Button';
 import { getTechnique, getTechniqueById } from '@/content/techniques';
 import { getReference } from '@/content/references';
 import { getStrategy } from '@/content/strategy';
@@ -57,13 +58,15 @@ function TechniqueView({ t }: { t: Technique }) {
 
       {t.drill && (
         <div className="flex flex-col gap-2">
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="md"
+            mono
             onClick={drillThis}
-            className="self-start rounded-btn bg-accent px-6 py-3 font-mono font-semibold text-bg hover:brightness-110"
+            className="self-start"
           >
             ▶ Drill this
-          </button>
+          </Button>
           {t.drill.note && (
             <p className="text-xs text-text-dim">{t.drill.note}</p>
           )}
@@ -132,14 +135,14 @@ export function LearnDetailPage() {
             </tbody>
           </table>
         </Card>
-        <button
-          type="button"
+        <Button
+          variant="secondary"
           disabled
           title="Flashcard decks arrive with the SRS milestone (M5)."
-          className="cursor-not-allowed self-start rounded-btn border border-border px-4 py-2 text-sm text-text-dim opacity-60"
+          className="self-start"
         >
           Turn into flashcards →
-        </button>
+        </Button>
       </div>
     );
   }

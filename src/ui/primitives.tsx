@@ -40,7 +40,7 @@ export function NavCard({
   return (
     <Link
       to={to}
-      className="rounded-card border border-border bg-surface p-4 transition-colors hover:border-accent hover:bg-surface-2"
+      className="rounded-card border border-border bg-surface p-4 transition-colors duration-fast ease-out-t hover:border-accent hover:bg-surface-2"
     >
       <div className="font-mono text-sm font-semibold text-text">{title}</div>
       <div className="mt-1 text-[0.8125rem] text-text-dim">{hint}</div>

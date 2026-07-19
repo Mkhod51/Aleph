@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
+import { Button } from '@/ui/Button';
 import { useStreakStore } from '@/store/streak';
 import { todayKey } from '@/store/daily';
 import { dailyRepo } from '@/store/repos/dailyRepo';
@@ -61,14 +62,15 @@ export function DailyPage() {
               </span>
             </div>
           </div>
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="md"
+            mono
             autoFocus
             onClick={() => navigate('/daily/play')}
-            className="rounded-btn bg-accent px-6 py-3 font-mono font-semibold text-bg hover:brightness-110"
           >
             {playedToday ? '▶ Replay (unofficial)' : '▶ Play today’s 120s'}
-          </button>
+          </Button>
         </div>
         {playedToday && (
           <p className="mt-3 text-sm text-text-dim">

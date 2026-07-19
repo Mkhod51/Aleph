@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Eyebrow, NavCard } from '@/ui/primitives';
+import { Button } from '@/ui/Button';
 import { PresetPanel } from '@/ui/PresetPanel';
 import { durationLabel } from '@/lib/format';
 import { usePresetStore, findPreset } from '@/store/usePresetStore';
@@ -47,24 +48,21 @@ function Onboarding() {
         Zetamac-style speed drills, firm test simulators, and a weakness engine —
         all local to your browser.
       </p>
-      <button
-        type="button"
+      <Button
+        variant="primary"
+        size="lg"
+        mono
         autoFocus
         onClick={() => {
           update({ onboarded: true });
           navigate('/play?seconds=60');
         }}
-        className="rounded-btn bg-accent px-6 py-3 font-mono font-semibold text-bg hover:brightness-110"
       >
         Take the 60-second baseline
-      </button>
-      <button
-        type="button"
-        onClick={() => update({ onboarded: true })}
-        className="text-sm text-text-dim hover:text-text"
-      >
+      </Button>
+      <Button variant="ghost" size="sm" onClick={() => update({ onboarded: true })}>
         Skip, just let me play
-      </button>
+      </Button>
     </div>
   );
 }
@@ -115,20 +113,23 @@ export function HomePage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
       <div className="flex flex-col items-center gap-4 pt-6 text-center">
-        <button
-          type="button"
+        <Button
+          variant="primary"
+          size="lg"
+          mono
           autoFocus
           disabled={!canPlay}
           onClick={() => navigate('/play')}
-          className="rounded-btn bg-accent px-8 py-4 font-mono text-lg font-semibold text-bg transition-transform hover:brightness-110 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-40"
+          className="px-8 py-4"
         >
           ▶ START SPRINT — {durationLabel(selected.durationMs)}
-        </button>
+        </Button>
 
         <PresetPanel />
 
-        <button
-          type="button"
+        <Button
+          variant="secondary"
+          size="sm"
           disabled={!weakness?.canFix}
           onClick={fixGaps}
           title={
@@ -136,7 +137,6 @@ export function HomePage() {
               ? 'A 25-question drill: 70% your weak spots, 30% variety.'
               : `Unlocks after ${FIX_GAPS_MIN_ATTEMPTS} answered questions.`
           }
-          className="rounded-btn border border-border px-3 py-1 text-sm text-text-dim transition-colors hover:border-accent hover:text-text disabled:cursor-not-allowed disabled:opacity-60"
         >
           Fix my gaps →
           {weakness && !weakness.canFix && (
@@ -144,13 +144,13 @@ export function HomePage() {
               ({weakness.totalQuestions}/{FIX_GAPS_MIN_ATTEMPTS})
             </span>
           )}
-        </button>
+        </Button>
       </div>
 
       {/* Daily + SRS */}
       <div className="grid gap-4 sm:grid-cols-2">
         <button type="button" onClick={() => navigate('/daily')} className="text-left">
-          <Card className="h-full transition-colors hover:border-accent hover:bg-surface-2">
+          <Card className="h-full transition-colors duration-fast ease-out-t hover:border-accent hover:bg-surface-2">
             <Eyebrow>Daily challenge</Eyebrow>
             <div className="mt-2 flex items-baseline gap-3">
               <span className="font-mono text-xl text-text">🔥 {streak.current}</span>
@@ -168,7 +168,7 @@ export function HomePage() {
           </Card>
         </button>
         <button type="button" onClick={() => navigate('/srs')} className="text-left">
-          <Card className="h-full transition-colors hover:border-accent hover:bg-surface-2">
+          <Card className="h-full transition-colors duration-fast ease-out-t hover:border-accent hover:bg-surface-2">
             <Eyebrow>Flashcards</Eyebrow>
             <div className="mt-2 font-mono text-xl text-text">
               {due > 0 ? `⚡ ${due} due` : 'None due'}

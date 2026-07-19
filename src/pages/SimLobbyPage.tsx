@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
+import { Button } from '@/ui/Button';
 import { BandGauge } from '@/ui/BandGauge';
 import { getSim } from '@/content/sims';
 import { bandsForKind, BAND_DISCLAIMER } from '@/content/bands';
@@ -87,14 +88,15 @@ export function SimLobbyPage() {
         )}
       </Card>
 
-      <button
-        type="button"
+      <Button
+        variant="primary"
+        size="lg"
+        mono
         autoFocus
         onClick={() => navigate(`/sims/${sim.id}/play`)}
-        className="rounded-btn bg-accent px-6 py-3 text-center font-mono text-lg font-semibold text-bg hover:brightness-110"
       >
         ▶ Start {sim.name.split(' · ')[0]}
-      </button>
+      </Button>
     </div>
   );
 }
