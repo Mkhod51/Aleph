@@ -22,11 +22,14 @@ export function PlayPage() {
   const preset = usePresetStore((s) => findPreset(s.custom, s.selectedId));
 
   // One plan (and seed) per play session — remounting /play makes a fresh one.
-  // `?seconds=` overrides the duration (used by the onboarding 60 s baseline).
+  // `?seconds=` overrides the duration (used by the onboarding 60 s baseline);
+  // the override flows into the plan's configHash so the baseline is its own
+  // config group and stays out of the default-sprint stats (F2).
   const secondsOverride = params.get('seconds');
   const built = useMemo(() => {
-    const base = buildPlanFromPreset(preset);
-    return secondsOverride ? { ...base, durationMs: Number(secondsOverride) * 1000 } : base;
+    const n = Number(secondsOverride);
+    const overrideMs = secondsOverride && Number.isFinite(n) && n > 0 ? n * 1000 : undefined;
+    return buildPlanFromPreset(preset, undefined, overrideMs);
   }, [preset, secondsOverride]);
   const playable = presetHasAnyOp(preset);
 

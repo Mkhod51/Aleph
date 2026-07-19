@@ -74,6 +74,7 @@ export interface BuiltPlan {
 export function buildPlanFromPreset(
   preset: SprintPreset,
   seed: number = randomSeed(),
+  durationOverrideMs?: number,
 ): BuiltPlan {
   const weights: WeightMap = {};
   const generatorConfigs: Partial<Record<SkillTag, GeneratorConfig>> = {};
@@ -95,19 +96,23 @@ export function buildPlanFromPreset(
     generatorConfigs.DIV_EXACT = { ...preset.mulRange };
   }
 
+  // The hash is always derived from what is actually played, so a `?seconds=`
+  // override (e.g. the 60 s onboarding baseline) forms its own config group and
+  // never pollutes the default-sprint series or PB bucket (F2, doc 05 §1).
+  const durationMs = durationOverrideMs ?? preset.durationMs;
   const plan: SessionPlan = { seed, profile: weights, generatorConfigs };
   const scoring: ScoringRule = { kind: 'count' };
   const configHash = stableHash({
     profile: weights,
     generatorConfigs,
-    durationMs: preset.durationMs,
+    durationMs,
     scoring,
     extended: preset.extended,
   });
 
   return {
     plan,
-    durationMs: preset.durationMs,
+    durationMs,
     scoring,
     configHash,
     mode: 'sprint',
