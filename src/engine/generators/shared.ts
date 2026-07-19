@@ -1,7 +1,43 @@
+import type { Rng } from '@/lib/prng';
 import type { Canonical } from '../types';
 
 /** Symbol for a missing operand (doc 07 / doc 04 §3). */
 export const BLANK = '□';
+
+/** Fact-trackable band (doc 04 §8): both operands must sit in [2, 20]. */
+const PIN_LO = 2;
+const PIN_HI = 20;
+/** Probability a pinned draw is the exact fact vs. a near neighbor (F1). */
+const PIN_EXACT_P = 0.7;
+
+/**
+ * Resolve a fact-family draw for a pinned multiplication fact (doc 03 §6, F1).
+ * Returns the pinned pair itself ~70% of the time; otherwise a near neighbor with
+ * one operand shifted by ±1 or ±2, clamped to [2, 20] so the resulting `factKey`
+ * stays inside the pinned neighborhood. Presentation order is randomized so the
+ * pair drives every question form (a×b, p÷a, a×□=p). Deterministic in `rng`.
+ */
+export function resolvePinnedPair(rng: Rng, pin: readonly [number, number]): [number, number] {
+  const [p, q] = pin;
+  let a: number;
+  let b: number;
+  if (rng() < PIN_EXACT_P) {
+    a = p;
+    b = q;
+  } else {
+    const clamp = (v: number) => Math.min(PIN_HI, Math.max(PIN_LO, v));
+    const magnitude = rng() < 0.5 ? 1 : 2;
+    const delta = (rng() < 0.5 ? -1 : 1) * magnitude;
+    if (rng() < 0.5) {
+      a = clamp(p + delta);
+      b = q;
+    } else {
+      a = p;
+      b = clamp(q + delta);
+    }
+  }
+  return rng() < 0.5 ? [a, b] : [b, a];
+}
 
 export function gcd(a: number, b: number): number {
   let x = Math.abs(a);

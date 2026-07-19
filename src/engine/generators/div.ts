@@ -2,7 +2,7 @@ import { intInRange, pick, type Rng } from '@/lib/prng';
 import type { GeneratorConfig, Question } from '../types';
 import { clampDifficulty, digitCount, divDifficulty } from '../difficulty';
 import { mulFactKey } from '../facts';
-import { decimalCanonical } from './shared';
+import { decimalCanonical, resolvePinnedPair } from './shared';
 
 /**
  * DIV_EXACT — inverse of MUL_1x2: pick factors a ∈ [2,12], b ∈ [2,100], present
@@ -17,12 +17,14 @@ export const divDefaults: GeneratorConfig = {
 };
 
 export function generateDivExact(rng: Rng, cfg: GeneratorConfig): Question {
-  const aMin = cfg.aMin ?? 2;
-  const aMax = cfg.aMax ?? 12;
-  const bMin = cfg.bMin ?? 2;
-  const bMax = cfg.bMax ?? 100;
-  const a = intInRange(rng, aMin, aMax); // divisor
-  const b = intInRange(rng, bMin, bMax); // quotient (answer)
+  // Pinned: resolvePinnedPair already randomizes order, so either operand plays
+  // divisor — presenting both p÷a and p÷b forms of the fact.
+  const [a, b] = cfg.pinPair // a = divisor, b = quotient (answer)
+    ? resolvePinnedPair(rng, cfg.pinPair)
+    : [
+        intInRange(rng, cfg.aMin ?? 2, cfg.aMax ?? 12),
+        intInRange(rng, cfg.bMin ?? 2, cfg.bMax ?? 100),
+      ];
   const product = a * b;
   return {
     skill: 'DIV_EXACT',

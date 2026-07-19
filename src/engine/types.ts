@@ -77,6 +77,13 @@ export interface GeneratorConfig {
   aMax?: number;
   bMin?: number;
   bMax?: number;
+  /**
+   * Fact-family pinning (doc 03 §6, F1). When set, MUL_1x2/MUL_2x2/DIV_EXACT/
+   * MISSING_MUL draw from this multiplication fact instead of aMin/aMax/bMin/bMax:
+   * the exact pair most of the time, a near neighbor (±2 on one operand) otherwise.
+   * Opt-in — never set on the sprint/zetamac path, so generator parity is unchanged.
+   */
+  pinPair?: [number, number];
 }
 
 export type ProfileId =

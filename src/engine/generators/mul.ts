@@ -2,6 +2,7 @@ import { intInRange, type Rng } from '@/lib/prng';
 import type { GeneratorConfig, Question } from '../types';
 import { mulDifficulty } from '../difficulty';
 import { mulFactKey } from '../facts';
+import { resolvePinnedPair } from './shared';
 
 /** MUL_1x2 — a ∈ [2,12], b ∈ [2,100] (Zetamac default). Answer: integer product. */
 export const mulDefaults: GeneratorConfig = {
@@ -12,12 +13,12 @@ export const mulDefaults: GeneratorConfig = {
 };
 
 export function generateMul1x2(rng: Rng, cfg: GeneratorConfig): Question {
-  const aMin = cfg.aMin ?? 2;
-  const aMax = cfg.aMax ?? 12;
-  const bMin = cfg.bMin ?? 2;
-  const bMax = cfg.bMax ?? 100;
-  const a = intInRange(rng, aMin, aMax);
-  const b = intInRange(rng, bMin, bMax);
+  const [a, b] = cfg.pinPair
+    ? resolvePinnedPair(rng, cfg.pinPair)
+    : [
+        intInRange(rng, cfg.aMin ?? 2, cfg.aMax ?? 12),
+        intInRange(rng, cfg.bMin ?? 2, cfg.bMax ?? 100),
+      ];
   const product = a * b;
   return {
     skill: 'MUL_1x2',
@@ -64,8 +65,9 @@ export function generateMul2x2(rng: Rng, cfg: GeneratorConfig): Question {
     for (let i = 0; i < 5 && v % 10 === 0; i++) v = intInRange(rng, min, max);
     return v;
   };
-  const a = draw(aMin, aMax);
-  const b = draw(bMin, bMax);
+  const [a, b] = cfg.pinPair
+    ? resolvePinnedPair(rng, cfg.pinPair)
+    : [draw(aMin, aMax), draw(bMin, bMax)];
   const product = a * b;
   return {
     skill: 'MUL_2x2',

@@ -25,6 +25,8 @@ export interface DrillMeta {
   tierMode: TierMode;
   configHash: string;
   scoring: ScoringRule;
+  /** Per-tag generator overrides (fact-family pinning; doc 03 §6, F1). */
+  configs?: Partial<Record<SkillTag, GeneratorConfig>>;
 }
 
 /** Per-tier range configs (doc 04 §7). Tags without meaningful tiers return {}. */
@@ -81,9 +83,12 @@ export function drawDrillQuestion(
   rng: Rng,
   resolved: { tags: SkillTag[]; weights: number[] },
   tier: 1 | 2 | 3,
+  configs?: Partial<Record<SkillTag, GeneratorConfig>>,
 ): Question {
   const tag = resolved.tags[weightedIndex(rng, resolved.weights)] as SkillTag;
-  const cfg = { ...resolveConfig(tag), ...tierConfig(tag, tier) };
+  // Per-tag overrides (e.g. pinPair) win over tier ranges — a pinned fact
+  // ignores the tier band by design (doc 03 §6, F1).
+  const cfg = { ...resolveConfig(tag), ...tierConfig(tag, tier), ...configs?.[tag] };
   return getGenerator(tag).generate(rng, cfg);
 }
 
@@ -98,6 +103,7 @@ function drillConfigHash(meta: Omit<DrillMeta, 'configHash' | 'seed' | 'scoring'
     count: meta.count,
     input: meta.input,
     tierMode: meta.tierMode,
+    configs: meta.configs,
   });
 }
 
@@ -141,6 +147,52 @@ export function buildDrillFromTag(
     input,
     feedback: input === 'test',
     tierMode,
+  };
+  return {
+    ...base,
+    seed: opts.seed ?? randomSeed(),
+    scoring: { kind: 'count' },
+    configHash: drillConfigHash(base),
+  };
+}
+
+/** Parse a `mul:a×b` fact key (heatmap cell) into its operand pair, or null. */
+export function parseMulFactKey(factKey: string): [number, number] | null {
+  const m = /^mul:(\d+)×(\d+)$/.exec(factKey);
+  if (!m) return null;
+  const a = Number(m[1]);
+  const b = Number(m[2]);
+  if (a < 2 || b < 2 || a > 20 || b > 20) return null;
+  return [a, b];
+}
+
+/**
+ * Build a fact-family drill from a heatmap cell (F1, doc 03 §6): a count-length
+ * drill pinned to one multiplication fact, mixing its question forms (a×b, p÷a,
+ * a×□=p) with light neighbors via `pinPair`. Returns null for an unparseable key.
+ */
+export function buildFactDrill(factKey: string, opts: BuildOptions = {}): DrillMeta | null {
+  const pair = parseMulFactKey(factKey);
+  if (!pair) return null;
+  const [a, b] = pair;
+  // Larger facts read as 2×2; small ones as 1×2 — keeps stat attribution honest.
+  const mulTag: SkillTag = Math.max(a, b) > 12 ? 'MUL_2x2' : 'MUL_1x2';
+  const weights: WeightMap = { [mulTag]: 40, DIV_EXACT: 30, MISSING_MUL: 30 };
+  const configs: Partial<Record<SkillTag, GeneratorConfig>> = {
+    [mulTag]: { pinPair: [a, b] },
+    DIV_EXACT: { pinPair: [a, b] },
+    MISSING_MUL: { pinPair: [a, b] },
+  };
+  const count = opts.count ?? 10;
+  const tierMode: TierMode = opts.tierMode ?? 'adaptive';
+  const base = {
+    title: `${a} × ${b} neighborhood`,
+    weights,
+    count,
+    input: 'flow' as const,
+    feedback: false,
+    tierMode,
+    configs,
   };
   return {
     ...base,
