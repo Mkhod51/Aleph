@@ -2,7 +2,7 @@ import { intInRange, type Rng } from '@/lib/prng';
 import type { GeneratorConfig, Question } from '../types';
 import { addDifficulty, mulDifficulty } from '../difficulty';
 import { mulFactKey } from '../facts';
-import { BLANK } from './shared';
+import { BLANK, resolvePinnedPair } from './shared';
 
 /** MISSING_ADD — `a + □ = s` or `□ − b = c`, from ADD ranges. Answer: integer. */
 export function generateMissingAdd(rng: Rng, cfg: GeneratorConfig): Question {
@@ -39,12 +39,13 @@ export function generateMissingAdd(rng: Rng, cfg: GeneratorConfig): Question {
 
 /** MISSING_MUL — `a × □ = p` from MUL ranges (last-digit-solvable). Answer: integer. */
 export function generateMissingMul(rng: Rng, cfg: GeneratorConfig): Question {
-  const aMin = cfg.aMin ?? 2;
-  const aMax = cfg.aMax ?? 12;
-  const bMin = cfg.bMin ?? 2;
-  const bMax = cfg.bMax ?? 100;
-  const a = intInRange(rng, aMin, aMax);
-  const b = intInRange(rng, bMin, bMax);
+  // Pinned: order randomization surfaces both `a×□=p` and `b×□=p` forms.
+  const [a, b] = cfg.pinPair
+    ? resolvePinnedPair(rng, cfg.pinPair)
+    : [
+        intInRange(rng, cfg.aMin ?? 2, cfg.aMax ?? 12),
+        intInRange(rng, cfg.bMin ?? 2, cfg.bMax ?? 100),
+      ];
   const p = a * b;
   return {
     skill: 'MISSING_MUL',

@@ -4,6 +4,7 @@ import { Card, Eyebrow } from '@/ui/primitives';
 import {
   DRILL_CATALOG,
   buildDrillFromTag,
+  buildFactDrill,
   useDrillStore,
   type TierMode,
 } from '@/store/drills';
@@ -55,8 +56,15 @@ export function DrillsPage() {
   useEffect(() => {
     const tag = params.get('tag') as SkillTag | null;
     const fact = params.get('fact');
-    if (tag) start(tag, { input: 'flow', tier: 'adaptive', count: 10 });
-    else if (fact) start(fact.includes('×') ? 'MUL_1x2' : 'MUL_1x2', { count: 10 });
+    if (tag) {
+      start(tag, { input: 'flow', tier: 'adaptive', count: 10 });
+    } else if (fact) {
+      const meta = buildFactDrill(fact, { count: 10 });
+      if (meta) {
+        setPending(meta);
+        navigate('/drills/play');
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

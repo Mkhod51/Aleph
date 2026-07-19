@@ -55,22 +55,30 @@ export function useDrillEngine(meta: DrillMeta, onComplete: () => void): DrillEn
   const resolvedRef = useRef(resolveDrillWeights(meta.weights));
   const ratingRef = useRef(ADAPTIVE_START);
   const recentRef = useRef<string[]>([]);
+  // Pinned fact drills share one factKey across every question, so factKey-based
+  // anti-repeat would collapse the whole drill; key on the prompt instead so the
+  // three forms and neighbors vary while identical prompts still don't repeat (F1).
+  const pinnedRef = useRef(
+    !!meta.configs && Object.values(meta.configs).some((c) => c?.pinPair),
+  );
 
   const makeNext = useCallback((): Question => {
     const tier =
       meta.tierMode === 'adaptive' ? tierFromRating(ratingRef.current) : meta.tierMode;
-    const gen = () => drawDrillQuestion(genRngRef.current, resolvedRef.current, tier);
+    const gen = () => drawDrillQuestion(genRngRef.current, resolvedRef.current, tier, meta.configs);
     let q = gen();
     let tries = 0;
-    const key = (x: Question) => x.factKey ?? `p:${x.prompt}`;
+    const key = (x: Question) =>
+      pinnedRef.current ? `p:${x.prompt}` : (x.factKey ?? `p:${x.prompt}`);
+    // Anti-repeat window of 8, matching the sprint stream (doc 04 §4, F9).
     while (recentRef.current.includes(key(q)) && tries < 5) {
       q = gen();
       tries++;
     }
     recentRef.current.push(key(q));
-    if (recentRef.current.length > 6) recentRef.current.shift();
+    if (recentRef.current.length > 8) recentRef.current.shift();
     return q;
-  }, [meta.tierMode]);
+  }, [meta.tierMode, meta.configs]);
 
   const [question, setQuestion] = useState<Question>(() => makeNext());
   const [input, setInput] = useState('');
