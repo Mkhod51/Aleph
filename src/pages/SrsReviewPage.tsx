@@ -51,6 +51,18 @@ export function SrsReviewPage() {
     };
   }, []);
 
+  // Esc leaves to Home. Each card is graded/persisted the moment it's answered
+  // or revealed, so exiting mid-review is safe and needs no confirm (F4).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      e.preventDefault();
+      navigate('/');
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [navigate]);
+
   const card = cards?.[i];
 
   useLayoutEffect(() => {
@@ -124,8 +136,16 @@ export function SrsReviewPage() {
       className="flex min-h-[70dvh] flex-col"
       onClick={() => inputRef.current?.focus()}
     >
-      <div className="flex h-12 items-center justify-center font-mono text-sm text-text-dim">
+      <div className="relative flex h-12 items-center justify-center px-6 font-mono text-sm text-text-dim">
         {i + 1}/{cards.length} · box {card?.box}
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          aria-label="Leave review"
+          className="absolute right-6 rounded-btn px-2 text-lg text-text-dim hover:text-text"
+        >
+          ✕
+        </button>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-6">
         <div className="font-mono text-6xl tabular-nums text-text">{card?.front}</div>
@@ -153,6 +173,9 @@ export function SrsReviewPage() {
             Reveal (counts as a miss)
           </button>
         )}
+      </div>
+      <div className="pb-6 text-center text-xs text-text-dim">
+        Esc to leave · progress saves per card
       </div>
     </div>
   );
