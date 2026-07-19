@@ -41,7 +41,7 @@ function Segmented<T extends string>({
             aria-checked={active}
             onClick={() => onChange(opt.value)}
             className={[
-              'rounded-[4px] px-3 py-1 text-sm transition-colors',
+              'rounded-[4px] px-3 py-1 text-sm transition-colors duration-fast ease-out-t',
               active
                 ? 'bg-accent font-medium text-bg'
                 : 'text-text-dim hover:text-text',
@@ -81,13 +81,13 @@ function Toggle({
       aria-label={label}
       onClick={() => onChange(!checked)}
       className={[
-        'relative h-6 w-11 rounded-full border transition-colors',
+        'relative h-6 w-11 rounded-full border transition-colors duration-fast ease-out-t',
         checked ? 'border-accent bg-accent' : 'border-border bg-surface-2',
       ].join(' ')}
     >
       <span
         className={[
-          'absolute top-0.5 h-4 w-4 rounded-full bg-bg transition-transform',
+          'absolute top-0.5 h-4 w-4 rounded-full bg-bg transition-transform duration-fast ease-out-t',
           checked ? 'left-0.5 translate-x-5' : 'left-0.5 translate-x-0',
         ].join(' ')}
       />

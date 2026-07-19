@@ -65,10 +65,18 @@
 
 :root {
   /* Fonts: JetBrains Mono for all numerals/prompts/stats, Inter for UI (doc 07 §2).
-     Self-hosted font files are deferred to a later milestone; robust system
-     fallbacks keep the layout stable in the meantime. No CDN fonts (doc 08 §7). */
+     Self-hosted via @fontsource, imported in index.css. No CDN fonts (doc 08 §7). */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Menlo', 'Consolas',
     monospace;
+}
+
+:root {
+  /* Motion — one timing system for all UI motion (doc 07 §1, ui-review 02).
+     Reduced-motion collapses every duration below to ~0 (see index.css). */
+  --dur-fast: 120ms; /* hovers, presses, overlay fades */
+  --dur-base: 180ms; /* reveals, countdown ticks */
+  --dur-moment: 400ms; /* the single results / PB moment */
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
 }
