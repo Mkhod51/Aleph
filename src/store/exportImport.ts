@@ -3,6 +3,7 @@ import { DATA_VERSION, db } from './db';
 import { applyTheme } from './theme';
 import { useSettingsStore, type Settings } from './useSettingsStore';
 import { usePresetStore } from './usePresetStore';
+import { applyImportedStreak } from './streak';
 import { ZETAMAC_DEFAULT_ID } from './presets';
 import type {
   Attempt,
@@ -218,6 +219,10 @@ export async function importBundle(
       await db.personalBests.bulkPut(bundle.personalBests ?? []);
     },
   );
+
+  // Restore the streak into storage + the live store (F3). Replace takes the
+  // bundle's; merge keeps whichever streak is newer.
+  applyImportedStreak(bundle.streak ?? null, mode);
 
   if (mode === 'replace' && bundle.settings) {
     useSettingsStore.setState(bundle.settings);

@@ -5,8 +5,10 @@ import {
   applyDailyCompletion,
   reconcileOnOpen,
   dayDiff,
+  mergeStreak,
   EMPTY_STREAK,
 } from '../streak';
+import type { Streak } from '../types';
 
 function seq(dateKey: string, n: number): string[] {
   const stream = createQuestionStream(buildDailyPlan(dateKey).plan);
@@ -74,5 +76,34 @@ describe('streak transitions (doc 05 §6)', () => {
     expect(dayDiff('2026-07-18', '2026-07-19')).toBe(1);
     expect(dayDiff('2026-07-01', '2026-07-08')).toBe(7);
     expect(dayDiff('2026-02-28', '2026-03-01')).toBe(1); // 2026 not a leap year
+  });
+});
+
+describe('mergeStreak — import reconciliation (F3, doc 05 §7)', () => {
+  const older: Streak = { current: 3, best: 5, lastDate: '2026-07-10', freezes: 2 };
+  const newer: Streak = { current: 7, best: 7, lastDate: '2026-07-19', freezes: 0 };
+
+  it('replace always takes the bundle (even null → empty)', () => {
+    expect(mergeStreak(newer, older, 'replace')).toEqual(older);
+    expect(mergeStreak(newer, null, 'replace')).toEqual(EMPTY_STREAK);
+  });
+
+  it('merge keeps the later lastDate regardless of direction', () => {
+    expect(mergeStreak(older, newer, 'merge')).toEqual(newer);
+    expect(mergeStreak(newer, older, 'merge')).toEqual(newer);
+  });
+
+  it('merge breaks a same-day tie by higher current, keeping local on a dead tie', () => {
+    const a: Streak = { current: 4, best: 6, lastDate: '2026-07-19', freezes: 1 };
+    const b: Streak = { current: 9, best: 9, lastDate: '2026-07-19', freezes: 0 };
+    expect(mergeStreak(a, b, 'merge')).toEqual(b); // incoming higher current
+    expect(mergeStreak(b, a, 'merge')).toEqual(b); // local higher current kept
+    expect(mergeStreak(a, a, 'merge')).toEqual(a); // dead tie → local
+  });
+
+  it('merge treats a dated streak as newer than an undated one, and ignores null', () => {
+    expect(mergeStreak(EMPTY_STREAK, newer, 'merge')).toEqual(newer);
+    expect(mergeStreak(newer, EMPTY_STREAK, 'merge')).toEqual(newer);
+    expect(mergeStreak(newer, null, 'merge')).toEqual(newer);
   });
 });

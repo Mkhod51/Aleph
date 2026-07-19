@@ -59,6 +59,31 @@ export function reconcileOnOpen(s: Streak, today: string): Streak {
   return s;
 }
 
+/**
+ * Pick the streak to keep on import (F3, doc 05 §6/§7). Replace takes the
+ * bundle's streak; merge keeps whichever has the later `lastDate`, ties broken
+ * by the higher `current` (and the local streak kept on a dead tie).
+ */
+export function mergeStreak(
+  current: Streak,
+  incoming: Streak | null,
+  mode: 'merge' | 'replace',
+): Streak {
+  if (mode === 'replace') return incoming ?? EMPTY_STREAK;
+  if (!incoming) return current;
+  if (incoming.lastDate && current.lastDate) {
+    const diff = dayDiff(current.lastDate, incoming.lastDate); // > 0 ⇒ incoming newer
+    if (diff > 0) return incoming;
+    if (diff < 0) return current;
+  } else if (incoming.lastDate) {
+    return incoming; // a dated streak beats an undated one
+  } else if (current.lastDate) {
+    return current;
+  }
+  // Same day (or both undated): higher current wins, local kept on a tie.
+  return incoming.current > current.current ? incoming : current;
+}
+
 function readStreak(): Streak {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -98,3 +123,17 @@ export const useStreakStore = create<StreakStore>((set, get) => ({
   },
   playedToday: (today) => get().lastDate === today,
 }));
+
+/**
+ * Restore a streak from an import bundle into both localStorage and the live
+ * store (F3) — the store is initialized once at module load, so an import must
+ * push the resolved streak in explicitly or the habit layer silently loses it.
+ */
+export function applyImportedStreak(
+  incoming: Streak | null,
+  mode: 'merge' | 'replace',
+): void {
+  const next = mergeStreak(readStreak(), incoming, mode);
+  writeStreak(next);
+  useStreakStore.setState(next);
+}

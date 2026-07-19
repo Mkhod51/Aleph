@@ -13,6 +13,15 @@ import {
 } from '../sessionService';
 import { personalBestRepo } from '../repos/personalBestRepo';
 import { buildExportBundle, eraseAll, importBundle } from '../exportImport';
+import { useStreakStore } from '../streak';
+import type { Streak } from '../types';
+
+function setStreak(s: Streak) {
+  localStorage.setItem('aleph-streak', JSON.stringify(s));
+}
+function readStreakLs(): Streak {
+  return JSON.parse(localStorage.getItem('aleph-streak')!) as Streak;
+}
 
 const built = buildPlanFromPreset(ZETAMAC_DEFAULT);
 
@@ -117,5 +126,35 @@ describe('export → wipe → import round-trip (doc 08 §6)', () => {
     await importBundle(bundle, 'merge');
     expect(await db.sessions.count()).toBe(1);
     expect(await db.attempts.count()).toBe(6);
+  });
+
+  it('restores the streak on replace, in localStorage and the store (F3)', async () => {
+    const streak: Streak = { current: 5, best: 9, lastDate: '2026-07-18', freezes: 1 };
+    setStreak(streak);
+    const bundle = await buildExportBundle();
+    expect(bundle.streak).toEqual(streak);
+
+    await eraseAll();
+    expect(localStorage.getItem('aleph-streak')).toBeNull();
+
+    await importBundle(bundle, 'replace');
+    expect(readStreakLs()).toEqual(streak);
+    expect(useStreakStore.getState()).toMatchObject(streak);
+  });
+
+  it('merge keeps whichever streak is newer (F3)', async () => {
+    // Bundle carries the newer streak; the older local one loses.
+    setStreak({ current: 7, best: 7, lastDate: '2026-07-19', freezes: 0 });
+    const newerBundle = await buildExportBundle();
+    setStreak({ current: 3, best: 5, lastDate: '2026-07-10', freezes: 2 });
+    await importBundle(newerBundle, 'merge');
+    expect(readStreakLs()).toMatchObject({ current: 7, lastDate: '2026-07-19' });
+
+    // Reverse: an older bundle must not clobber a newer local streak.
+    setStreak({ current: 1, best: 1, lastDate: '2026-06-01', freezes: 0 });
+    const olderBundle = await buildExportBundle();
+    setStreak({ current: 10, best: 12, lastDate: '2026-08-01', freezes: 1 });
+    await importBundle(olderBundle, 'merge');
+    expect(readStreakLs()).toMatchObject({ current: 10, lastDate: '2026-08-01' });
   });
 });
