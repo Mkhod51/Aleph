@@ -9,6 +9,12 @@ import { todayKey } from '@/store/daily';
 /**
  * Root layout: keeps the resolved theme in sync with the setting (and the OS
  * preference while in "system" mode), then renders the top bar + routed page.
+ *
+ * Container-width convention (ui-review 03 §C4) — each page sets its own inner
+ * max-width by content type, within this shell's `max-w-content` outer bound:
+ *   narrow  `max-w-2xl`     — settings, daily, srs
+ *   default `max-w-3xl`     — home, learn, drills, sims, results
+ *   wide    `max-w-content` — stats (dense dashboard)
  */
 export function AppLayout() {
   const theme = useSettingsStore((s) => s.theme);
