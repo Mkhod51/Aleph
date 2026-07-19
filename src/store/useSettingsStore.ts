@@ -8,7 +8,6 @@ export interface Settings {
   theme: ThemeSetting;
   // Gameplay
   countdown: boolean; // show the 3-2-1 countdown
-  countdownSkip: boolean; // skip it by default after the first play
   clockVisible: boolean;
   scoreVisible: boolean;
   sound: boolean; // key clicks / end buzzer (default off)
@@ -21,7 +20,6 @@ export interface Settings {
 export const DEFAULT_SETTINGS: Settings = {
   theme: 'dark', // dark is default (decision log item 4)
   countdown: true,
-  countdownSkip: false,
   clockVisible: true,
   scoreVisible: true,
   sound: false,
@@ -59,7 +57,6 @@ export const useSettingsStore = create<SettingsStore>()(
       partialize: (s): Settings => ({
         theme: s.theme,
         countdown: s.countdown,
-        countdownSkip: s.countdownSkip,
         clockVisible: s.clockVisible,
         scoreVisible: s.scoreVisible,
         sound: s.sound,
