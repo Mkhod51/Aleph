@@ -6,6 +6,8 @@ import { durationLabel } from '@/lib/format';
 import { usePresetStore, findPreset } from '@/store/usePresetStore';
 import { buildPlanFromPreset, presetHasAnyOp } from '@/store/presets';
 import { sessionRepo } from '@/store/repos/sessionRepo';
+import { dailyRepo } from '@/store/repos/dailyRepo';
+import { todayKey } from '@/store/daily';
 import { useSettingsStore } from '@/store/useSettingsStore';
 import { useStreakStore } from '@/store/streak';
 import { dueCount } from '@/store/srs';
@@ -78,6 +80,8 @@ export function HomePage() {
   const [recent, setRecent] = useState<number[] | null>(null);
   const [due, setDue] = useState(0);
   const [weakness, setWeakness] = useState<WeaknessSummary | null>(null);
+  // Today's daily score, or null when today's daily hasn't been played (F5).
+  const [dailyScore, setDailyScore] = useState<number | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -94,6 +98,7 @@ export function HomePage() {
     let alive = true;
     dueCount().then((n) => alive && setDue(n));
     loadWeaknessSummary().then((w) => alive && setWeakness(w));
+    dailyRepo.get(todayKey()).then((r) => alive && setDailyScore(r?.score ?? null));
     return () => {
       alive = false;
     };
@@ -152,6 +157,13 @@ export function HomePage() {
               <span className="text-sm text-text-dim">
                 day streak{streak.best > 0 ? ` · best ${streak.best}` : ''}
               </span>
+            </div>
+            <div className="mt-2 font-mono text-sm text-text-dim">
+              {dailyScore !== null ? (
+                <span className="text-good">✓ Done today · {dailyScore}</span>
+              ) : (
+                <span className="text-accent">▶ Play today’s 120s</span>
+              )}
             </div>
           </Card>
         </button>
