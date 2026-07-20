@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
 import { Button } from '@/ui/Button';
+import { StatTile } from '@/ui/kit';
 import { useStreakStore } from '@/store/streak';
 import { todayKey } from '@/store/daily';
 import { dailyRepo } from '@/store/repos/dailyRepo';
@@ -15,7 +16,7 @@ function History({ records }: { records: DailyRecord[] }) {
       {recent.map((r) => (
         <div
           key={r.date}
-          className="w-4 rounded-sm bg-accent/80"
+          className="w-4 rounded-sm border-t-2 border-accent-hi bg-accent/70"
           style={{ height: `${Math.max(6, (r.score / max) * 100)}%` }}
           title={`${r.date}: ${r.score}`}
         />
@@ -53,18 +54,14 @@ export function DailyPage() {
 
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <Eyebrow>Streak</Eyebrow>
-            <div className="mt-1 font-mono text-2xl tabular-nums text-text">
-              🔥 {streak.current}
-              <span className="ml-3 text-sm text-text-dim">
-                best {streak.best} · {streak.freezes} freeze{streak.freezes === 1 ? '' : 's'}
-              </span>
-            </div>
-          </div>
+          <StatTile
+            label="Streak"
+            value={<>🔥 {streak.current}</>}
+            sub={`best ${streak.best} · ${streak.freezes} freeze${streak.freezes === 1 ? '' : 's'}`}
+          />
           <Button
             variant="primary"
-            size="md"
+            size="lg"
             mono
             autoFocus
             onClick={() => navigate('/daily/play')}
