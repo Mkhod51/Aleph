@@ -27,7 +27,7 @@ export function Clock({
 
   return (
     <div
-      className="font-mono text-2xl tabular-nums text-text-dim"
+      className="readout text-2xl text-text-dim"
       aria-label="Time remaining"
       role="timer"
     >

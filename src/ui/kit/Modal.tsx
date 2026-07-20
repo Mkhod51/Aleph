@@ -41,7 +41,11 @@ export function Modal({
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        // The modal owns Escape — stop it reaching page-level key handlers
+        // (e.g. a play screen that also toggles pause on Escape), which would
+        // otherwise double-fire and cancel the close.
         e.preventDefault();
+        e.stopPropagation();
         onClose();
         return;
       }

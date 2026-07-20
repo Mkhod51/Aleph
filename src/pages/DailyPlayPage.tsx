@@ -94,7 +94,7 @@ export function DailyPlayPage() {
           <div className="absolute left-6 font-mono text-sm text-text-dim">Daily</div>
         )}
         {showTop && settings.scoreVisible && (
-          <div className="absolute right-6 font-mono text-2xl tabular-nums text-text-dim">
+          <div className="absolute right-6 readout text-2xl text-text-dim">
             {engine.score}
           </div>
         )}
