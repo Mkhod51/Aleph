@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { Card, Eyebrow } from '@/ui/primitives';
+import { Button } from '@/ui/Button';
 import {
   exportJson,
   exportAttemptsCsv,
@@ -78,27 +79,15 @@ export function DataSettings() {
       </p>
 
       <div className="mt-3 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={onExportJson}
-          className="rounded-btn border border-border px-3 py-1.5 text-sm text-text-dim hover:border-accent hover:text-text"
-        >
+        <Button variant="secondary" size="sm" onClick={onExportJson}>
           Export JSON
-        </button>
-        <button
-          type="button"
-          onClick={onExportCsv}
-          className="rounded-btn border border-border px-3 py-1.5 text-sm text-text-dim hover:border-accent hover:text-text"
-        >
+        </Button>
+        <Button variant="secondary" size="sm" onClick={onExportCsv}>
           Export attempts CSV
-        </button>
-        <button
-          type="button"
-          onClick={() => fileRef.current?.click()}
-          className="rounded-btn border border-border px-3 py-1.5 text-sm text-text-dim hover:border-accent hover:text-text"
-        >
+        </Button>
+        <Button variant="secondary" size="sm" onClick={() => fileRef.current?.click()}>
           Import JSON…
-        </button>
+        </Button>
         <input
           ref={fileRef}
           type="file"
@@ -126,29 +115,25 @@ export function DataSettings() {
                 data first.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
-                <button
-                  type="button"
+                <Button
+                  variant="primary"
+                  size="sm"
                   disabled={busy}
                   onClick={() => void confirmImport('merge')}
-                  className="rounded-btn bg-accent px-3 py-1.5 text-sm font-medium text-bg hover:brightness-110 disabled:opacity-40"
                 >
                   Merge
-                </button>
-                <button
-                  type="button"
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
                   disabled={busy}
                   onClick={() => void confirmImport('replace')}
-                  className="rounded-btn border border-bad px-3 py-1.5 text-sm text-text hover:bg-bad-bg disabled:opacity-40"
                 >
                   Replace
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPreview(null)}
-                  className="rounded-btn border border-border px-3 py-1.5 text-sm text-text-dim hover:text-text"
-                >
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => setPreview(null)}>
                   Cancel
-                </button>
+                </Button>
               </div>
             </>
           ) : (
@@ -171,14 +156,14 @@ export function DataSettings() {
             placeholder="DELETE"
             className="w-32 rounded-btn border border-border bg-bg px-2 py-1 font-mono text-sm text-text outline-none focus:border-bad"
           />
-          <button
-            type="button"
+          <Button
+            variant="danger"
+            size="sm"
             disabled={eraseText !== 'DELETE' || busy}
             onClick={() => void onErase()}
-            className="rounded-btn border border-bad px-3 py-1.5 text-sm text-text hover:bg-bad-bg disabled:cursor-not-allowed disabled:opacity-40"
           >
             Erase everything
-          </button>
+          </Button>
         </div>
       </div>
 

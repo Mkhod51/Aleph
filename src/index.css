@@ -1,5 +1,14 @@
 @import './styles/tokens.css';
 
+/* Self-hosted UI + numeral faces (ui-review 03 §C2, doc 08 §7 — no CDN fonts).
+   Inter 400/500/600 for UI, JetBrains Mono 400/600 for prompts/numerals/stats.
+   woff2 files are emitted into dist/assets and are cacheable static assets. */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/600.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
