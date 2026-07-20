@@ -1,9 +1,7 @@
 import type { ReactNode } from 'react';
 import { Card, Eyebrow } from '@/ui/primitives';
-import {
-  useSettingsStore,
-  type Settings,
-} from '@/store/useSettingsStore';
+import { SegmentedControl, Toggle } from '@/ui/kit';
+import { useSettingsStore, type Settings } from '@/store/useSettingsStore';
 import type { ThemeSetting } from '@/store/theme';
 import { DataSettings } from '@/ui/DataSettings';
 import { APP_NAME } from '@/lib/brand';
@@ -14,46 +12,12 @@ const THEMES: { value: ThemeSetting; label: string }[] = [
   { value: 'system', label: 'System' },
 ];
 
-function Segmented<T extends string>({
-  value,
-  options,
-  onChange,
-  ariaLabel,
-}: {
-  value: T;
-  options: { value: T; label: string }[];
-  onChange: (v: T) => void;
-  ariaLabel: string;
-}) {
-  return (
-    <div
-      role="radiogroup"
-      aria-label={ariaLabel}
-      className="inline-flex rounded-btn border border-border p-0.5"
-    >
-      {options.map((opt) => {
-        const active = opt.value === value;
-        return (
-          <button
-            key={opt.value}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            onClick={() => onChange(opt.value)}
-            className={[
-              'rounded-[4px] px-3 py-1 text-sm transition-colors duration-fast ease-out-t',
-              active
-                ? 'bg-accent font-medium text-bg'
-                : 'text-text-dim hover:text-text',
-            ].join(' ')}
-          >
-            {opt.label}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
+const FONT_SIZES: { value: Settings['questionFontSize']; label: string }[] = [
+  { value: 'S', label: 'S' },
+  { value: 'M', label: 'M' },
+  { value: 'L', label: 'L' },
+  { value: 'XL', label: 'XL' },
+];
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -63,44 +27,6 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
     </div>
   );
 }
-
-function Toggle({
-  checked,
-  onChange,
-  label,
-}: {
-  checked: boolean;
-  onChange: (v: boolean) => void;
-  label: string;
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      aria-label={label}
-      onClick={() => onChange(!checked)}
-      className={[
-        'relative h-6 w-11 rounded-full border transition-colors duration-fast ease-out-t',
-        checked ? 'border-accent bg-accent' : 'border-border bg-surface-2',
-      ].join(' ')}
-    >
-      <span
-        className={[
-          'absolute top-0.5 h-4 w-4 rounded-full bg-bg transition-transform duration-fast ease-out-t',
-          checked ? 'left-0.5 translate-x-5' : 'left-0.5 translate-x-0',
-        ].join(' ')}
-      />
-    </button>
-  );
-}
-
-const FONT_SIZES: { value: Settings['questionFontSize']; label: string }[] = [
-  { value: 'S', label: 'S' },
-  { value: 'M', label: 'M' },
-  { value: 'L', label: 'L' },
-  { value: 'XL', label: 'XL' },
-];
 
 export function SettingsPage() {
   const s = useSettingsStore();
@@ -113,7 +39,7 @@ export function SettingsPage() {
         <Eyebrow>Appearance</Eyebrow>
         <div className="mt-3">
           <Row label="Theme">
-            <Segmented
+            <SegmentedControl
               ariaLabel="Theme"
               value={s.theme}
               options={THEMES}
@@ -153,7 +79,7 @@ export function SettingsPage() {
           {/* Sound toggle hidden until audio is wired (M6, P2) — a control that
               does nothing erodes trust. The `sound` setting is kept for then. */}
           <Row label="Question font size">
-            <Segmented
+            <SegmentedControl
               ariaLabel="Question font size"
               value={s.questionFontSize}
               options={FONT_SIZES}
