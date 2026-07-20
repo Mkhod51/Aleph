@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getResultData, type ResultData } from '@/store/sessionService';
 import { bandsForSession } from '@/store/bands';
 import { bandFor, BAND_DISCLAIMER } from '@/content/bands';
 import { techniqueForTag } from '@/content/techniques';
 import { buildDrillFromTag, useDrillStore } from '@/store/drills';
+import { Button } from '@/ui/Button';
+import { BandGauge } from '@/ui/BandGauge';
 import type { SkillTag } from '@/engine';
 import type { Attempt } from '@/store/types';
 import {
@@ -27,6 +29,40 @@ function sortAttempts(attempts: Attempt[], mode: SortMode): Attempt[] {
     if (aWrong !== bWrong) return bWrong - aWrong;
     return b.totalMs - a.totalMs;
   });
+}
+
+/**
+ * Count 0 → target over --dur-moment (400 ms) with an eased rAF loop (M1/M2).
+ * Skips straight to the final value under reduced-motion, when the tab is
+ * hidden, or when `animate` is false (abandoned sessions show a static score).
+ * The returned value drives both the hero number and the band-gauge marker, so
+ * they share one clock with no second timer.
+ */
+function useCountUp(target: number, animate: boolean): number {
+  const [display, setDisplay] = useState(target);
+  useLayoutEffect(() => {
+    if (!animate) {
+      setDisplay(target);
+      return;
+    }
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || document.hidden) {
+      setDisplay(target);
+      return;
+    }
+    let raf = 0;
+    const start = performance.now();
+    const DURATION = 400; // --dur-moment
+    const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
+    const step = (ts: number) => {
+      const p = Math.min(1, (ts - start) / DURATION);
+      setDisplay(Math.round(target * easeOutCubic(p)));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [target, animate]);
+  return display;
 }
 
 function Vital({ label, value }: { label: string; value: string }) {
@@ -94,6 +130,13 @@ export function ResultsPage() {
     return () => window.removeEventListener('keydown', onKey);
   }, [onAgain, onNew, onDashboard]);
 
+  // M1/M2: the hero counts up only for a completed session; abandoned sessions
+  // (and reduced-motion) show the final score instantly. Same value feeds the
+  // gauge marker so both move on one clock.
+  const heroTarget = data && data !== 'missing' ? data.session.score : 0;
+  const heroAnimate = data && data !== 'missing' ? data.session.completed : false;
+  const displayScore = useCountUp(heroTarget, heroAnimate);
+
   if (data === null) {
     return <p className="py-16 text-center text-text-dim">Loading results…</p>;
   }
@@ -101,13 +144,9 @@ export function ResultsPage() {
     return (
       <div className="py-16 text-center">
         <p className="text-text-dim">That session wasn&apos;t found.</p>
-        <button
-          type="button"
-          onClick={onNew}
-          className="mt-3 rounded-btn border border-border px-4 py-2 text-sm text-text-dim hover:border-accent hover:text-text"
-        >
+        <Button variant="secondary" size="md" onClick={onNew} className="mt-3">
           ← Home
-        </button>
+        </Button>
       </div>
     );
   }
@@ -115,6 +154,10 @@ export function ResultsPage() {
   const { session, vitals } = { session: data.session, vitals: data.session.vitals };
   const bands = bandsForSession(session);
   const band = bands ? bandFor(session.score, bands) : null;
+  // Give the top band a visible width and keep the marker off the right edge.
+  const gaugeMax = bands
+    ? Math.max(Math.ceil(bands[bands.length - 1].min / 0.8), session.score)
+    : 0;
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
