@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { APP_MARK, APP_NAME } from '@/lib/brand';
+import { Chip } from '@/ui/kit';
 import { useStreakStore } from '@/store/streak';
 import { dueCount } from '@/store/srs';
 
@@ -14,13 +15,10 @@ const NAV = [
 
 function linkClass({ isActive }: { isActive: boolean }): string {
   return [
-    'rounded-btn px-2 py-1 text-sm transition-colors duration-fast ease-out-t',
+    'relative rounded-btn px-2 py-1 text-sm transition-colors duration-fast ease-out-t',
     isActive ? 'text-accent' : 'text-text-dim hover:text-text',
   ].join(' ');
 }
-
-const CHIP =
-  'rounded-btn px-2 py-1 font-mono text-sm text-text-dim transition-colors duration-fast ease-out-t hover:text-text';
 
 /** Thin top bar (doc 07 §3). Hidden during play in a later milestone. */
 export function TopBar() {
@@ -54,20 +52,40 @@ export function TopBar() {
         <div className="flex items-center gap-1">
           {NAV.map((item) => (
             <NavLink key={item.to} to={item.to} className={linkClass}>
-              {item.label}
+              {({ isActive }) => (
+                <>
+                  {item.label}
+                  {/* Selected marker (N1): a 2px accent underline, not just a
+                      color change (ui-redesign/01 §6). Per-item — cheap, no JS. */}
+                  {isActive && (
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-accent"
+                    />
+                  )}
+                </>
+              )}
             </NavLink>
           ))}
         </div>
 
         <div className="ml-auto flex items-center gap-1">
           {streakCurrent > 0 && (
-            <Link to="/daily" className={CHIP} title="Daily streak">
-              🔥 {streakCurrent}
+            <Link
+              to="/daily"
+              title="Daily streak"
+              className="rounded-full transition-opacity duration-fast ease-out-t hover:opacity-80"
+            >
+              <Chip tone="neutral">🔥 {streakCurrent}</Chip>
             </Link>
           )}
           {due > 0 && (
-            <Link to="/srs" className={CHIP} title="Flashcards due">
-              ⚡ {due} due
+            <Link
+              to="/srs"
+              title="Flashcards due"
+              className="rounded-full transition-opacity duration-fast ease-out-t hover:opacity-80"
+            >
+              <Chip tone="accent">⚡ {due} due</Chip>
             </Link>
           )}
           <NavLink
