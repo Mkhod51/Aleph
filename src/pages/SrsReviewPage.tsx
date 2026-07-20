@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@/ui/Button';
 import { acceptsChar, matchesLive, type Question } from '@/engine';
 import { now } from '@/lib/timing';
 import { gradeCard, loadDueCards, seedBuiltinDecks } from '@/store/srs';
@@ -120,13 +121,14 @@ export function SrsReviewPage() {
             ? `${reviewed} card${reviewed === 1 ? '' : 's'} reviewed. Come back tomorrow.`
             : 'No cards are due right now.'}
         </p>
-        <button
-          type="button"
+        <Button
+          variant="secondary"
+          size="md"
           onClick={() => navigate('/')}
-          className="mt-4 rounded-btn border border-border px-4 py-2 text-sm text-text-dim hover:border-accent hover:text-text"
+          className="mt-4"
         >
           ← Home
-        </button>
+        </Button>
       </div>
     );
   }
@@ -138,14 +140,15 @@ export function SrsReviewPage() {
     >
       <div className="relative flex h-12 items-center justify-center px-6 font-mono text-sm text-text-dim">
         {i + 1}/{cards.length} · box {card?.box}
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => navigate('/')}
           aria-label="Leave review"
-          className="absolute right-6 rounded-btn px-2 text-lg text-text-dim hover:text-text"
+          className="absolute right-6 text-lg"
         >
           ✕
-        </button>
+        </Button>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-6">
         <div className="font-mono text-6xl tabular-nums text-text">{card?.front}</div>
@@ -165,13 +168,9 @@ export function SrsReviewPage() {
             answer: <span className="text-text">{reveal}</span>
           </div>
         ) : (
-          <button
-            type="button"
-            onClick={onReveal}
-            className="text-sm text-text-dim hover:text-text"
-          >
+          <Button variant="ghost" size="sm" onClick={onReveal}>
             Reveal (counts as a miss)
-          </button>
+          </Button>
         )}
       </div>
       <div className="pb-6 text-center text-xs text-text-dim">

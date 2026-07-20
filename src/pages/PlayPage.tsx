@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Button } from '@/ui/Button';
 import { Clock } from '@/ui/play/Clock';
 import { Countdown } from '@/ui/play/Countdown';
 import { PauseOverlay } from '@/ui/play/PauseOverlay';
@@ -110,13 +111,9 @@ export function PlayPage() {
     return (
       <div className="flex min-h-[60dvh] flex-col items-center justify-center gap-3 text-center">
         <p className="text-text">This preset has no operations enabled.</p>
-        <button
-          type="button"
-          onClick={() => navigate('/settings')}
-          className="rounded-btn border border-border px-4 py-2 text-sm text-text-dim hover:border-accent hover:text-text"
-        >
+        <Button variant="secondary" size="md" onClick={() => navigate('/settings')}>
           Edit presets
-        </button>
+        </Button>
       </div>
     );
   }

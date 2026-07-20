@@ -50,6 +50,9 @@ function useCountUp(target: number, animate: boolean): number {
       setDisplay(target);
       return;
     }
+    // Start from 0 even if the component is reused across two results URLs
+    // (React keeps ResultsPage mounted when only :sessionId changes).
+    setDisplay(0);
     let raf = 0;
     const start = performance.now();
     const DURATION = 400; // --dur-moment
@@ -138,7 +141,9 @@ export function ResultsPage() {
   const displayScore = useCountUp(heroTarget, heroAnimate);
 
   if (data === null) {
-    return <p className="py-16 text-center text-text-dim">Loading results…</p>;
+    // C6: reserve the layout during the brief IndexedDB read instead of flashing
+    // a centered "Loading…" line that then jumps the full results in.
+    return <div className="mx-auto min-h-[70vh] max-w-3xl" aria-hidden />;
   }
   if (data === 'missing') {
     return (
@@ -166,7 +171,7 @@ export function ResultsPage() {
         <div>
           <div className="flex items-baseline gap-3">
             <span className="font-mono text-hero font-semibold tabular-nums text-text">
-              {session.score}
+              {displayScore}
             </span>
             <span className="text-sm text-text-dim">
               {session.completed ? 'correct' : 'abandoned'}
@@ -181,6 +186,11 @@ export function ResultsPage() {
               />
               <span className="font-medium text-text">{band.label}</span>
               <span className="text-text-dim">· {BAND_DISCLAIMER}</span>
+            </div>
+          )}
+          {bands && (
+            <div className={`mt-3 max-w-md ${data.isNewPB ? 'animate-pb-pulse' : ''}`}>
+              <BandGauge bands={bands} max={gaugeMax} value={displayScore} />
             </div>
           )}
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
@@ -198,14 +208,14 @@ export function ResultsPage() {
           </div>
         </div>
         {data.isNewPB && (
-          <div className="rounded-btn border border-accent px-3 py-1 text-sm font-medium text-accent">
+          <div className="animate-pb-pulse rounded-btn border border-accent px-3 py-1 text-sm font-medium text-accent">
             New best
           </div>
         )}
       </div>
 
       {/* Vitals */}
-      <div className="grid grid-cols-3 gap-4 sm:grid-cols-6">
+      <div className="animate-reveal grid grid-cols-3 gap-4 sm:grid-cols-6">
         <Vital label="attempted" value={String(vitals.attempted)} />
         <Vital label="correct" value={String(vitals.correct)} />
         <Vital label="wrong" value={String(vitals.wrong)} />
@@ -215,7 +225,7 @@ export function ResultsPage() {
       </div>
 
       {/* Review table */}
-      <div className="overflow-x-auto">
+      <div className="animate-reveal overflow-x-auto">
         <div className="mb-2 flex items-center justify-between">
           <h2 className="text-sm font-medium uppercase tracking-wide text-text-dim">
             Review
@@ -226,7 +236,7 @@ export function ResultsPage() {
                 key={m}
                 type="button"
                 onClick={() => setSortMode(m)}
-                className={`rounded-btn px-2 py-1 ${
+                className={`rounded-btn px-2 py-1 transition-colors duration-fast ease-out-t ${
                   sortMode === m
                     ? 'bg-surface-2 text-text'
                     : 'text-text-dim hover:text-text'
@@ -304,27 +314,15 @@ export function ResultsPage() {
 
       {/* Actions */}
       <div className="flex flex-wrap gap-3 border-t border-border pt-4">
-        <button
-          type="button"
-          onClick={onAgain}
-          className="rounded-btn bg-accent px-5 py-2 font-medium text-bg hover:brightness-110"
-        >
+        <Button variant="primary" size="md" onClick={onAgain}>
           Again <span className="opacity-70">↵</span>
-        </button>
-        <button
-          type="button"
-          onClick={onNew}
-          className="rounded-btn border border-border px-5 py-2 text-text-dim hover:border-accent hover:text-text"
-        >
+        </Button>
+        <Button variant="secondary" size="md" onClick={onNew}>
           New config <span className="opacity-70">N</span>
-        </button>
-        <button
-          type="button"
-          onClick={onDashboard}
-          className="rounded-btn border border-border px-5 py-2 text-text-dim hover:border-accent hover:text-text"
-        >
+        </Button>
+        <Button variant="secondary" size="md" onClick={onDashboard}>
           Dashboard <span className="opacity-70">D</span>
-        </button>
+        </Button>
       </div>
     </div>
   );

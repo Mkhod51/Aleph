@@ -46,7 +46,10 @@ export function Countdown({ onDone }: { onDone: () => void }) {
         </>
       ) : (
         <>
-          <div className="font-mono text-7xl tabular-nums text-accent">
+          <div
+            key={n}
+            className="animate-tick font-mono text-7xl tabular-nums text-accent"
+          >
             {n > 0 ? n : 'GO'}
           </div>
           <div className="text-sm text-text-dim">Enter to skip</div>

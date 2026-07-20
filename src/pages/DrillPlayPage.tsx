@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@/ui/Button';
 import { PlayField } from '@/ui/play/PlayField';
 import { useDrillEngine } from '@/ui/play/useDrillEngine';
 import { useSettingsStore } from '@/store/useSettingsStore';
@@ -102,7 +103,7 @@ export function DrillPlayPage() {
 
   return (
     <div
-      className={`flex min-h-[calc(100dvh-2px)] flex-col transition-colors duration-150 ${flashBg}`}
+      className={`flex min-h-[calc(100dvh-2px)] flex-col transition-colors duration-150 ease-out-t ${flashBg}`}
       onClick={() => phase === 'playing' && inputRef.current?.focus()}
     >
       <div className="relative flex h-16 items-center justify-center px-6">
@@ -118,24 +119,24 @@ export function DrillPlayPage() {
 
       <div className="flex flex-1 flex-col items-center justify-center gap-4 px-4 pb-16">
         {phase === 'paused' ? (
-          <div className="flex flex-col items-center gap-5 text-center">
+          <div className="animate-overlay-in flex flex-col items-center gap-5 text-center">
             <div className="font-mono text-3xl text-text">Paused</div>
             <div className="flex gap-3">
-              <button
-                type="button"
+              <Button
+                variant="primary"
+                size="md"
                 autoFocus
                 onClick={() => setPhase('playing')}
-                className="rounded-btn bg-accent px-5 py-2 font-medium text-bg hover:brightness-110"
               >
                 Resume
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="danger"
+                size="md"
                 onClick={() => void endSession(false, engine.finalizeDrafts())}
-                className="rounded-btn border border-border px-5 py-2 text-text-dim hover:border-bad hover:text-text"
               >
                 Quit
-              </button>
+              </Button>
             </div>
           </div>
         ) : (

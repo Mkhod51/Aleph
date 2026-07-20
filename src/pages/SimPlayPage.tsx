@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Button } from '@/ui/Button';
 import { Clock } from '@/ui/play/Clock';
 import { Countdown } from '@/ui/play/Countdown';
 import { PlayField } from '@/ui/play/PlayField';
@@ -150,27 +151,27 @@ export function SimPlayPage() {
       <div className="flex flex-1 items-center justify-center px-4 pb-16">
         {phase === 'countdown' && <Countdown onDone={beginPlay} />}
         {phase === 'confirmQuit' && (
-          <div className="flex flex-col items-center gap-5 text-center">
+          <div className="animate-overlay-in flex flex-col items-center gap-5 text-center">
             <div className="font-mono text-2xl text-text">Quit this sim?</div>
             <p className="text-sm text-text-dim">
               It will be recorded as abandoned and won&apos;t count.
             </p>
             <div className="flex gap-3">
-              <button
-                type="button"
+              <Button
+                variant="primary"
+                size="md"
                 autoFocus
                 onClick={() => setPhase('playing')}
-                className="rounded-btn bg-accent px-5 py-2 font-medium text-bg hover:brightness-110"
               >
                 Resume
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="danger"
+                size="md"
                 onClick={() => void endSession(false, engine.finalizeDrafts())}
-                className="rounded-btn border border-bad px-5 py-2 text-text hover:bg-bad-bg"
               >
                 Quit
-              </button>
+              </Button>
             </div>
           </div>
         )}
