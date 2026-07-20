@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
+import { Chip, SegmentedControl, type ChipTone } from '@/ui/kit';
 import {
   DRILL_CATALOG,
   buildDrillFromTag,
@@ -10,7 +11,13 @@ import {
 } from '@/store/drills';
 import { loadDashboard, type SkillRow } from '@/store/dashboard';
 import { formatAccuracy, formatLatency } from '@/lib/format';
-import type { SkillTag } from '@/engine';
+import type { Mastery, SkillTag } from '@/engine';
+
+function MasteryChip({ level }: { level: Mastery }) {
+  const tone: ChipTone =
+    level === 'solid' ? 'good' : level === 'learning' ? 'accent' : 'neutral';
+  return <Chip tone={tone}>{level}</Chip>;
+}
 
 const COUNTS = [10, 25, 50];
 const TIERS: TierMode[] = [1, 2, 3, 'adaptive'];
@@ -116,7 +123,7 @@ export function DrillsPage() {
                   key={tag}
                   type="button"
                   onClick={() => start(tag)}
-                  className="flex w-full items-center gap-4 py-2 text-left hover:opacity-90"
+                  className="group flex w-full items-center gap-4 py-2 text-left"
                 >
                   <span className="w-28 shrink-0 font-mono text-sm text-text">{tag}</span>
                   <span className="flex-1 text-xs text-text-dim">
@@ -124,20 +131,10 @@ export function DrillsPage() {
                       ? `${formatAccuracy(s.accuracy)} · ${s.medianMs ? formatLatency(s.medianMs) : '—'}`
                       : 'no data yet'}
                   </span>
-                  {s && (
-                    <span
-                      className={`text-xs ${
-                        s.mastery === 'solid'
-                          ? 'text-good'
-                          : s.mastery === 'learning'
-                            ? 'text-accent'
-                            : 'text-text-dim'
-                      }`}
-                    >
-                      {s.mastery}
-                    </span>
-                  )}
-                  <span className="text-xs text-accent">Drill →</span>
+                  {s && <MasteryChip level={s.mastery} />}
+                  <span className="text-xs text-text-faint transition-[transform,color] duration-fast ease-out-t group-hover:translate-x-0.5 group-hover:text-accent">
+                    Drill →
+                  </span>
                 </button>
               );
             })}
@@ -148,6 +145,11 @@ export function DrillsPage() {
   );
 }
 
+/**
+ * A labeled drill-config picker. Wraps the kit SegmentedControl (role=radiogroup)
+ * so every single-select group in the app shares one accessible component; values
+ * may be numbers/mixed, so they round-trip through their string form.
+ */
 function ConfigGroup<T extends string | number>({
   label,
   options,
@@ -162,22 +164,16 @@ function ConfigGroup<T extends string | number>({
   return (
     <div className="flex items-center gap-2">
       <span className="text-text-dim">{label}</span>
-      <div className="flex gap-1">
-        {options.map((o) => (
-          <button
-            key={String(o.value)}
-            type="button"
-            onClick={() => onChange(o.value)}
-            className={`rounded-btn px-2.5 py-1 ${
-              o.value === value
-                ? 'bg-accent font-medium text-bg'
-                : 'border border-border text-text-dim hover:text-text'
-            }`}
-          >
-            {o.label}
-          </button>
-        ))}
-      </div>
+      <SegmentedControl
+        size="sm"
+        ariaLabel={label}
+        value={String(value)}
+        options={options.map((o) => ({ value: String(o.value), label: o.label }))}
+        onChange={(v) => {
+          const match = options.find((o) => String(o.value) === v);
+          if (match) onChange(match.value);
+        }}
+      />
     </div>
   );
 }
