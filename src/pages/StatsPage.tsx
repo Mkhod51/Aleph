@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
 import { Button } from '@/ui/Button';
+import { Chip, StatTile, EmptyState, type ChipTone } from '@/ui/kit';
 import { Heatmap } from '@/ui/stats/Heatmap';
 import { Calendar } from '@/ui/stats/Calendar';
 import { BandGauge } from '@/ui/BandGauge';
@@ -18,25 +19,9 @@ const ScoreChart = lazy(() => import('@/ui/stats/ScoreChart'));
 const TREND: Record<string, string> = { '1': '▲', '0': '—', '-1': '▼' };
 
 function MasteryChip({ level }: { level: Mastery }) {
-  const cls =
-    level === 'solid'
-      ? 'text-good'
-      : level === 'learning'
-        ? 'text-accent'
-        : 'text-text-dim';
-  return <span className={`text-xs ${cls}`}>{level}</span>;
-}
-
-function Stat({ label, value, sub }: { label: string; value: string; sub?: string }) {
-  return (
-    <div className="flex flex-col">
-      <span className="font-mono text-2xl tabular-nums text-text">{value}</span>
-      <span className="text-[0.75rem] uppercase tracking-wide text-text-dim">
-        {label}
-      </span>
-      {sub && <span className="text-xs text-text-dim">{sub}</span>}
-    </div>
-  );
+  const tone: ChipTone =
+    level === 'solid' ? 'good' : level === 'learning' ? 'accent' : 'neutral';
+  return <Chip tone={tone}>{level}</Chip>;
 }
 
 function SkillBar({ row, onClick }: { row: SkillRow; onClick: () => void }) {
@@ -83,21 +68,16 @@ export function StatsPage() {
 
   if (data && !data.hasData) {
     return (
-      <div className="mx-auto max-w-lg py-16 text-center">
+      <div className="mx-auto flex max-w-lg flex-col gap-6">
         <h1 className="font-mono text-2xl font-semibold text-text">Dashboard</h1>
-        <p className="mt-3 text-text-dim">
-          No sessions yet. Two minutes gets you a baseline — then this fills with
-          score trends, a skill breakdown, a times-table heatmap and a consistency
-          calendar.
-        </p>
-        <Button
-          variant="primary"
-          size="md"
-          onClick={() => navigate('/play')}
-          className="mt-4"
+        <EmptyState
+          eyebrow="No sessions yet"
+          title="Your dashboard is empty"
+          action={{ label: 'Play a sprint', to: '/play' }}
         >
-          Play a sprint
-        </Button>
+          Two minutes gets you a baseline — then this fills with score trends, a
+          skill breakdown, a times-table heatmap and a consistency calendar.
+        </EmptyState>
       </div>
     );
   }
@@ -118,10 +98,10 @@ export function StatsPage() {
     <div className="mx-auto flex max-w-content flex-col gap-6">
       <h1 className="font-mono text-2xl font-semibold text-text">Dashboard</h1>
 
-      {/* 1. Headline strip */}
+      {/* 1. Headline strip → StatTile grid on a panel */}
       <Card>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <Stat
+          <StatTile
             label="Sprint avg (7)"
             value={data.sprintRolling7 !== null ? data.sprintRolling7.toFixed(0) : '—'}
             sub={
@@ -130,9 +110,9 @@ export function StatsPage() {
                 : undefined
             }
           />
-          <Stat label="Sessions" value={String(data.totalSessions)} />
-          <Stat label="Questions" value={String(data.totalQuestions)} />
-          <Stat label="SRS due" value="—" sub="arrives in M5" />
+          <StatTile label="Sessions" value={data.totalSessions} />
+          <StatTile label="Questions" value={data.totalQuestions} />
+          <StatTile label="SRS due" value="—" sub="arrives in M5" />
         </div>
       </Card>
 
@@ -189,9 +169,7 @@ export function StatsPage() {
                   navigate(`/drills?fact=${encodeURIComponent(factKey)}`)
                 }
               />
-              <p className="mt-2 text-xs text-text-dim">
-                Fast → slow. Red outline = weak fact. Click a cell to drill it.
-              </p>
+              <p className="mt-2 text-xs text-text-dim">Click a cell to drill it.</p>
             </div>
           ) : (
             <p className="mt-2 text-sm text-text-dim">
