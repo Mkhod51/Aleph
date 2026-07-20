@@ -107,7 +107,7 @@ function FragmentRow({
                 ? `${r} × ${c} · ${formatLatency(fact.medianLatencyMs)} · ${Math.round(accuracy * 100)}%`
                 : `${r} × ${c} · no data`
             }
-            className="h-5 w-5 rounded-[2px] border transition-transform hover:scale-110 disabled:cursor-default disabled:hover:scale-100"
+            className="h-5 w-5 rounded-[2px] border transition-transform duration-fast ease-out-t hover:scale-110 disabled:cursor-default disabled:hover:scale-100"
             style={{
               backgroundColor: has ? heatColor(norm) : 'var(--surface-2)',
               borderColor: weak ? 'var(--bad)' : 'transparent',

@@ -7,7 +7,7 @@ export function NotFoundPage() {
       <p className="text-sm text-text-dim">That route doesn&apos;t exist.</p>
       <Link
         to="/"
-        className="rounded-btn border border-border px-4 py-2 text-sm text-text-dim transition-colors hover:border-accent hover:text-text"
+        className="rounded-btn border border-border px-4 py-2 text-sm text-text-dim transition-colors duration-fast ease-out-t hover:border-accent hover:text-text"
       >
         ← Back to Home
       </Link>

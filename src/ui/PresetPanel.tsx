@@ -11,6 +11,7 @@ import {
   type SprintPreset,
 } from '@/store/presets';
 import { durationLabel } from '@/lib/format';
+import { Button } from '@/ui/Button';
 
 interface Draft {
   name: string;
@@ -114,29 +115,17 @@ export function PresetPanel() {
           ))}
         </select>
 
-        <button
-          type="button"
-          onClick={() => beginNew(selected)}
-          className="rounded-btn border border-border px-3 py-1.5 text-sm text-text-dim hover:border-accent hover:text-text"
-        >
+        <Button variant="secondary" size="sm" onClick={() => beginNew(selected)}>
           {selected.builtin ? 'Duplicate' : 'New'}
-        </button>
+        </Button>
         {!selected.builtin && (
           <>
-            <button
-              type="button"
-              onClick={() => beginEdit(selected)}
-              className="rounded-btn border border-border px-3 py-1.5 text-sm text-text-dim hover:border-accent hover:text-text"
-            >
+            <Button variant="secondary" size="sm" onClick={() => beginEdit(selected)}>
               Edit
-            </button>
-            <button
-              type="button"
-              onClick={() => remove(selected.id)}
-              className="rounded-btn border border-border px-3 py-1.5 text-sm text-text-dim hover:border-bad hover:text-text"
-            >
+            </Button>
+            <Button variant="danger" size="sm" onClick={() => remove(selected.id)}>
               Delete
-            </button>
+            </Button>
           </>
         )}
       </div>
@@ -230,21 +219,17 @@ export function PresetPanel() {
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                type="button"
+              <Button
+                variant="primary"
+                size="sm"
                 onClick={save}
                 disabled={!draftValid(draft)}
-                className="rounded-btn bg-accent px-4 py-1.5 text-sm font-medium text-bg hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Save
-              </button>
-              <button
-                type="button"
-                onClick={() => setEditing(null)}
-                className="rounded-btn border border-border px-4 py-1.5 text-sm text-text-dim hover:text-text"
-              >
+              </Button>
+              <Button variant="secondary" size="sm" onClick={() => setEditing(null)}>
                 Cancel
-              </button>
+              </Button>
               {!draftValid(draft) && (
                 <span className="text-xs text-text-dim">
                   Enable an op; ranges need min ≥ 2 and max ≥ min.
