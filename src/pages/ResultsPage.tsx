@@ -7,6 +7,8 @@ import { techniqueForTag } from '@/content/techniques';
 import { buildDrillFromTag, useDrillStore } from '@/store/drills';
 import { Button } from '@/ui/Button';
 import { BandGauge } from '@/ui/BandGauge';
+import { Card } from '@/ui/primitives';
+import { Chip, HeroReadout, StatTile, SegmentedControl } from '@/ui/kit';
 import type { SkillTag } from '@/engine';
 import type { Attempt } from '@/store/types';
 import {
@@ -66,17 +68,6 @@ function useCountUp(target: number, animate: boolean): number {
     return () => cancelAnimationFrame(raf);
   }, [target, animate]);
   return display;
-}
-
-function Vital({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex flex-col">
-      <span className="font-mono text-lg tabular-nums text-text">{value}</span>
-      <span className="text-[0.75rem] uppercase tracking-wide text-text-dim">
-        {label}
-      </span>
-    </div>
-  );
 }
 
 export function ResultsPage() {
@@ -166,26 +157,28 @@ export function ResultsPage() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
-      {/* Hero */}
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-6">
+      {/* Hero — the designed moment: gridfield band, HeroReadout count-up (R1),
+          band gauge fill (R2), PB pulse/pop (R4). */}
+      <div className="panel gridfield flex flex-wrap items-end justify-between gap-4 p-6">
         <div>
-          <div className="flex items-baseline gap-3">
-            <span className="font-mono text-hero font-semibold tabular-nums text-text">
-              {displayScore}
-            </span>
-            <span className="text-sm text-text-dim">
-              {session.completed ? 'correct' : 'abandoned'}
-            </span>
-          </div>
+          <HeroReadout
+            value={displayScore}
+            sub={session.completed ? 'correct' : 'abandoned'}
+            emphasis={data.isNewPB}
+            align="left"
+            rule={false}
+          />
           {band && (
-            <div className="mt-1 flex items-center gap-2 text-sm">
-              <span
-                className="inline-block h-2 w-2 rounded-full"
-                style={{ backgroundColor: band.color }}
-                aria-hidden
-              />
-              <span className="font-medium text-text">{band.label}</span>
-              <span className="text-text-dim">· {BAND_DISCLAIMER}</span>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+              <Chip tone="band">
+                <span
+                  className="inline-block h-2 w-2 rounded-full"
+                  style={{ backgroundColor: band.color }}
+                  aria-hidden
+                />
+                {band.label}
+              </Chip>
+              <span className="text-text-dim">{BAND_DISCLAIMER}</span>
             </div>
           )}
           {bands && (
@@ -208,48 +201,43 @@ export function ResultsPage() {
           </div>
         </div>
         {data.isNewPB && (
-          <div className="animate-pb-pulse rounded-btn border border-accent px-3 py-1 text-sm font-medium text-accent">
+          <Chip tone="accent" size="md" glow pop className="animate-pb-pulse">
             New best
-          </div>
+          </Chip>
         )}
       </div>
 
-      {/* Vitals */}
-      <div className="animate-reveal grid grid-cols-3 gap-4 sm:grid-cols-6">
-        <Vital label="attempted" value={String(vitals.attempted)} />
-        <Vital label="correct" value={String(vitals.correct)} />
-        <Vital label="wrong" value={String(vitals.wrong)} />
-        <Vital label="accuracy" value={formatAccuracy(vitals.accuracy)} />
-        <Vital label="med latency" value={formatLatency(vitals.medianLatencyMs)} />
-        <Vital label="throughput" value={formatPerMin(vitals.perMin)} />
-      </div>
+      {/* Vitals → StatTile grid */}
+      <Card className="animate-reveal grid grid-cols-3 gap-4 sm:grid-cols-6">
+        <StatTile label="attempted" value={vitals.attempted} />
+        <StatTile label="correct" value={vitals.correct} />
+        <StatTile label="wrong" value={vitals.wrong} />
+        <StatTile label="accuracy" value={formatAccuracy(vitals.accuracy)} />
+        <StatTile label="med latency" value={formatLatency(vitals.medianLatencyMs)} />
+        <StatTile label="throughput" value={formatPerMin(vitals.perMin)} />
+      </Card>
 
       {/* Review table */}
       <div className="animate-reveal overflow-x-auto">
         <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-sm font-medium uppercase tracking-wide text-text-dim">
+          <h2 className="text-sm font-medium uppercase tracking-[0.06em] text-text-faint">
             Review
           </h2>
-          <div className="flex gap-1 text-xs">
-            {(['worst', 'latency', 'order'] as SortMode[]).map((m) => (
-              <button
-                key={m}
-                type="button"
-                onClick={() => setSortMode(m)}
-                className={`rounded-btn px-2 py-1 transition-colors duration-fast ease-out-t ${
-                  sortMode === m
-                    ? 'bg-surface-2 text-text'
-                    : 'text-text-dim hover:text-text'
-                }`}
-              >
-                {m === 'worst' ? 'Worst first' : m === 'latency' ? 'Slowest' : 'Order'}
-              </button>
-            ))}
-          </div>
+          <SegmentedControl
+            ariaLabel="Sort review"
+            size="sm"
+            value={sortMode}
+            onChange={setSortMode}
+            options={[
+              { value: 'worst', label: 'Worst first' },
+              { value: 'latency', label: 'Slowest' },
+              { value: 'order', label: 'Order' },
+            ]}
+          />
         </div>
         <table className="w-full border-collapse text-sm">
           <thead>
-            <tr className="border-b border-border text-left text-text-dim">
+            <tr className="border-b border-border text-left text-text-faint">
               <th className="py-2 pr-3 font-medium"> </th>
               <th className="py-2 pr-3 font-medium">Question</th>
               <th className="py-2 pr-3 font-medium">You</th>
@@ -261,7 +249,10 @@ export function ResultsPage() {
           </thead>
           <tbody className="font-mono tabular-nums">
             {rows.map((a) => (
-              <tr key={a.id} className="border-b border-border/60">
+              <tr
+                key={a.id}
+                className="border-b border-border/60 transition-colors duration-fast ease-out-t hover:bg-surface-2"
+              >
                 <td className="py-2 pr-3">
                   {a.correct ? (
                     <span className="text-good" aria-label="correct">
@@ -286,11 +277,11 @@ export function ResultsPage() {
                   {(() => {
                     const tech = techniqueForTag(a.skill);
                     return (
-                      <span className="flex gap-2">
+                      <span className="flex gap-3">
                         {tech && (
                           <Link
                             to={`/learn/${tech.slug}`}
-                            className="text-accent hover:underline"
+                            className="text-text-dim transition-colors duration-fast ease-out-t hover:text-accent"
                           >
                             trick {tech.id}
                           </Link>
@@ -298,7 +289,7 @@ export function ResultsPage() {
                         <button
                           type="button"
                           onClick={() => drillLike(a.skill)}
-                          className="text-accent hover:underline"
+                          className="text-text-dim transition-colors duration-fast ease-out-t hover:text-accent"
                         >
                           drill
                         </button>
