@@ -1,10 +1,15 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 /**
- * The single button primitive (ui-review 03 §C1). One component replaces the ~45
- * ad-hoc `rounded-btn px-…` combos so every button shares padding, timing,
- * hover/press and disabled behaviour. Renders a real <button> — accessible name
- * and role are unchanged, so role+name queries (e2e) keep working.
+ * The single button primitive (ui-review 03 §C1, upgraded per ui-redesign/02 §A).
+ * One component replaces the ~45 ad-hoc `rounded-btn px-…` combos so every button
+ * shares padding, timing, hover/press and disabled behaviour. Renders a real
+ * <button> — accessible name and role are unchanged, so role+name queries (e2e)
+ * keep working; the API is unchanged.
+ *
+ * Redesign additions: primary hovers to --accent-hi, the press springs (`.btn`
+ * transitions transform with --ease-spring) and dips with active:scale, and the
+ * focus glow comes from the global :focus-visible rule.
  *
  * Layout-only overrides (w-full, self-start, one-off padding) go through
  * `className`; visual style comes from variant/size only.
@@ -13,8 +18,9 @@ type Variant = 'primary' | 'secondary' | 'danger' | 'ghost';
 type Size = 'sm' | 'md' | 'lg';
 
 const VARIANT: Record<Variant, string> = {
-  primary: 'bg-accent text-bg font-medium hover:brightness-110 active:scale-[0.98]',
-  secondary: 'border border-border text-text-dim hover:border-accent hover:text-text',
+  primary: 'bg-accent text-bg font-medium hover:bg-accent-hi active:scale-[0.98]',
+  secondary:
+    'border border-border text-text-dim hover:border-accent hover:text-text',
   danger: 'border border-bad text-text hover:bg-bad-bg',
   ghost: 'text-text-dim hover:text-text',
 };
@@ -46,7 +52,7 @@ export function Button({
     <button
       type={type}
       className={[
-        'rounded-btn transition-[color,background-color,border-color,transform,filter] duration-fast ease-out-t',
+        'btn rounded-btn',
         'disabled:cursor-not-allowed disabled:opacity-40',
         VARIANT[variant],
         SIZE[size],
