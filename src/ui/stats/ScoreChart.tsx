@@ -1,4 +1,5 @@
 import {
+  CartesianGrid,
   Line,
   LineChart,
   ReferenceArea,
@@ -13,6 +14,11 @@ import type { ScorePoint } from '@/store/dashboard';
 /**
  * Score-over-time line with band-shaded background and PB markers (doc 05 §4
  * card 2). Lazy-loaded so Recharts stays out of the play/home bundle (doc 08 §1).
+ *
+ * Precision-Instrument theming (ui-redesign/02 §C): faint graph-paper grid
+ * (--grid-line) + faint axis ticks (--text-faint), a 2px --accent line, graded
+ * band shading (the target zone reads strongest), and PB dots that carry the
+ * amber glow. Charts never animate on mount — `isAnimationActive={false}` stays.
  */
 export default function ScoreChart({
   data,
@@ -36,27 +42,29 @@ export default function ScoreChart({
             y1={b.min}
             y2={idx + 1 < bands.length ? (bands[idx + 1] as Band).min : yMax}
             fill={b.color}
-            fillOpacity={0.12}
+            // Graded so higher (target) bands read strongest, drawing the eye up.
+            fillOpacity={0.05 + idx * 0.018}
             stroke="none"
           />
         ))}
+        <CartesianGrid stroke="var(--grid-line)" strokeWidth={1} />
         <XAxis
           dataKey="i"
-          tick={{ fill: 'var(--text-dim)', fontSize: 11 }}
+          tick={{ fill: 'var(--text-faint)', fontSize: 11 }}
           tickFormatter={(i: number) => points[i]?.date.slice(5) ?? ''}
           stroke="var(--border)"
         />
         <YAxis
           domain={[0, yMax]}
-          tick={{ fill: 'var(--text-dim)', fontSize: 11 }}
+          tick={{ fill: 'var(--text-faint)', fontSize: 11 }}
           stroke="var(--border)"
           width={40}
         />
         <Tooltip
           contentStyle={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 8,
+            background: 'var(--surface-3)',
+            border: '1px solid var(--border-2)',
+            borderRadius: 10,
             color: 'var(--text)',
             fontSize: 12,
           }}
@@ -81,7 +89,11 @@ export default function ScoreChart({
                 fill={pb ? 'var(--accent)' : 'var(--bg)'}
                 stroke="var(--accent)"
                 strokeWidth={1.5}
-                style={{ cursor: 'pointer' }}
+                style={{
+                  cursor: 'pointer',
+                  // PB markers carry the amber glow (ui-redesign/02 §C).
+                  filter: pb ? 'drop-shadow(0 0 4px var(--accent-glow))' : undefined,
+                }}
                 onClick={() => p && onPointClick(p.sessionId)}
               />
             );

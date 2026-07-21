@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Eyebrow, NavCard } from '@/ui/primitives';
+import { StatTile } from '@/ui/kit';
 import { Button } from '@/ui/Button';
 import { PresetPanel } from '@/ui/PresetPanel';
 import { durationLabel } from '@/lib/format';
@@ -23,11 +24,12 @@ import { useDrillStore } from '@/store/drills';
 function Sparkline({ scores }: { scores: number[] }) {
   const max = Math.max(...scores, 1);
   return (
-    <div className="flex h-10 items-end gap-1" aria-hidden>
+    // Height is a multiple of the 24px grid rhythm (ui-redesign/03 §Home).
+    <div className="flex h-12 items-end gap-1" aria-hidden>
       {scores.map((s, i) => (
         <div
           key={i}
-          className="w-3 rounded-sm bg-accent/80"
+          className="w-3 rounded-sm border-t-2 border-accent-hi bg-accent/70"
           style={{ height: `${Math.max(6, (s / max) * 100)}%` }}
           title={String(s)}
         />
@@ -40,8 +42,11 @@ function Onboarding() {
   const navigate = useNavigate();
   const update = useSettingsStore((s) => s.update);
   return (
-    <div className="mx-auto flex max-w-lg flex-col items-center gap-5 py-20 text-center">
-      <h1 className="font-mono text-2xl font-semibold text-text">
+    // Onboarding hero: gridfield texture + HeroReadout-style framed title. The
+    // two CTAs get a one-shot spring-in (animate-pop); the global reduced-motion
+    // override collapses it to instant (ui-redesign/03 §Home, motion H1).
+    <div className="panel gridfield mx-auto flex max-w-lg flex-col items-center gap-5 rounded-card px-6 py-16 text-center">
+      <h1 className="border-y border-border py-4 font-mono text-2xl font-semibold tracking-[-0.01em] text-text">
         This trains you for quant trading math tests.
       </h1>
       <p className="text-text-dim">
@@ -53,6 +58,7 @@ function Onboarding() {
         size="lg"
         mono
         autoFocus
+        className="animate-pop"
         onClick={() => {
           update({ onboarded: true });
           navigate('/play?seconds=60');
@@ -60,7 +66,12 @@ function Onboarding() {
       >
         Take the 60-second baseline
       </Button>
-      <Button variant="ghost" size="sm" onClick={() => update({ onboarded: true })}>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="animate-pop [animation-delay:60ms]"
+        onClick={() => update({ onboarded: true })}
+      >
         Skip, just let me play
       </Button>
     </div>
@@ -112,7 +123,9 @@ export function HomePage() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
-      <div className="flex flex-col items-center gap-4 pt-6 text-center">
+      {/* Hero band — the signature gridfield texture behind START + the preset
+          panel, seen first (ui-redesign/03 §Home). */}
+      <div className="panel gridfield flex flex-col items-center gap-5 rounded-card px-4 py-8 text-center">
         <Button
           variant="primary"
           size="lg"
@@ -150,15 +163,13 @@ export function HomePage() {
       {/* Daily + SRS */}
       <div className="grid gap-4 sm:grid-cols-2">
         <button type="button" onClick={() => navigate('/daily')} className="text-left">
-          <Card className="h-full transition-colors duration-fast ease-out-t hover:border-accent hover:bg-surface-2">
-            <Eyebrow>Daily challenge</Eyebrow>
-            <div className="mt-2 flex items-baseline gap-3">
-              <span className="font-mono text-xl text-text">🔥 {streak.current}</span>
-              <span className="text-sm text-text-dim">
-                day streak{streak.best > 0 ? ` · best ${streak.best}` : ''}
-              </span>
-            </div>
-            <div className="mt-2 font-mono text-sm text-text-dim">
+          <Card hover className="h-full">
+            <StatTile
+              label="Daily challenge"
+              value={<>🔥 {streak.current}</>}
+              sub={`day streak${streak.best > 0 ? ` · best ${streak.best}` : ''}`}
+            />
+            <div className="mt-3 font-mono text-sm">
               {dailyScore !== null ? (
                 <span className="text-good">✓ Done today · {dailyScore}</span>
               ) : (
@@ -168,11 +179,12 @@ export function HomePage() {
           </Card>
         </button>
         <button type="button" onClick={() => navigate('/srs')} className="text-left">
-          <Card className="h-full transition-colors duration-fast ease-out-t hover:border-accent hover:bg-surface-2">
-            <Eyebrow>Flashcards</Eyebrow>
-            <div className="mt-2 font-mono text-xl text-text">
-              {due > 0 ? `⚡ ${due} due` : 'None due'}
-            </div>
+          <Card hover className="h-full">
+            <StatTile
+              label="Flashcards"
+              value={due > 0 ? <>⚡ {due}</> : 'None due'}
+              sub={due > 0 ? 'Review now →' : 'All caught up'}
+            />
           </Card>
         </button>
       </div>
