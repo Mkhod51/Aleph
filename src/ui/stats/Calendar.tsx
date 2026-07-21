@@ -47,7 +47,7 @@ export function Calendar({ perDay }: { perDay: Record<string, number> }) {
                       ? ''
                       : `${localDateKey(date.getTime())} · ${count} question${count === 1 ? '' : 's'}`
                   }
-                  className="h-[10px] w-[10px] rounded-[2px]"
+                  className="h-[10px] w-[10px] rounded-[3px]"
                   style={{
                     backgroundColor: future
                       ? 'transparent'
