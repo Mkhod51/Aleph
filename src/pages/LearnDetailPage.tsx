@@ -1,6 +1,7 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
 import { Button } from '@/ui/Button';
+import { PlayIcon } from '@/ui/kit';
 import { getTechnique, getTechniqueById } from '@/content/techniques';
 import { getReference } from '@/content/references';
 import { getStrategy } from '@/content/strategy';
@@ -66,9 +67,10 @@ function TechniqueView({ t }: { t: Technique }) {
             size="md"
             mono
             onClick={drillThis}
-            className="self-start"
+            className="group self-start"
           >
-            ▶ Drill this
+            <PlayIcon className="mr-2 transition-transform duration-fast ease-spring-t group-hover:translate-x-0.5" />
+            Drill this
           </Button>
           {t.drill.note && (
             <p className="text-xs text-text-dim">{t.drill.note}</p>

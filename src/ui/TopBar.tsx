@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { APP_MARK, APP_NAME } from '@/lib/brand';
-import { Chip } from '@/ui/kit';
+import { Chip, FlameIcon, BoltIcon } from '@/ui/kit';
 import { useStreakStore } from '@/store/streak';
 import { dueCount } from '@/store/srs';
 
@@ -76,7 +76,10 @@ export function TopBar() {
               title="Daily streak"
               className="rounded-full transition-opacity duration-fast ease-out-t hover:opacity-80"
             >
-              <Chip tone="neutral">🔥 {streakCurrent}</Chip>
+              <Chip tone="neutral">
+                <FlameIcon value={streakCurrent} className="text-accent" />
+                {streakCurrent}
+              </Chip>
             </Link>
           )}
           {due > 0 && (
@@ -85,7 +88,10 @@ export function TopBar() {
               title="Flashcards due"
               className="rounded-full transition-opacity duration-fast ease-out-t hover:opacity-80"
             >
-              <Chip tone="accent">⚡ {due} due</Chip>
+              <Chip tone="accent">
+                <BoltIcon value={due} className="text-accent" />
+                {due} due
+              </Chip>
             </Link>
           )}
           <NavLink

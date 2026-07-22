@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
 import { Button } from '@/ui/Button';
-import { StatTile } from '@/ui/kit';
+import { StatTile, PlayIcon, FlameIcon } from '@/ui/kit';
 import { useStreakStore } from '@/store/streak';
 import { todayKey } from '@/store/daily';
 import { dailyRepo } from '@/store/repos/dailyRepo';
@@ -56,7 +56,12 @@ export function DailyPage() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <StatTile
             label="Streak"
-            value={<>🔥 {streak.current}</>}
+            value={
+              <>
+                <FlameIcon value={streak.current} className="mr-1.5 text-accent" />
+                {streak.current}
+              </>
+            }
             sub={`best ${streak.best} · ${streak.freezes} freeze${streak.freezes === 1 ? '' : 's'}`}
           />
           <Button
@@ -64,9 +69,11 @@ export function DailyPage() {
             size="lg"
             mono
             autoFocus
+            className="group"
             onClick={() => navigate('/daily/play')}
           >
-            {playedToday ? '▶ Replay (unofficial)' : '▶ Play today’s 120s'}
+            <PlayIcon className="mr-2 transition-transform duration-fast ease-spring-t group-hover:translate-x-0.5" />
+            {playedToday ? 'Replay (unofficial)' : 'Play today’s 120s'}
           </Button>
         </div>
         {playedToday && (

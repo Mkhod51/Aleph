@@ -8,7 +8,7 @@ import { buildDrillFromTag, useDrillStore } from '@/store/drills';
 import { Button } from '@/ui/Button';
 import { BandGauge } from '@/ui/BandGauge';
 import { Card } from '@/ui/primitives';
-import { Chip, HeroReadout, StatTile, SegmentedControl } from '@/ui/kit';
+import { Chip, HeroReadout, StatTile, SegmentedControl, CheckIcon, CrossIcon } from '@/ui/kit';
 import type { SkillTag } from '@/engine';
 import type { Attempt } from '@/store/types';
 import {
@@ -256,11 +256,11 @@ export function ResultsPage() {
                 <td className="py-2 pr-3">
                   {a.correct ? (
                     <span className="text-good" aria-label="correct">
-                      ✓
+                      <CheckIcon />
                     </span>
                   ) : (
                     <span className="text-bad" aria-label="wrong">
-                      ✗
+                      <CrossIcon />
                     </span>
                   )}
                 </td>
