@@ -141,7 +141,7 @@ export function PlayPage() {
         )}
         {showTopRow && settings.scoreVisible && (
           <div
-            className="absolute right-6 font-mono text-2xl tabular-nums text-text-dim"
+            className="absolute right-6 readout text-2xl text-text-dim"
             aria-label="Score"
           >
             {engine.score}
