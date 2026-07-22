@@ -151,7 +151,7 @@ export function SrsReviewPage() {
         </Button>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-6">
-        <div className="font-mono text-6xl tabular-nums text-text">{card?.front}</div>
+        <div className="readout text-6xl text-text">{card?.front}</div>
         <input
           ref={inputRef}
           value={input}
