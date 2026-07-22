@@ -18,7 +18,7 @@ function MasteryChip({ level }: { level: Mastery }) {
 /** Right-aligned nav arrow that shifts + gilds on row hover (ui-redesign/03 §Learn). */
 function RowArrow() {
   return (
-    <span className="text-text-faint transition-[transform,color] duration-fast ease-out-t group-hover:translate-x-0.5 group-hover:text-accent">
+    <span className="text-text-faint transition-[transform,color] duration-fast ease-spring-t group-hover:translate-x-0.5 group-hover:text-accent">
       →
     </span>
   );

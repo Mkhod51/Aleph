@@ -91,13 +91,20 @@ const config: Config = {
           from: { opacity: '0', transform: 'scale(0.85)' },
           to: { opacity: '1', transform: 'scale(1)' },
         },
+        // One-shot flare on the flame/bolt when streak/due increases (ui-cleanup §3.2).
+        flare: {
+          '0%': { transform: 'scale(1)' },
+          '45%': { transform: 'scale(1.15)' },
+          '100%': { transform: 'scale(1)' },
+        },
       },
       animation: {
-        reveal: 'fade-rise var(--dur-base) var(--ease-out) 100ms both', // M3 body reveal
+        reveal: 'fade-rise var(--dur-base) var(--ease-spring) 100ms both', // M3 body reveal (springy, ui-cleanup §3.3)
         'pb-pulse': 'pb-pulse 200ms var(--ease-spring)', // M4 PB emphasis (one spring pulse)
         tick: 'count-tick var(--dur-base) var(--ease-spring)', // M5/C1 countdown tick
         'overlay-in': 'overlay-in var(--dur-fast) var(--ease-out)', // M6/O1 overlay open
         pop: 'pop 200ms var(--ease-spring) both', // one-shot chip/check pop
+        flare: 'flare 220ms var(--ease-spring)', // one-shot flame/bolt flare on increase
       },
     },
   },
