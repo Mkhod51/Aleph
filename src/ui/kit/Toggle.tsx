@@ -1,5 +1,5 @@
 /**
- * Toggle — the one on/off switch (ui-redesign/02 §B). Codifies the switch that
+ * Toggle, the one on/off switch (ui-redesign/02 §B). Codifies the switch that
  * was inline in Settings. Track uses --accent when on; the knob springs across
  * via --ease-spring. role="switch" + aria-checked preserved for a11y/e2e.
  */

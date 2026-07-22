@@ -75,7 +75,7 @@ export function StatsPage() {
           title="Your dashboard is empty"
           action={{ label: 'Play a sprint', to: '/play' }}
         >
-          Two minutes gets you a baseline — then this fills with score trends, a
+          Two minutes gets you a baseline, then this fills with score trends, a
           skill breakdown, a times-table heatmap and a consistency calendar.
         </EmptyState>
       </div>
@@ -84,7 +84,7 @@ export function StatsPage() {
 
   // C6: render the page shell immediately and reserve vertical space so the brief
   // IndexedDB read never flashes a centered "Loading…" line that then jumps the
-  // whole layout in. No spinner, no skeleton shimmer — just a stable container.
+  // whole layout in. No spinner, no skeleton shimmer, just a stable container.
   if (!data) {
     return (
       <div className="mx-auto flex max-w-content flex-col gap-6">
@@ -233,7 +233,7 @@ export function StatsPage() {
           </div>
           {data.fatigue[3]! - data.fatigue[0]! < -0.08 && (
             <p className="mt-2 text-xs text-accent">
-              Accuracy drops late in sessions — build stamina with longer drills.
+              Accuracy drops late in sessions. Build stamina with longer drills.
             </p>
           )}
         </Card>

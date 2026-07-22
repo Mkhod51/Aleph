@@ -1,5 +1,5 @@
 /**
- * SegmentedControl — the one accessible radiogroup (ui-redesign/02 §B). Codifies
+ * SegmentedControl, the one accessible radiogroup (ui-redesign/02 §B). Codifies
  * the theme picker / drill config / font-size pickers that each hand-rolled the
  * same markup. Selected option = --surface-2 fill + accent text; the `.btn`
  * transition springs the press. role="radiogroup"/"radio" is preserved so e2e

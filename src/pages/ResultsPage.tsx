@@ -157,7 +157,7 @@ export function ResultsPage() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
-      {/* Hero — the designed moment: gridfield band, HeroReadout count-up (R1),
+      {/* Hero, the designed moment: gridfield band, HeroReadout count-up (R1),
           band gauge fill (R2), PB pulse/pop (R4). */}
       <div className="panel gridfield flex flex-wrap items-end justify-between gap-4 p-6">
         <div>

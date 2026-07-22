@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
 /**
- * A neutral surface card — the `.panel` recipe from ui-redesign/01 §2 (1px
+ * A neutral surface card, the `.panel` recipe from ui-redesign/01 §2 (1px
  * hairline + top inner-highlight + surface sheen, 10px radius). Opt-in props:
  *   hover → `.panel-hover` lift on hover (H1)
  *   grid  → `.gridfield` graph-paper texture (heroes / empty states only)
@@ -44,7 +44,7 @@ export function Eyebrow({ children }: { children: ReactNode }) {
 }
 
 /**
- * A card that navigates on click — used for the Home shortcuts row. Reuses
+ * A card that navigates on click, used for the Home shortcuts row. Reuses
  * `.panel-hover` (lift) and adds a hover arrow shift (ui-redesign/02 §A).
  */
 export function NavCard({

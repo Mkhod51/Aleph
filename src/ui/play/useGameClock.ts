@@ -6,15 +6,15 @@ interface GameClockOptions {
   running: boolean; // false during countdown / after end
   paused: boolean; // Esc pause or tab-hidden
   onExpire: () => void;
-  /** Called each active frame with elapsed ms — lets the page read elapsed
+  /** Called each active frame with elapsed ms, lets the page read elapsed
    *  (for finalize) via a ref without re-rendering the play field. */
   onTick?: (elapsedMs: number) => void;
 }
 
 /**
  * A pause-aware session clock (doc 08 §3). Elapsed time is measured from
- * `performance.now()` deltas via requestAnimationFrame — never accumulated
- * setInterval ticks — so it cannot drift. Paused/hidden time is excluded.
+ * `performance.now()` deltas via requestAnimationFrame, never accumulated
+ * setInterval ticks, so it cannot drift. Paused/hidden time is excluded.
  *
  * Isolated in its own component (see Clock.tsx) so its ~60fps re-renders don't
  * touch the prompt/input. Fires `onExpire` exactly once when elapsed ≥ duration;

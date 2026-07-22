@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/ui/Button';
 
 /**
- * EmptyState — one treatment for every "no data yet" card (ui-redesign/02 §B):
+ * EmptyState, one treatment for every "no data yet" card (ui-redesign/02 §B):
  * a `.gridfield` panel + eyebrow + one line + one CTA. Unifies the shell; pages
  * keep their own copy. The CTA navigates (`to`) or runs `onClick`.
  */

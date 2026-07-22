@@ -6,12 +6,12 @@ import { useEffect, useRef, useState, type ReactNode, type SVGProps } from 'reac
  *   - inherits `currentColor`, so callers tint via `text-*` (good/bad/accent);
  *   - sizes to 1em (≈14px in body copy, scales up beside larger numerals) and
  *     sits on the text baseline (`align-[-0.125em]`);
- *   - is decorative by default (`aria-hidden`) — where a mark carries meaning the
+ *   - is decorative by default (`aria-hidden`), where a mark carries meaning the
  *     caller keeps an aria-label on the wrapping element (e.g. ✓/✗ = correct/wrong).
  *
  * FlameIcon/BoltIcon accept an optional numeric `value`: when it INCREASES after
  * mount they play one spring "flare" (never on hydration, never on decrease,
- * never looping — see useIncreaseFlare). Reduced-motion collapses it to instant
+ * never looping, see useIncreaseFlare). Reduced-motion collapses it to instant
  * via the global override in index.css.
  */
 type IconProps = SVGProps<SVGSVGElement>;
@@ -82,7 +82,7 @@ export function CrossIcon(props: IconProps) {
  * Fire one `animate-flare` when `value` increases after mount. A short settle
  * window swallows the initial async 0→N data load (IndexedDB reads resolve well
  * within it) so the flare only ever marks a genuine gain, and `onAnimationEnd`
- * clears the class so the next increase can re-trigger it — never a loop.
+ * clears the class so the next increase can re-trigger it, never a loop.
  */
 function useIncreaseFlare(value: number | undefined) {
   const prev = useRef(value);

@@ -18,7 +18,7 @@ import type { ScorePoint } from '@/store/dashboard';
  * Precision-Instrument theming (ui-redesign/02 §C): faint graph-paper grid
  * (--grid-line) + faint axis ticks (--text-faint), a 2px --accent line, graded
  * band shading (the target zone reads strongest), and PB dots that carry the
- * amber glow. Charts never animate on mount — `isAnimationActive={false}` stays.
+ * amber glow. Charts never animate on mount, `isAnimationActive={false}` stays.
  */
 export default function ScoreChart({
   data,

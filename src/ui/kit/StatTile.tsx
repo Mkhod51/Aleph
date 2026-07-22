@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Chip } from './Chip';
 
 /**
- * StatTile — the one "number + label" unit (ui-redesign/02 §B). Replaces the
+ * StatTile, the one "number + label" unit (ui-redesign/02 §B). Replaces the
  * scattered vitals / headline / skill number displays; a grid of these is the
  * results vitals row and the dashboard headline strip. `delta` (a signed number)
  * renders an auto-colored ↑/↓ Chip. Numbers use the mono `.readout` by default.

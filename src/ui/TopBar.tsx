@@ -56,7 +56,7 @@ export function TopBar() {
                 <>
                   {item.label}
                   {/* Selected marker (N1): a 2px accent underline, not just a
-                      color change (ui-redesign/01 §6). Per-item — cheap, no JS. */}
+                      color change (ui-redesign/01 §6). Per-item, cheap, no JS. */}
                   {isActive && (
                     <span
                       aria-hidden

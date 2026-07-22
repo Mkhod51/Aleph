@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 /**
- * HeroReadout — the signature "instrument readout" number treatment
+ * HeroReadout, the signature "instrument readout" number treatment
  * (ui-redesign/02 §B). A big JetBrains-Mono tabular figure (-0.02em), optional
  * thin top+bottom hairline rule, optional label/unit slots, optional amber
  * `emphasis` (PB / net). Used on the Results hero and the daily-done state.

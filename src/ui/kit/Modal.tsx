@@ -1,7 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 
 /**
- * Modal — themed centered panel on a dim scrim (ui-redesign/02 §B, motion O1).
+ * Modal, themed centered panel on a dim scrim (ui-redesign/02 §B, motion O1).
  * surface-3 + the one allowed elevation shadow; fade+scale in via --dur-fast /
  * --ease-out (`animate-overlay-in`); **instant close** (unmounts, no exit anim);
  * Esc to dismiss; backdrop click dismisses; focus is trapped and restored.
@@ -41,7 +41,7 @@ export function Modal({
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        // The modal owns Escape — stop it reaching page-level key handlers
+        // The modal owns Escape, stop it reaching page-level key handlers
         // (e.g. a play screen that also toggles pause on Escape), which would
         // otherwise double-fire and cancel the close.
         e.preventDefault();

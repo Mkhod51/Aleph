@@ -8,7 +8,7 @@ export function SimsIndexPage() {
       <div>
         <h1 className="font-mono text-2xl font-semibold text-text">Firm simulators</h1>
         <p className="mt-1 text-sm text-text-dim">
-          Rehearse the real test&apos;s rules, pressure and scoring — fixed count,
+          Rehearse the real test&apos;s rules, pressure and scoring: fixed count,
           Enter to submit, negative marking, no mid-test feedback. Pass bars are
           community-reported estimates, not official firm data.
         </p>
