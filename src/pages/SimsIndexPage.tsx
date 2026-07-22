@@ -17,7 +17,7 @@ export function SimsIndexPage() {
       <div className="grid gap-4 sm:grid-cols-2">
         {SIMS.map((sim) => (
           <Link key={sim.id} to={`/sims/${sim.id}`} className="block">
-            <Card className="h-full transition-colors duration-fast ease-out-t hover:border-accent hover:bg-surface-2">
+            <Card hover className="h-full">
               <div className="font-mono text-lg font-semibold text-text">
                 {sim.name}
               </div>

@@ -1,16 +1,15 @@
-import { Link } from 'react-router-dom';
+import { EmptyState } from '@/ui/kit';
 
 export function NotFoundPage() {
   return (
-    <div className="mx-auto flex max-w-lg flex-col items-center gap-3 py-16 text-center">
-      <h1 className="font-mono text-4xl font-semibold text-text">404</h1>
-      <p className="text-sm text-text-dim">That route doesn&apos;t exist.</p>
-      <Link
-        to="/"
-        className="rounded-btn border border-border px-4 py-2 text-sm text-text-dim transition-colors duration-fast ease-out-t hover:border-accent hover:text-text"
+    <div className="mx-auto max-w-lg py-16">
+      <EmptyState
+        eyebrow="404"
+        title="Page not found"
+        action={{ label: '← Back to Home', to: '/' }}
       >
-        ← Back to Home
-      </Link>
+        That route doesn&apos;t exist.
+      </EmptyState>
     </div>
   );
 }

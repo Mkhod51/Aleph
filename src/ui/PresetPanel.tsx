@@ -12,6 +12,7 @@ import {
 } from '@/store/presets';
 import { durationLabel } from '@/lib/format';
 import { Button } from '@/ui/Button';
+import { SegmentedControl } from '@/ui/kit';
 
 interface Draft {
   name: string;
@@ -131,7 +132,7 @@ export function PresetPanel() {
       </div>
 
       {editing !== null && (
-        <div className="rounded-card border border-border bg-surface p-4 text-left">
+        <div className="panel p-4 text-left">
           <div className="flex flex-col gap-4">
             <label className="flex flex-col gap-1 text-xs text-text-dim">
               Name
@@ -144,22 +145,17 @@ export function PresetPanel() {
 
             <div className="flex flex-col gap-2">
               <span className="text-xs text-text-dim">Duration</span>
-              <div className="flex gap-1">
-                {DURATIONS_MS.map((ms) => (
-                  <button
-                    key={ms}
-                    type="button"
-                    onClick={() => patch({ durationMs: ms })}
-                    className={`rounded-btn px-3 py-1 text-sm ${
-                      draft.durationMs === ms
-                        ? 'bg-accent font-medium text-bg'
-                        : 'border border-border text-text-dim hover:text-text'
-                    }`}
-                  >
-                    {durationLabel(ms)}
-                  </button>
-                ))}
-              </div>
+              <SegmentedControl
+                size="sm"
+                ariaLabel="Duration"
+                value={String(draft.durationMs)}
+                options={DURATIONS_MS.map((ms) => ({
+                  value: String(ms),
+                  label: durationLabel(ms),
+                }))}
+                onChange={(v) => patch({ durationMs: Number(v) })}
+                className="self-start"
+              />
             </div>
 
             <div className="flex flex-col gap-2">
