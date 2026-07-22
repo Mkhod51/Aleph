@@ -5,5 +5,5 @@
  */
 export const APP_NAME = 'Aleph';
 
-/** Wordmark glyph placeholder (doc 07 §4 uses ◆; doc 10 §4 suggests א / ℵ₀ later). */
-export const APP_MARK = '◆';
+/** Wordmark glyph — the aleph, tying the mark to the name (doc 10 §4). */
+export const APP_MARK = 'ℵ';

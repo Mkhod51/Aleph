@@ -56,7 +56,7 @@ export function generateFracCompare(rng: Rng, _cfg: GeneratorConfig): Question {
   const firstLarger = a / b > c / d;
   return {
     skill: 'FRAC_COMPARE',
-    prompt: `Larger?  ① ${a}/${b}   ② ${c}/${d}`,
+    prompt: `Larger?  (1) ${a}/${b}   (2) ${c}/${d}`,
     operands: [a, b, c, d],
     answer: { value: firstLarger ? 1 : 2, display: firstLarger ? '1' : '2' },
     format: 'choice',

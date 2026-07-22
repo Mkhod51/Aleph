@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
 import { Button } from '@/ui/Button';
-import { Chip } from '@/ui/kit';
+import { Chip, PlayIcon } from '@/ui/kit';
 import { BandGauge } from '@/ui/BandGauge';
 import { getSim } from '@/content/sims';
 import { bandsForKind, BAND_DISCLAIMER } from '@/content/bands';
@@ -79,7 +79,7 @@ export function SimLobbyPage() {
                 key={s.id}
                 type="button"
                 onClick={() => navigate(`/results/${s.id}`)}
-                className="rounded-full transition-transform duration-fast ease-out-t hover:-translate-y-0.5"
+                className="rounded-full transition-transform duration-fast ease-spring-t hover:-translate-y-0.5"
                 aria-label={`View result, net ${s.score}`}
               >
                 <Chip tone="neutral" size="md">
@@ -98,9 +98,11 @@ export function SimLobbyPage() {
         size="lg"
         mono
         autoFocus
+        className="group"
         onClick={() => navigate(`/sims/${sim.id}/play`)}
       >
-        ▶ Start {sim.name.split(' · ')[0]}
+        <PlayIcon className="mr-2 transition-transform duration-fast ease-spring-t group-hover:translate-x-0.5" />
+        Start {sim.name.split(' · ')[0]}
       </Button>
     </div>
   );

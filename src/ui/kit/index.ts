@@ -9,3 +9,4 @@ export { SegmentedControl } from './SegmentedControl';
 export { Toggle } from './Toggle';
 export { Modal } from './Modal';
 export { EmptyState } from './EmptyState';
+export { PlayIcon, FlameIcon, BoltIcon, CheckIcon, CrossIcon } from './icons';

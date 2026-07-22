@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Eyebrow, NavCard } from '@/ui/primitives';
-import { StatTile } from '@/ui/kit';
+import { StatTile, PlayIcon, FlameIcon, BoltIcon, CheckIcon } from '@/ui/kit';
 import { Button } from '@/ui/Button';
 import { PresetPanel } from '@/ui/PresetPanel';
 import { durationLabel } from '@/lib/format';
@@ -133,9 +133,10 @@ export function HomePage() {
           autoFocus
           disabled={!canPlay}
           onClick={() => navigate('/play')}
-          className="px-8 py-4"
+          className="group px-8 py-4"
         >
-          ▶ START SPRINT — {durationLabel(selected.durationMs)}
+          <PlayIcon className="mr-2 transition-transform duration-fast ease-spring-t group-hover:translate-x-0.5" />
+          START SPRINT · {durationLabel(selected.durationMs)}
         </Button>
 
         <PresetPanel />
@@ -166,14 +167,25 @@ export function HomePage() {
           <Card hover className="h-full">
             <StatTile
               label="Daily challenge"
-              value={<>🔥 {streak.current}</>}
+              value={
+                <>
+                  <FlameIcon value={streak.current} className="mr-1.5 text-accent" />
+                  {streak.current}
+                </>
+              }
               sub={`day streak${streak.best > 0 ? ` · best ${streak.best}` : ''}`}
             />
             <div className="mt-3 font-mono text-sm">
               {dailyScore !== null ? (
-                <span className="text-good">✓ Done today · {dailyScore}</span>
+                <span className="text-good">
+                  <CheckIcon className="mr-1" />
+                  Done today · {dailyScore}
+                </span>
               ) : (
-                <span className="text-accent">▶ Play today’s 120s</span>
+                <span className="text-accent">
+                  <PlayIcon className="mr-1" />
+                  Play today’s 120s
+                </span>
               )}
             </div>
           </Card>
@@ -182,7 +194,16 @@ export function HomePage() {
           <Card hover className="h-full">
             <StatTile
               label="Flashcards"
-              value={due > 0 ? <>⚡ {due}</> : 'None due'}
+              value={
+                due > 0 ? (
+                  <>
+                    <BoltIcon value={due} className="mr-1.5 text-accent" />
+                    {due}
+                  </>
+                ) : (
+                  'None due'
+                )
+              }
               sub={due > 0 ? 'Review now →' : 'All caught up'}
             />
           </Card>
