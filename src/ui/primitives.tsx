@@ -69,7 +69,7 @@ export function NavCard({
       </span>
       <span
         aria-hidden
-        className="mt-0.5 shrink-0 text-text-faint transition-[transform,color] duration-fast ease-out-t group-hover:translate-x-0.5 group-hover:text-accent"
+        className="mt-0.5 shrink-0 text-text-faint transition-[transform,color] duration-fast ease-spring-t group-hover:translate-x-0.5 group-hover:text-accent"
       >
         →
       </span>

@@ -132,7 +132,7 @@ export function DrillsPage() {
                       : 'no data yet'}
                   </span>
                   {s && <MasteryChip level={s.mastery} />}
-                  <span className="text-xs text-text-faint transition-[transform,color] duration-fast ease-out-t group-hover:translate-x-0.5 group-hover:text-accent">
+                  <span className="text-xs text-text-faint transition-[transform,color] duration-fast ease-spring-t group-hover:translate-x-0.5 group-hover:text-accent">
                     Drill →
                   </span>
                 </button>
