@@ -238,7 +238,7 @@ export function PresetPanel() {
 
       {!presetHasAnyOp(selected) && (
         <p className="text-center text-xs text-bad">
-          This preset has no operations enabled — edit it before playing.
+          This preset has no operations enabled. Edit it before playing.
         </p>
       )}
     </div>

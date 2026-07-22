@@ -11,7 +11,7 @@ import { finalizeSession } from '@/store/sessionService';
 
 type Phase = 'countdown' | 'playing' | 'paused' | 'ending';
 
-/** Daily challenge — a date-seeded 120 s sprint (doc 03 §5). */
+/** Daily challenge, a date-seeded 120 s sprint (doc 03 §5). */
 export function DailyPlayPage() {
   const navigate = useNavigate();
   const settings = useSettingsStore();

@@ -50,7 +50,7 @@ function Onboarding() {
         This trains you for quant trading math tests.
       </h1>
       <p className="text-text-dim">
-        Zetamac-style speed drills, firm test simulators, and a weakness engine —
+        Zetamac-style speed drills, firm test simulators, and a weakness engine,
         all local to your browser.
       </p>
       <Button
@@ -123,7 +123,7 @@ export function HomePage() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
-      {/* Hero band — the signature gridfield texture behind START + the preset
+      {/* Hero band, the signature gridfield texture behind START + the preset
           panel, seen first (ui-redesign/03 §Home). */}
       <div className="panel gridfield flex flex-col items-center gap-5 rounded-card px-4 py-8 text-center">
         <Button

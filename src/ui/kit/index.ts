@@ -1,5 +1,5 @@
 /**
- * The in-house component kit (ui-redesign/02). No UI library — these carry the
+ * The in-house component kit (ui-redesign/02). No UI library, these carry the
  * "Precision Instrument" design system. Import from '@/ui/kit'.
  */
 export { Chip, type ChipTone } from './Chip';

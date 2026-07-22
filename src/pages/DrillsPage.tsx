@@ -81,7 +81,7 @@ export function DrillsPage() {
         <h1 className="font-mono text-2xl font-semibold text-text">Skill drills</h1>
         <p className="mt-1 text-sm text-text-dim">
           Volume practice on one family. Accuracy and median latency below are your
-          live stats — the catalog doubles as a weakness display.
+          live stats. The catalog doubles as a weakness display.
         </p>
       </div>
 

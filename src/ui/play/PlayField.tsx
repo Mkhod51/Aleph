@@ -10,7 +10,7 @@ const PROMPT_SIZE: Record<Settings['questionFontSize'], string> = {
 };
 
 /**
- * The prompt + answer input — the entire interface during play (doc 07 §1/§4).
+ * The prompt + answer input, the entire interface during play (doc 07 §1/§4).
  * The prompt area has a fixed min-height so question changes cause zero layout
  * shift. `aria-live` announces each new prompt to screen readers (doc 07 §7).
  */

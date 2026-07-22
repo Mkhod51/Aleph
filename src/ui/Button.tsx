@@ -4,7 +4,7 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react';
  * The single button primitive (ui-review 03 §C1, upgraded per ui-redesign/02 §A).
  * One component replaces the ~45 ad-hoc `rounded-btn px-…` combos so every button
  * shares padding, timing, hover/press and disabled behaviour. Renders a real
- * <button> — accessible name and role are unchanged, so role+name queries (e2e)
+ * <button>, accessible name and role are unchanged, so role+name queries (e2e)
  * keep working; the API is unchanged.
  *
  * Redesign additions: primary hovers to --accent-hi, the press springs (`.btn`
@@ -34,7 +34,7 @@ const SIZE: Record<Size, string> = {
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
-  /** Mono + semibold label — the start-action style. */
+  /** Mono + semibold label, the start-action style. */
   mono?: boolean;
   children: ReactNode;
 }

@@ -22,7 +22,7 @@ export function PlayPage() {
   const settings = useSettingsStore();
   const preset = usePresetStore((s) => findPreset(s.custom, s.selectedId));
 
-  // One plan (and seed) per play session — remounting /play makes a fresh one.
+  // One plan (and seed) per play session, remounting /play makes a fresh one.
   // `?seconds=` overrides the duration (used by the onboarding 60 s baseline);
   // the override flows into the plan's configHash so the baseline is its own
   // config group and stays out of the default-sprint stats (F2).

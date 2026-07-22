@@ -34,7 +34,7 @@ export interface PlayEngine {
 /**
  * Flow-input play loop (doc 03 §1.1, doc 08 §3). A single controlled input;
  * every keystroke normalizes + live-matches; on match the question advances
- * instantly with no "wrong" state. Attempts buffer in memory — zero DB writes
+ * instantly with no "wrong" state. Attempts buffer in memory, zero DB writes
  * during the loop. Latency (firstKeyMs/totalMs) is captured via refs so it never
  * causes a re-render.
  */

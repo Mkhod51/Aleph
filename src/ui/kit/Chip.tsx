@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 /**
- * Chip — the one pill for tags / deltas / status / band labels (ui-redesign/02 §B).
+ * Chip, the one pill for tags / deltas / status / band labels (ui-redesign/02 §B).
  * tone drives color (color = state); `glow` adds the amber PB emphasis; `pop`
  * plays a one-shot spring pop for chips that mount as feedback (e.g. a new
  * delta). Static otherwise.

@@ -76,7 +76,7 @@ export function SettingsPage() {
               onChange={(v) => s.update({ scoreVisible: v })}
             />
           </Row>
-          {/* Sound toggle hidden until audio is wired (M6, P2) — a control that
+          {/* Sound toggle hidden until audio is wired (M6, P2), a control that
               does nothing erodes trust. The `sound` setting is kept for then. */}
           <Row label="Question font size">
             <SegmentedControl
@@ -100,7 +100,7 @@ export function SettingsPage() {
             official firm data.
           </p>
           <p>
-            All your data stays in this browser — no accounts, no servers, no
+            All your data stays in this browser: no accounts, no servers, no
             analytics. Export/import arrives with Sprint mode.
           </p>
           <p>

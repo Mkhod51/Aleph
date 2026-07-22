@@ -39,7 +39,7 @@ export function SimLobbyPage() {
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6">
-      {/* Lobby header band — signature gridfield texture (ui-redesign/03 §Sims). */}
+      {/* Lobby header band, signature gridfield texture (ui-redesign/03 §Sims). */}
       <div className="panel gridfield p-6">
         <h1 className="font-mono text-2xl font-semibold text-text">{sim.name}</h1>
         <p className="mt-1 text-sm text-text-dim">
