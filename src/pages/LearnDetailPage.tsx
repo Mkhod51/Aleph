@@ -20,19 +20,22 @@ function TechniqueView({ t }: { t: Technique }) {
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <div className="font-mono text-xs text-text-dim">{t.id}</div>
-        <h1 className="mt-1 font-mono text-2xl font-semibold text-text">{t.title}</h1>
-        <p className="mt-2 text-text-dim">{t.hook}</p>
+        <Eyebrow>{t.id}</Eyebrow>
+        <h1 className="mt-1 font-mono text-2xl font-semibold tracking-[-0.01em] text-text">
+          {t.title}
+        </h1>
+        <p className="mt-2 max-w-[65ch] text-text-dim">{t.hook}</p>
       </div>
 
       <Card>
         <Eyebrow>Method</Eyebrow>
-        <p className="mt-2 text-sm leading-relaxed text-text">{t.method}</p>
+        <p className="mt-2 max-w-[65ch] text-sm leading-relaxed text-text">{t.method}</p>
       </Card>
 
       <Card>
         <Eyebrow>Worked examples</Eyebrow>
-        <ul className="mt-2 space-y-1 font-mono text-sm text-text">
+        {/* Code-block feel: subtle left accent rule (ui-redesign/03 §Learn). */}
+        <ul className="mt-2 space-y-1 border-l-2 border-accent/40 pl-3 font-mono text-sm text-text">
           {t.examples.map((e) => (
             <li key={e}>{e}</li>
           ))}
@@ -105,18 +108,21 @@ export function LearnDetailPage() {
     return (
       <div className="flex flex-col gap-5">
         <div>
-          <div className="font-mono text-xs text-text-dim">{reference.id}</div>
-          <h1 className="mt-1 font-mono text-2xl font-semibold text-text">
+          <Eyebrow>{reference.id}</Eyebrow>
+          <h1 className="mt-1 font-mono text-2xl font-semibold tracking-[-0.01em] text-text">
             {reference.title}
           </h1>
-          <p className="mt-2 text-text-dim">{reference.intro}</p>
+          <p className="mt-2 max-w-[65ch] text-text-dim">{reference.intro}</p>
         </div>
         <Card className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-left text-text-dim">
+              <tr className="text-left text-text-faint">
                 {reference.columns.map((c) => (
-                  <th key={c} className="py-2 pr-6 font-medium">
+                  <th
+                    key={c}
+                    className="sticky top-0 border-b border-border bg-surface py-2 pr-6 font-medium"
+                  >
                     {c}
                   </th>
                 ))}
@@ -151,8 +157,8 @@ export function LearnDetailPage() {
     return (
       <div className="mx-auto flex max-w-2xl flex-col gap-4">
         <div>
-          <div className="font-mono text-xs text-text-dim">{strategy.id}</div>
-          <h1 className="mt-1 font-mono text-2xl font-semibold text-text">
+          <Eyebrow>{strategy.id}</Eyebrow>
+          <h1 className="mt-1 font-mono text-2xl font-semibold tracking-[-0.01em] text-text">
             {strategy.title}
           </h1>
         </div>

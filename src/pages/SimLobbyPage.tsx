@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
 import { Button } from '@/ui/Button';
+import { Chip } from '@/ui/kit';
 import { BandGauge } from '@/ui/BandGauge';
 import { getSim } from '@/content/sims';
 import { bandsForKind, BAND_DISCLAIMER } from '@/content/bands';
@@ -38,7 +39,8 @@ export function SimLobbyPage() {
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6">
-      <div>
+      {/* Lobby header band — signature gridfield texture (ui-redesign/03 §Sims). */}
+      <div className="panel gridfield p-6">
         <h1 className="font-mono text-2xl font-semibold text-text">{sim.name}</h1>
         <p className="mt-1 text-sm text-text-dim">
           {sim.count} questions · {formatClock(sim.durationMs)}
@@ -71,15 +73,18 @@ export function SimLobbyPage() {
       <Card>
         <Eyebrow>Your last 3</Eyebrow>
         {last3.length > 0 ? (
-          <div className="mt-2 flex gap-4 font-mono text-lg tabular-nums text-text">
+          <div className="mt-2 flex flex-wrap gap-2">
             {last3.map((s) => (
               <button
                 key={s.id}
                 type="button"
                 onClick={() => navigate(`/results/${s.id}`)}
-                className="hover:text-accent"
+                className="rounded-full transition-transform duration-fast ease-out-t hover:-translate-y-0.5"
+                aria-label={`View result, net ${s.score}`}
               >
-                {s.score}
+                <Chip tone="neutral" size="md">
+                  {s.score}
+                </Chip>
               </button>
             ))}
           </div>

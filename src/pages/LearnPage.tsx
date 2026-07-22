@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Eyebrow } from '@/ui/primitives';
+import { Chip, type ChipTone } from '@/ui/kit';
 import { TECHNIQUES } from '@/content/techniques';
 import { REFERENCES } from '@/content/references';
 import { STRATEGY } from '@/content/strategy';
@@ -8,14 +9,19 @@ import { LEARN_CATEGORIES } from '@/content/learn';
 import { loadDashboard } from '@/store/dashboard';
 import type { Mastery } from '@/engine';
 
-function Chip({ level }: { level: Mastery }) {
-  const cls =
-    level === 'solid'
-      ? 'text-good'
-      : level === 'learning'
-        ? 'text-accent'
-        : 'text-text-dim';
-  return <span className={`text-xs ${cls}`}>{level}</span>;
+function MasteryChip({ level }: { level: Mastery }) {
+  const tone: ChipTone =
+    level === 'solid' ? 'good' : level === 'learning' ? 'accent' : 'neutral';
+  return <Chip tone={tone}>{level}</Chip>;
+}
+
+/** Right-aligned nav arrow that shifts + gilds on row hover (ui-redesign/03 §Learn). */
+function RowArrow() {
+  return (
+    <span className="text-text-faint transition-[transform,color] duration-fast ease-out-t group-hover:translate-x-0.5 group-hover:text-accent">
+      →
+    </span>
+  );
 }
 
 export function LearnPage() {
@@ -54,12 +60,12 @@ export function LearnPage() {
                 <Link
                   key={t.id}
                   to={`/learn/${t.slug}`}
-                  className="flex items-center gap-3 py-2 hover:opacity-90"
+                  className="group flex items-center gap-3 py-2"
                 >
                   <span className="w-8 shrink-0 font-mono text-xs text-text-dim">{t.id}</span>
                   <span className="flex-1 text-sm text-text">{t.title}</span>
-                  {t.masteryTag && <Chip level={mastery[t.masteryTag] ?? '—'} />}
-                  <span className="text-xs text-accent">→</span>
+                  {t.masteryTag && <MasteryChip level={mastery[t.masteryTag] ?? '—'} />}
+                  <RowArrow />
                 </Link>
               ))}
             </div>
@@ -74,11 +80,11 @@ export function LearnPage() {
             <Link
               key={r.id}
               to={`/learn/${r.slug}`}
-              className="flex items-center gap-3 py-2 hover:opacity-90"
+              className="group flex items-center gap-3 py-2"
             >
               <span className="w-8 shrink-0 font-mono text-xs text-text-dim">{r.id}</span>
               <span className="flex-1 text-sm text-text">{r.title}</span>
-              <span className="text-xs text-accent">→</span>
+              <RowArrow />
             </Link>
           ))}
         </div>
@@ -91,11 +97,11 @@ export function LearnPage() {
             <Link
               key={s.id}
               to={`/learn/${s.slug}`}
-              className="flex items-center gap-3 py-2 hover:opacity-90"
+              className="group flex items-center gap-3 py-2"
             >
               <span className="w-8 shrink-0 font-mono text-xs text-text-dim">{s.id}</span>
               <span className="flex-1 text-sm text-text">{s.title}</span>
-              <span className="text-xs text-accent">→</span>
+              <RowArrow />
             </Link>
           ))}
         </div>
