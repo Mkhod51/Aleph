@@ -25,6 +25,16 @@ Read in order. Later docs assume earlier ones.
 | 10 | `10-naming-and-context.md` | What "Aleph" means and why, plus a few small decisions left open elsewhere |
 | — | `AGENT-PROMPT.md` | The prompt to hand to a coding agent |
 
+The numbered docs above are the spec. Work done against it is written up in
+sibling folders:
+
+| Folder | What it covers |
+|--------|----------------|
+| `ui-redesign/` | The "Precision Instrument" design system, component kit and screen treatments |
+| `ui-review/` | UI audit findings, plus the motion and consistency specs |
+| `ui-cleanup/` | The de-slop pass: crafted icons, em-dash purge, springier motion |
+| `pm-review/` | Product audit, cut list and roadmap-to-ship |
+
 ## How to use these docs with an AI coding agent
 
 1. Create an empty repo (e.g. `quantsprint/`) and copy this `DesignProposal/` folder into it as `docs/`.
