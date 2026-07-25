@@ -28,8 +28,10 @@ npm run check      # typecheck + lint + test + build
 
 ## Documentation
 
-Full specifications live in [`Docs/`](./Docs) (00–10). Build order and
-definition-of-done checklists are in [`Docs/09-roadmap.md`](./Docs/09-roadmap.md).
+Full specifications live in [`docs/`](./docs) (00–10), with UI and product
+review notes in `docs/ui-redesign/`, `docs/ui-review/`, `docs/ui-cleanup/`, and
+`docs/pm-review/`. Build order and definition-of-done checklists are in
+[`docs/09-roadmap.md`](./docs/09-roadmap.md).
 
 ## Status
 
