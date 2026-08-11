@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "description": "Aleph — a mental-arithmetic trainer for quant trading interview prep.",
+  "engines": {
+    "node": "^20.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
