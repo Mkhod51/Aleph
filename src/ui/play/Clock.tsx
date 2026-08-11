@@ -21,7 +21,13 @@ export function Clock({
   onExpire: () => void;
   onTick: (elapsedMs: number) => void;
 }) {
-  const { remainingMs } = useGameClock({ durationMs, running, paused, onExpire, onTick });
+  const { remainingMs } = useGameClock({
+    durationMs,
+    running,
+    paused,
+    onExpire,
+    onTick,
+  });
 
   if (hidden) return null;
 

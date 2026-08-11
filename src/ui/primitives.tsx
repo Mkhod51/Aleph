@@ -20,12 +20,7 @@ export function Card({
 }) {
   return (
     <div
-      className={[
-        'panel p-4',
-        hover && 'panel-hover',
-        grid && 'gridfield',
-        className,
-      ]
+      className={['panel p-4', hover && 'panel-hover', grid && 'gridfield', className]
         .filter(Boolean)
         .join(' ')}
     >
@@ -62,9 +57,7 @@ export function NavCard({
       className="panel panel-hover group flex items-start justify-between gap-3 p-4"
     >
       <span className="min-w-0">
-        <span className="block font-mono text-sm font-semibold text-text">
-          {title}
-        </span>
+        <span className="block font-mono text-sm font-semibold text-text">{title}</span>
         <span className="mt-1 block text-[0.8125rem] text-text-dim">{hint}</span>
       </span>
       <span

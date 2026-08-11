@@ -37,7 +37,10 @@ export function SimPlayPage() {
   }, [baseSim, params]);
 
   const built = useMemo(
-    () => (sim ? buildPlanFromSim(sim, overrideSeed ? Number(overrideSeed) : undefined) : null),
+    () =>
+      sim
+        ? buildPlanFromSim(sim, overrideSeed ? Number(overrideSeed) : undefined)
+        : null,
     [sim, overrideSeed],
   );
   const inputRef = useRef<HTMLInputElement>(null);
@@ -151,7 +154,7 @@ export function SimPlayPage() {
       <div className="flex flex-1 items-center justify-center px-4 pb-16">
         {phase === 'countdown' && <Countdown onDone={beginPlay} />}
         {phase === 'confirmQuit' && (
-          <div className="animate-overlay-in flex flex-col items-center gap-5 text-center">
+          <div className="flex animate-overlay-in flex-col items-center gap-5 text-center">
             <div className="font-mono text-2xl text-text">Quit this sim?</div>
             <p className="text-sm text-text-dim">
               It will be recorded as abandoned and won&apos;t count.

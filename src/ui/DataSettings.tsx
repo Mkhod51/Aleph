@@ -111,8 +111,8 @@ export function DataSettings() {
               </p>
               <p className="mt-1 text-text-dim">
                 Merge adds {preview.newCounts.sessions} new sessions and{' '}
-                {preview.newCounts.attempts} new attempts. Replace wipes current
-                data first.
+                {preview.newCounts.attempts} new attempts. Replace wipes current data
+                first.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <Button

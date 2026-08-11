@@ -130,5 +130,14 @@ export function useSimEngine(
     return [...attemptsRef.current, inflight];
   }, [index, question]);
 
-  return { question, input, index, correct, wrong, onInputChange, commit, finalizeDrafts };
+  return {
+    question,
+    input,
+    index,
+    correct,
+    wrong,
+    onInputChange,
+    commit,
+    finalizeDrafts,
+  };
 }

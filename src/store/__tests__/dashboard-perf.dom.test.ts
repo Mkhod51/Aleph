@@ -38,7 +38,9 @@ describe('dashboard performance with 100k attempts (doc 09 M2 DoD)', () => {
     expect(data.sprintSeries.length).toBe(1700);
     expect(data.skills.length).toBe(4);
     expect(data.facts.length).toBeGreaterThan(0);
-    console.log(`loadDashboard over ${seeded.attempts} attempts: ${elapsed.toFixed(1)}ms`);
+    console.log(
+      `loadDashboard over ${seeded.attempts} attempts: ${elapsed.toFixed(1)}ms`,
+    );
     expect(elapsed).toBeLessThan(400);
   });
 });

@@ -2,13 +2,7 @@ import { intInRange, pick, type Rng } from '@/lib/prng';
 import type { GeneratorConfig, Question } from '../types';
 import { clampDifficulty } from '../difficulty';
 import { fracFactKey } from '../facts';
-import {
-  fractionCanonical,
-  formatDecimal,
-  gcd,
-  lcm,
-  reduceFraction,
-} from './shared';
+import { fractionCanonical, formatDecimal, gcd, lcm, reduceFraction } from './shared';
 
 const FRAC_ADD_DENOMS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16] as const;
 

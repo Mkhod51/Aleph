@@ -46,16 +46,20 @@ export function DrillsPage() {
   }, []);
 
   const start = useMemo(
-    () => (tag: SkillTag, opts?: { count?: number; input?: 'flow' | 'test'; tier?: TierMode }) => {
-      setPending(
-        buildDrillFromTag(tag, {
-          count: opts?.count ?? count,
-          input: opts?.input ?? input,
-          tierMode: opts?.tier ?? tier,
-        }),
-      );
-      navigate('/drills/play');
-    },
+    () =>
+      (
+        tag: SkillTag,
+        opts?: { count?: number; input?: 'flow' | 'test'; tier?: TierMode },
+      ) => {
+        setPending(
+          buildDrillFromTag(tag, {
+            count: opts?.count ?? count,
+            input: opts?.input ?? input,
+            tierMode: opts?.tier ?? tier,
+          }),
+        );
+        navigate('/drills/play');
+      },
     [count, input, tier, navigate, setPending],
   );
 
@@ -80,8 +84,8 @@ export function DrillsPage() {
       <div>
         <h1 className="font-mono text-2xl font-semibold text-text">Skill drills</h1>
         <p className="mt-1 text-sm text-text-dim">
-          Volume practice on one family. Accuracy and median latency below are your
-          live stats. The catalog doubles as a weakness display.
+          Volume practice on one family. Accuracy and median latency below are your live
+          stats. The catalog doubles as a weakness display.
         </p>
       </div>
 
@@ -105,7 +109,10 @@ export function DrillsPage() {
           />
           <ConfigGroup
             label="Difficulty"
-            options={TIERS.map((t) => ({ value: t, label: t === 'adaptive' ? 'Adaptive' : `T${t}` }))}
+            options={TIERS.map((t) => ({
+              value: t,
+              label: t === 'adaptive' ? 'Adaptive' : `T${t}`,
+            }))}
             value={tier}
             onChange={setTier}
           />
@@ -115,7 +122,7 @@ export function DrillsPage() {
       {DRILL_CATALOG.map((group) => (
         <Card key={group.category}>
           <Eyebrow>{group.category}</Eyebrow>
-          <div className="mt-2 divide-y divide-border/60">
+          <div className="divide-border/60 mt-2 divide-y">
             {group.tags.map((tag) => {
               const s = stats[tag];
               return (
@@ -125,7 +132,9 @@ export function DrillsPage() {
                   onClick={() => start(tag)}
                   className="group flex w-full items-center gap-4 py-2 text-left"
                 >
-                  <span className="w-28 shrink-0 font-mono text-sm text-text">{tag}</span>
+                  <span className="w-28 shrink-0 font-mono text-sm text-text">
+                    {tag}
+                  </span>
                   <span className="flex-1 text-xs text-text-dim">
                     {s
                       ? `${formatAccuracy(s.accuracy)} · ${s.medianMs ? formatLatency(s.medianMs) : '—'}`

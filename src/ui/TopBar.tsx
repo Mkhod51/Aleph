@@ -100,7 +100,9 @@ export function TopBar() {
             aria-label="Settings"
             title="Settings"
           >
-            <span aria-hidden className="text-xl leading-none">⚙</span>
+            <span aria-hidden className="text-xl leading-none">
+              ⚙
+            </span>
           </NavLink>
         </div>
       </nav>

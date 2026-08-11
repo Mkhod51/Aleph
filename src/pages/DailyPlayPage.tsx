@@ -19,7 +19,9 @@ export function DailyPlayPage() {
   const engine = usePlayEngine(built.plan);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [phase, setPhase] = useState<Phase>(settings.countdown ? 'countdown' : 'playing');
+  const [phase, setPhase] = useState<Phase>(
+    settings.countdown ? 'countdown' : 'playing',
+  );
   const startedAtRef = useRef(Date.now());
   const elapsedRef = useRef(0);
   const endedRef = useRef(false);
@@ -94,7 +96,7 @@ export function DailyPlayPage() {
           <div className="absolute left-6 font-mono text-sm text-text-dim">Daily</div>
         )}
         {showTop && settings.scoreVisible && (
-          <div className="absolute right-6 readout text-2xl text-text-dim">
+          <div className="readout absolute right-6 text-2xl text-text-dim">
             {engine.score}
           </div>
         )}

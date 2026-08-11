@@ -7,10 +7,7 @@ import { PauseOverlay } from '@/ui/play/PauseOverlay';
 import { PlayField } from '@/ui/play/PlayField';
 import { usePlayEngine } from '@/ui/play/usePlayEngine';
 import { useSettingsStore } from '@/store/useSettingsStore';
-import {
-  usePresetStore,
-  findPreset,
-} from '@/store/usePresetStore';
+import { usePresetStore, findPreset } from '@/store/usePresetStore';
 import { buildPlanFromPreset, presetHasAnyOp } from '@/store/presets';
 import { finalizeSession } from '@/store/sessionService';
 
@@ -29,7 +26,8 @@ export function PlayPage() {
   const secondsOverride = params.get('seconds');
   const built = useMemo(() => {
     const n = Number(secondsOverride);
-    const overrideMs = secondsOverride && Number.isFinite(n) && n > 0 ? n * 1000 : undefined;
+    const overrideMs =
+      secondsOverride && Number.isFinite(n) && n > 0 ? n * 1000 : undefined;
     return buildPlanFromPreset(preset, undefined, overrideMs);
   }, [preset, secondsOverride]);
   const playable = presetHasAnyOp(preset);
@@ -57,9 +55,7 @@ export function PlayPage() {
       endedRef.current = true;
       setPhase('ending');
       const drafts = engine.finalizeDrafts();
-      const durationMs = completed
-        ? built.durationMs
-        : Math.round(elapsedRef.current);
+      const durationMs = completed ? built.durationMs : Math.round(elapsedRef.current);
       try {
         const { sessionId } = await finalizeSession({
           plan: built.plan,
@@ -141,7 +137,7 @@ export function PlayPage() {
         )}
         {showTopRow && settings.scoreVisible && (
           <div
-            className="absolute right-6 readout text-2xl text-text-dim"
+            className="readout absolute right-6 text-2xl text-text-dim"
             aria-label="Score"
           >
             {engine.score}

@@ -39,7 +39,9 @@ export function generatePctReverse(rng: Rng, _cfg: GeneratorConfig): Question {
   };
 }
 
-const CHANGE_PCTS = [-50, -40, -30, -25, -20, -15, -10, -5, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100];
+const CHANGE_PCTS = [
+  -50, -40, -30, -25, -20, -15, -10, -5, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100,
+];
 
 /** PCT_CHANGE — "old → new"; answer is the clean percentage change. */
 export function generatePctChange(rng: Rng, _cfg: GeneratorConfig): Question {

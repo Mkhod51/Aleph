@@ -46,8 +46,9 @@ describe('pinPair fact-family draws (doc 03 §6, F1)', () => {
   it('is deterministic for a given seed', () => {
     const seq = (seed: number) => {
       const rng = mulberry32(seed);
-      return Array.from({ length: 50 }, () =>
-        generateDivExact(rng, { pinPair: [13, 17] }).prompt,
+      return Array.from(
+        { length: 50 },
+        () => generateDivExact(rng, { pinPair: [13, 17] }).prompt,
       );
     };
     expect(seq(42)).toEqual(seq(42));

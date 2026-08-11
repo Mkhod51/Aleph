@@ -24,7 +24,10 @@ export function SegmentedControl<T extends string>({
     <div
       role="radiogroup"
       aria-label={ariaLabel}
-      className={['inline-flex rounded-btn border border-border bg-surface p-0.5', className]
+      className={[
+        'inline-flex rounded-btn border border-border bg-surface p-0.5',
+        className,
+      ]
         .filter(Boolean)
         .join(' ')}
     >

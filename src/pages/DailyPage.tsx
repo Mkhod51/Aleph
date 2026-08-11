@@ -16,7 +16,7 @@ function History({ records }: { records: DailyRecord[] }) {
       {recent.map((r) => (
         <div
           key={r.date}
-          className="w-4 rounded-sm border-t-2 border-accent-hi bg-accent/70"
+          className="bg-accent/70 w-4 rounded-sm border-t-2 border-accent-hi"
           style={{ height: `${Math.max(6, (r.score / max) * 100)}%` }}
           title={`${r.date}: ${r.score}`}
         />
@@ -47,8 +47,8 @@ export function DailyPage() {
       <div>
         <h1 className="font-mono text-2xl font-semibold text-text">Daily challenge</h1>
         <p className="mt-1 text-sm text-text-dim">
-          A 120-second sprint on the same question sequence for everyone, every day.
-          The cleanest day-over-day signal.
+          A 120-second sprint on the same question sequence for everyone, every day. The
+          cleanest day-over-day signal.
         </p>
       </div>
 

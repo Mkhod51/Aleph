@@ -17,7 +17,10 @@ const PIN_EXACT_P = 0.7;
  * stays inside the pinned neighborhood. Presentation order is randomized so the
  * pair drives every question form (a×b, p÷a, a×□=p). Deterministic in `rng`.
  */
-export function resolvePinnedPair(rng: Rng, pin: readonly [number, number]): [number, number] {
+export function resolvePinnedPair(
+  rng: Rng,
+  pin: readonly [number, number],
+): [number, number] {
   const [p, q] = pin;
   let a: number;
   let b: number;

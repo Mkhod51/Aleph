@@ -15,12 +15,7 @@ import { generateAddDec, generateMulDec } from './dec';
 import { generateFracAdd, generateFracToDec, generateFracCompare } from './frac';
 import { generatePctOf, generatePctReverse, generatePctChange } from './pct';
 import { generateMissingAdd, generateMissingMul } from './missing';
-import {
-  squareDefaults,
-  pow2Defaults,
-  generateSquare,
-  generatePow2,
-} from './recall';
+import { squareDefaults, pow2Defaults, generateSquare, generatePow2 } from './recall';
 
 export type GeneratorFn = (rng: Rng, cfg: GeneratorConfig) => Question;
 

@@ -87,11 +87,7 @@ export interface GeneratorConfig {
 }
 
 export type ProfileId =
-  | 'zetamac'
-  | 'optiver'
-  | 'flow'
-  | 'sequences'
-  | `drill:${SkillTag}`;
+  'zetamac' | 'optiver' | 'flow' | 'sequences' | `drill:${SkillTag}`;
 
 /** A weight map over skill tags; the stream draws each question's tag by weight. */
 export type WeightMap = Partial<Record<SkillTag, number>>;

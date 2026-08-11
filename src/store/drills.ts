@@ -97,7 +97,9 @@ export function resolveDrillWeights(weights: WeightMap) {
   return resolveProfile(weights);
 }
 
-function drillConfigHash(meta: Omit<DrillMeta, 'configHash' | 'seed' | 'scoring' | 'title'>): string {
+function drillConfigHash(
+  meta: Omit<DrillMeta, 'configHash' | 'seed' | 'scoring' | 'title'>,
+): string {
   return stableHash({
     weights: meta.weights,
     count: meta.count,
@@ -171,7 +173,10 @@ export function parseMulFactKey(factKey: string): [number, number] | null {
  * drill pinned to one multiplication fact, mixing its question forms (a×b, p÷a,
  * a×□=p) with light neighbors via `pinPair`. Returns null for an unparseable key.
  */
-export function buildFactDrill(factKey: string, opts: BuildOptions = {}): DrillMeta | null {
+export function buildFactDrill(
+  factKey: string,
+  opts: BuildOptions = {},
+): DrillMeta | null {
   const pair = parseMulFactKey(factKey);
   if (!pair) return null;
   const [a, b] = pair;
@@ -204,12 +209,27 @@ export function buildFactDrill(factKey: string, opts: BuildOptions = {}): DrillM
 
 /** Drillable tags grouped by category for the catalog (doc 03 §4). */
 export const DRILL_CATALOG: { category: LearnCategory; tags: SkillTag[] }[] = [
-  { category: 'Foundations', tags: ['ADD_2D', 'ADD_3D', 'SUB_2D', 'SUB_3D', 'MISSING_ADD'] },
-  { category: 'Multiplication', tags: ['MUL_1x2', 'MUL_1x3', 'MUL_2x2', 'SQUARE', 'MISSING_MUL'] },
+  {
+    category: 'Foundations',
+    tags: ['ADD_2D', 'ADD_3D', 'SUB_2D', 'SUB_3D', 'MISSING_ADD'],
+  },
+  {
+    category: 'Multiplication',
+    tags: ['MUL_1x2', 'MUL_1x3', 'MUL_2x2', 'SQUARE', 'MISSING_MUL'],
+  },
   { category: 'Division & divisibility', tags: ['DIV_EXACT', 'DIV_TO_DEC'] },
   {
     category: 'Fractions, decimals, percentages',
-    tags: ['ADD_DEC', 'MUL_DEC', 'FRAC_ADD', 'FRAC_TO_DEC', 'FRAC_COMPARE', 'PCT_OF', 'PCT_REVERSE', 'PCT_CHANGE'],
+    tags: [
+      'ADD_DEC',
+      'MUL_DEC',
+      'FRAC_ADD',
+      'FRAC_TO_DEC',
+      'FRAC_COMPARE',
+      'PCT_OF',
+      'PCT_REVERSE',
+      'PCT_CHANGE',
+    ],
   },
 ];
 

@@ -29,7 +29,10 @@ const FACT_LATENCY_RING = 20; // keep the last N correct latencies per fact (doc
 
 /** Per-tag summary denormalized onto the session (doc 08 §5). */
 function computeSkillBreakdown(drafts: AttemptDraft[]): SkillBreakdown {
-  const byTag = new Map<SkillTag, { attempts: number; correct: number; ms: number[] }>();
+  const byTag = new Map<
+    SkillTag,
+    { attempts: number; correct: number; ms: number[] }
+  >();
   for (const d of drafts) {
     let e = byTag.get(d.skill);
     if (!e) {
@@ -70,7 +73,9 @@ async function updateFactStats(drafts: AttemptDraft[], at: number): Promise<void
     const existing = await db.factStats.get(factKey);
     const attempts = (existing?.attempts ?? 0) + e.attempts;
     const correct = (existing?.correct ?? 0) + e.correct;
-    const latencies = [...(existing?.latencies ?? []), ...e.ms].slice(-FACT_LATENCY_RING);
+    const latencies = [...(existing?.latencies ?? []), ...e.ms].slice(
+      -FACT_LATENCY_RING,
+    );
     const medianLatencyMs = median(latencies);
     const stat: FactStat = {
       factKey,
@@ -242,9 +247,7 @@ export async function getResultData(sessionId: string): Promise<ResultData | nul
   const sameConfig = await sessionRepo.completedByConfig(session.configHash);
   const prior = sameConfig.filter((s) => s.startedAt < session.startedAt);
 
-  const best = sameConfig.length
-    ? Math.max(...sameConfig.map((s) => s.score))
-    : null;
+  const best = sameConfig.length ? Math.max(...sameConfig.map((s) => s.score)) : null;
   const prevBest = prior.length ? Math.max(...prior.map((s) => s.score)) : null;
   const last7 = prior.slice(0, 7);
   const last7Avg = last7.length ? mean(last7.map((s) => s.score)) : null;

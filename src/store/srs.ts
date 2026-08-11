@@ -29,7 +29,13 @@ interface CardShape {
 }
 
 function intCard(id: string, deck: string, front: string, value: number): CardShape {
-  return { id, deck, front, answer: { value, display: String(value) }, format: 'integer' };
+  return {
+    id,
+    deck,
+    front,
+    answer: { value, display: String(value) },
+    format: 'integer',
+  };
 }
 
 /** All built-in cards (doc 03 §7), before scheduling. */
@@ -50,10 +56,12 @@ function builtinShapes(): CardShape[] {
   }
 
   // Squares 11–30.
-  for (let n = 11; n <= 30; n++) cards.push(intCard(`sq:${n}`, 'squares', `${n}²`, n * n));
+  for (let n = 11; n <= 30; n++)
+    cards.push(intCard(`sq:${n}`, 'squares', `${n}²`, n * n));
 
   // Powers of 2, 2^1..2^12.
-  for (let n = 1; n <= 12; n++) cards.push(intCard(`pow2:${n}`, 'pow2', `2^${n}`, 2 ** n));
+  for (let n = 1; n <= 12; n++)
+    cards.push(intCard(`pow2:${n}`, 'pow2', `2^${n}`, 2 ** n));
 
   // Times tables 13–20 (upper triangle to avoid duplicate facts).
   for (let a = 13; a <= 20; a++) {
@@ -157,7 +165,13 @@ function cardFromFactKey(factKey: string): CardShape | null {
     const n = Number(m[1]);
     const d = Number(m[2]);
     const value = Number((n / d).toFixed(4));
-    return { id: factKey, deck: 'weak', front: `${n}/${d}`, answer: { value, display: String(value) }, format: 'decimal' };
+    return {
+      id: factKey,
+      deck: 'weak',
+      front: `${n}/${d}`,
+      answer: { value, display: String(value) },
+      format: 'decimal',
+    };
   }
   return null;
 }
@@ -168,7 +182,9 @@ function cardFromFactKey(factKey: string): CardShape | null {
  */
 export async function enrollWeakFacts(nowMs = Date.now()): Promise<number> {
   const facts = await factRepo.all();
-  const reference = median(facts.filter((f) => f.attempts >= 3).map((f) => f.medianLatencyMs));
+  const reference = median(
+    facts.filter((f) => f.attempts >= 3).map((f) => f.medianLatencyMs),
+  );
   const existing = new Map((await srsRepo.all()).map((c) => [c.id, c]));
   const updates: SrsCard[] = [];
 
@@ -210,7 +226,9 @@ export async function enrollWeakFacts(nowMs = Date.now()): Promise<number> {
 /** Weak facts as a count (for the Fix-My-Gaps explainer). */
 export async function weakFactCount(): Promise<number> {
   const facts = await factRepo.all();
-  const reference = median(facts.filter((f) => f.attempts >= 3).map((f) => f.medianLatencyMs));
+  const reference = median(
+    facts.filter((f) => f.attempts >= 3).map((f) => f.medianLatencyMs),
+  );
   return facts.filter((f) =>
     isWeakFact({
       attempts: f.attempts,

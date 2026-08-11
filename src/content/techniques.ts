@@ -40,8 +40,7 @@ export const TECHNIQUES: Technique[] = [
       '× 102 → ×100 + ×2: 68×102 = 6800+136 = 6936.',
     ],
     whenToUse: 'Any operand within ~5 of a round number.',
-    pitfall:
-      'Repair direction — subtracting a too-big number means adding back.',
+    pitfall: 'Repair direction — subtracting a too-big number means adding back.',
     drill: {
       weights: { ADD_2D: 50, SUB_2D: 50 },
       tier: 2,
@@ -168,7 +167,8 @@ export const TECHNIQUES: Technique[] = [
     method:
       '×11: neighbours sum inward — 43×11 → 4|(4+3)|3 = 473 (carry when ≥10: 87×11 → 8|15|7 → 957). ×9 = ×10 − n: 34×9 = 340−34 = 306. Same tens, units summing to 10: 63 × 67 → tens 6×(6+1) = 42, units 3×7 = 21 → 4221.',
     examples: ['43 × 11 = 473', '87 × 11 = 957', '34 × 9 = 306', '63 × 67 = 4221'],
-    whenToUse: '×11, ×9, or two-digit pairs with the same tens digit and units summing to 10.',
+    whenToUse:
+      '×11, ×9, or two-digit pairs with the same tens digit and units summing to 10.',
     drill: {
       weights: { MUL_2x2: 100 },
       tier: 2,
@@ -200,7 +200,8 @@ export const TECHNIQUES: Technique[] = [
     method:
       '2/5/10: last digit · 4: last two digits · 8: last three · 3/9: digit sum · 6: rules 2∧3 · 11: alternating digit sum · 7: double the last digit, subtract from the rest (315 → 31−10 = 21 ✓).',
     examples: ['315 divisible by 7? 31 − 2·5 = 21 ✓', '4,928 by 4? "28" ÷ 4 ✓'],
-    whenToUse: 'Eliminating impossible multiple-choice answers; checking exact divisions.',
+    whenToUse:
+      'Eliminating impossible multiple-choice answers; checking exact divisions.',
     drill: {
       weights: { FRAC_COMPARE: 100 },
       note: 'The divisibility quiz variant is P2; this drill uses fraction comparison for now.',

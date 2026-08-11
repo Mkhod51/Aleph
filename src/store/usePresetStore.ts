@@ -1,11 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { ulid } from '@/lib/ulid';
-import {
-  ZETAMAC_DEFAULT,
-  ZETAMAC_DEFAULT_ID,
-  type SprintPreset,
-} from './presets';
+import { ZETAMAC_DEFAULT, ZETAMAC_DEFAULT_ID, type SprintPreset } from './presets';
 
 /**
  * Preset store — the immutable Zetamac Default plus user-created custom presets,

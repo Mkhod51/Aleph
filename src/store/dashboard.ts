@@ -113,11 +113,19 @@ function buildSkillRows(sessions: Session[]): SkillRow[] {
       accuracy,
       medianMs,
       targetMs,
-      mastery: masteryLevel({ attempts: e.attempts, accuracy, medianLatencyMs: medianMs, targetMs }),
+      mastery: masteryLevel({
+        attempts: e.attempts,
+        accuracy,
+        medianLatencyMs: medianMs,
+        targetMs,
+      }),
     });
   }
   // Worst-first: lowest accuracy, then slowest relative to target.
-  rows.sort((a, b) => a.accuracy - b.accuracy || b.medianMs / b.targetMs - a.medianMs / a.targetMs);
+  rows.sort(
+    (a, b) =>
+      a.accuracy - b.accuracy || b.medianMs / b.targetMs - a.medianMs / a.targetMs,
+  );
   return rows;
 }
 
@@ -171,7 +179,9 @@ export async function loadDashboard(): Promise<DashboardData> {
 
   const simReadiness: SimReadiness[] = [];
   for (const sim of SIMS) {
-    const runs = completed.filter((s) => s.mode === 'sim' && s.simId === sim.id && s.official);
+    const runs = completed.filter(
+      (s) => s.mode === 'sim' && s.simId === sim.id && s.official,
+    );
     if (runs.length === 0) continue;
     const scores = runs.map((s) => s.score);
     const latest = runs.sort((a, b) => b.startedAt - a.startedAt)[0] as Session;
@@ -208,8 +218,7 @@ export async function loadDashboard(): Promise<DashboardData> {
     totalQuestions: completed.reduce((sum, s) => sum + questionsIn(s), 0),
     sprintRolling7: rolling7,
     sprintTrend: trendDirection(sprintScores),
-    sprintBandLabel:
-      rolling7 !== null ? bandFor(rolling7, SPRINT_BANDS).label : null,
+    sprintBandLabel: rolling7 !== null ? bandFor(rolling7, SPRINT_BANDS).label : null,
     sprintSeries,
     skills: buildSkillRows(completed),
     facts,

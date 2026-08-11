@@ -85,8 +85,7 @@ export function isWeakFact(input: {
   if (input.attempts < 3) return false;
   if (input.accuracy < 0.7) return true;
   return (
-    input.referenceMedianMs > 0 &&
-    input.medianLatencyMs > 1.5 * input.referenceMedianMs
+    input.referenceMedianMs > 0 && input.medianLatencyMs > 1.5 * input.referenceMedianMs
   );
 }
 

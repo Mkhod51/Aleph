@@ -13,7 +13,11 @@ export const SRS_REQUEUE_MS = 10 * 60 * 1000;
 export type Box = 1 | 2 | 3 | 4 | 5;
 
 /** Correct within the target time promotes; anything else demotes to box 1. */
-export function promoted(correct: boolean, elapsedMs: number, targetMs: number): boolean {
+export function promoted(
+  correct: boolean,
+  elapsedMs: number,
+  targetMs: number,
+): boolean {
   return correct && elapsedMs <= targetMs;
 }
 

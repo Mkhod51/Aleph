@@ -33,27 +33,83 @@ describe('trendDirection (doc 05 §2)', () => {
 describe('masteryLevel (doc 05 §2)', () => {
   const target = 5000;
   it('— under 10 attempts', () => {
-    expect(masteryLevel({ attempts: 9, accuracy: 1, medianLatencyMs: 100, targetMs: target })).toBe('—');
+    expect(
+      masteryLevel({
+        attempts: 9,
+        accuracy: 1,
+        medianLatencyMs: 100,
+        targetMs: target,
+      }),
+    ).toBe('—');
   });
   it('learning when inaccurate or slow', () => {
-    expect(masteryLevel({ attempts: 20, accuracy: 0.8, medianLatencyMs: 100, targetMs: target })).toBe('learning');
-    expect(masteryLevel({ attempts: 20, accuracy: 0.99, medianLatencyMs: 6000, targetMs: target })).toBe('learning');
+    expect(
+      masteryLevel({
+        attempts: 20,
+        accuracy: 0.8,
+        medianLatencyMs: 100,
+        targetMs: target,
+      }),
+    ).toBe('learning');
+    expect(
+      masteryLevel({
+        attempts: 20,
+        accuracy: 0.99,
+        medianLatencyMs: 6000,
+        targetMs: target,
+      }),
+    ).toBe('learning');
   });
   it('solid when accurate and within target', () => {
-    expect(masteryLevel({ attempts: 20, accuracy: 0.9, medianLatencyMs: 4000, targetMs: target })).toBe('solid');
+    expect(
+      masteryLevel({
+        attempts: 20,
+        accuracy: 0.9,
+        medianLatencyMs: 4000,
+        targetMs: target,
+      }),
+    ).toBe('solid');
   });
 });
 
 describe('isWeakFact (doc 03 §6)', () => {
   it('needs at least 3 attempts', () => {
-    expect(isWeakFact({ attempts: 2, accuracy: 0, medianLatencyMs: 9999, referenceMedianMs: 1000 })).toBe(false);
+    expect(
+      isWeakFact({
+        attempts: 2,
+        accuracy: 0,
+        medianLatencyMs: 9999,
+        referenceMedianMs: 1000,
+      }),
+    ).toBe(false);
   });
   it('weak on low accuracy', () => {
-    expect(isWeakFact({ attempts: 5, accuracy: 0.6, medianLatencyMs: 100, referenceMedianMs: 1000 })).toBe(true);
+    expect(
+      isWeakFact({
+        attempts: 5,
+        accuracy: 0.6,
+        medianLatencyMs: 100,
+        referenceMedianMs: 1000,
+      }),
+    ).toBe(true);
   });
   it('weak on slow latency vs 1.5× reference', () => {
-    expect(isWeakFact({ attempts: 5, accuracy: 1, medianLatencyMs: 1600, referenceMedianMs: 1000 })).toBe(true);
-    expect(isWeakFact({ attempts: 5, accuracy: 1, medianLatencyMs: 1400, referenceMedianMs: 1000 })).toBe(false);
+    expect(
+      isWeakFact({
+        attempts: 5,
+        accuracy: 1,
+        medianLatencyMs: 1600,
+        referenceMedianMs: 1000,
+      }),
+    ).toBe(true);
+    expect(
+      isWeakFact({
+        attempts: 5,
+        accuracy: 1,
+        medianLatencyMs: 1400,
+        referenceMedianMs: 1000,
+      }),
+    ).toBe(false);
   });
 });
 

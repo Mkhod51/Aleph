@@ -55,14 +55,16 @@ export function LearnPage() {
         return (
           <Card key={cat}>
             <Eyebrow>{cat}</Eyebrow>
-            <div className="mt-2 divide-y divide-border/60">
+            <div className="divide-border/60 mt-2 divide-y">
               {items.map((t) => (
                 <Link
                   key={t.id}
                   to={`/learn/${t.slug}`}
                   className="group flex items-center gap-3 py-2"
                 >
-                  <span className="w-8 shrink-0 font-mono text-xs text-text-dim">{t.id}</span>
+                  <span className="w-8 shrink-0 font-mono text-xs text-text-dim">
+                    {t.id}
+                  </span>
                   <span className="flex-1 text-sm text-text">{t.title}</span>
                   {t.masteryTag && <MasteryChip level={mastery[t.masteryTag] ?? '—'} />}
                   <RowArrow />
@@ -75,14 +77,16 @@ export function LearnPage() {
 
       <Card>
         <Eyebrow>Reference tables</Eyebrow>
-        <div className="mt-2 divide-y divide-border/60">
+        <div className="divide-border/60 mt-2 divide-y">
           {REFERENCES.map((r) => (
             <Link
               key={r.id}
               to={`/learn/${r.slug}`}
               className="group flex items-center gap-3 py-2"
             >
-              <span className="w-8 shrink-0 font-mono text-xs text-text-dim">{r.id}</span>
+              <span className="w-8 shrink-0 font-mono text-xs text-text-dim">
+                {r.id}
+              </span>
               <span className="flex-1 text-sm text-text">{r.title}</span>
               <RowArrow />
             </Link>
@@ -92,14 +96,16 @@ export function LearnPage() {
 
       <Card>
         <Eyebrow>Strategy</Eyebrow>
-        <div className="mt-2 divide-y divide-border/60">
+        <div className="divide-border/60 mt-2 divide-y">
           {STRATEGY.map((s) => (
             <Link
               key={s.id}
               to={`/learn/${s.slug}`}
               className="group flex items-center gap-3 py-2"
             >
-              <span className="w-8 shrink-0 font-mono text-xs text-text-dim">{s.id}</span>
+              <span className="w-8 shrink-0 font-mono text-xs text-text-dim">
+                {s.id}
+              </span>
               <span className="flex-1 text-sm text-text">{s.title}</span>
               <RowArrow />
             </Link>

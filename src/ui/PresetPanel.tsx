@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import {
-  usePresetStore,
-  allPresets,
-  findPreset,
-} from '@/store/usePresetStore';
+import { usePresetStore, allPresets, findPreset } from '@/store/usePresetStore';
 import {
   DURATIONS_MS,
   presetHasAnyOp,

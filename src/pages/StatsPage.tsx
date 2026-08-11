@@ -8,10 +8,7 @@ import { Calendar } from '@/ui/stats/Calendar';
 import { BandGauge } from '@/ui/BandGauge';
 import { loadDashboard, type DashboardData, type SkillRow } from '@/store/dashboard';
 import { SPRINT_BANDS, BAND_DISCLAIMER, bandsForKind } from '@/content/bands';
-import {
-  formatAccuracy,
-  formatLatency,
-} from '@/lib/format';
+import { formatAccuracy, formatLatency } from '@/lib/format';
 import type { Mastery } from '@/engine';
 
 const ScoreChart = lazy(() => import('@/ui/stats/ScoreChart'));
@@ -35,7 +32,7 @@ function SkillBar({ row, onClick }: { row: SkillRow; onClick: () => void }) {
       <span className="w-24 shrink-0 font-mono text-xs text-text">{row.tag}</span>
       <span className="relative h-4 flex-1 overflow-hidden rounded-sm bg-surface-2">
         <span
-          className="absolute inset-y-0 left-0 bg-accent/70"
+          className="bg-accent/70 absolute inset-y-0 left-0"
           style={{ width: `${Math.round(row.accuracy * 100)}%` }}
         />
       </span>
@@ -75,8 +72,8 @@ export function StatsPage() {
           title="Your dashboard is empty"
           action={{ label: 'Play a sprint', to: '/play' }}
         >
-          Two minutes gets you a baseline, then this fills with score trends, a
-          skill breakdown, a times-table heatmap and a consistency calendar.
+          Two minutes gets you a baseline, then this fills with score trends, a skill
+          breakdown, a times-table heatmap and a consistency calendar.
         </EmptyState>
       </div>
     );
@@ -121,9 +118,7 @@ export function StatsPage() {
         <Eyebrow>Sprint score over time · Zetamac default</Eyebrow>
         {data.sprintSeries.length > 0 ? (
           <div className="mt-3">
-            <Suspense
-              fallback={<div className="h-[240px] rounded bg-surface-2" />}
-            >
+            <Suspense fallback={<div className="h-[240px] rounded bg-surface-2" />}>
               <ScoreChart
                 data={data.sprintSeries}
                 bands={SPRINT_BANDS}
@@ -143,7 +138,7 @@ export function StatsPage() {
         <Card>
           <Eyebrow>Skill breakdown · worst first</Eyebrow>
           {data.skills.length > 0 ? (
-            <div className="mt-2 divide-y divide-border/60">
+            <div className="divide-border/60 mt-2 divide-y">
               {data.skills.map((row) => (
                 <SkillBar
                   key={row.tag}
@@ -220,7 +215,7 @@ export function StatsPage() {
               <div key={q} className="flex flex-1 flex-col items-center gap-1">
                 <div className="flex h-24 w-full items-end">
                   <div
-                    className="w-full rounded-sm bg-accent/70"
+                    className="bg-accent/70 w-full rounded-sm"
                     style={{ height: `${Math.max(4, acc * 100)}%` }}
                   />
                 </div>
@@ -246,7 +241,7 @@ export function StatsPage() {
           <table className="mt-2 w-full text-sm">
             <tbody className="font-mono tabular-nums">
               {data.records.map((pb) => (
-                <tr key={pb.key} className="border-b border-border/60">
+                <tr key={pb.key} className="border-border/60 border-b">
                   <td className="py-1.5 text-text-dim">{pb.key}</td>
                   <td className="py-1.5 text-right text-text">{pb.score}</td>
                   <td className="py-1.5 text-right">

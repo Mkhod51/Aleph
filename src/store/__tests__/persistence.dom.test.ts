@@ -1,16 +1,8 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, it, expect } from 'vitest';
 import { db } from '../db';
-import {
-  buildPlanFromPreset,
-  pbKey,
-  ZETAMAC_DEFAULT,
-} from '../presets';
-import {
-  finalizeSession,
-  getResultData,
-  type AttemptDraft,
-} from '../sessionService';
+import { buildPlanFromPreset, pbKey, ZETAMAC_DEFAULT } from '../presets';
+import { finalizeSession, getResultData, type AttemptDraft } from '../sessionService';
 import { personalBestRepo } from '../repos/personalBestRepo';
 import { buildExportBundle, eraseAll, importBundle } from '../exportImport';
 import { useStreakStore } from '../streak';

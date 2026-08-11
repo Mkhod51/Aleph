@@ -100,12 +100,10 @@ export function SettingsPage() {
             official firm data.
           </p>
           <p>
-            All your data stays in this browser: no accounts, no servers, no
-            analytics. Export/import arrives with Sprint mode.
+            All your data stays in this browser: no accounts, no servers, no analytics.
+            Export/import arrives with Sprint mode.
           </p>
-          <p>
-            Inspired by arithmetic.zetamac.com. {APP_NAME} v0.0.0 · milestone M0.
-          </p>
+          <p>Inspired by arithmetic.zetamac.com. {APP_NAME} v0.0.0 · milestone M0.</p>
         </div>
       </Card>
     </div>

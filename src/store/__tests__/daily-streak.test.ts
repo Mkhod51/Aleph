@@ -43,14 +43,24 @@ describe('streak transitions (doc 05 §6)', () => {
   });
 
   it('a freeze bridges a single missed day', () => {
-    const s: typeof EMPTY_STREAK = { current: 3, best: 3, lastDate: '2026-07-16', freezes: 1 };
+    const s: typeof EMPTY_STREAK = {
+      current: 3,
+      best: 3,
+      lastDate: '2026-07-16',
+      freezes: 1,
+    };
     const next = applyDailyCompletion(s, '2026-07-18'); // missed the 17th
     expect(next.current).toBe(4);
     expect(next.freezes).toBe(0);
   });
 
   it('a gap with no freeze resets to a fresh streak of 1', () => {
-    const s: typeof EMPTY_STREAK = { current: 5, best: 5, lastDate: '2026-07-15', freezes: 0 };
+    const s: typeof EMPTY_STREAK = {
+      current: 5,
+      best: 5,
+      lastDate: '2026-07-15',
+      freezes: 0,
+    };
     const next = applyDailyCompletion(s, '2026-07-18');
     expect(next.current).toBe(1);
   });
@@ -65,7 +75,12 @@ describe('streak transitions (doc 05 §6)', () => {
   });
 
   it('reconcileOnOpen breaks the streak when a gap outstrips freezes', () => {
-    const alive: typeof EMPTY_STREAK = { current: 4, best: 4, lastDate: '2026-07-17', freezes: 0 };
+    const alive: typeof EMPTY_STREAK = {
+      current: 4,
+      best: 4,
+      lastDate: '2026-07-17',
+      freezes: 0,
+    };
     // Opening on the 18th (yesterday was the 17th → gap 1) keeps it alive.
     expect(reconcileOnOpen(alive, '2026-07-18').current).toBe(4);
     // Opening on the 20th (missed 18th & 19th, no freezes) breaks it.

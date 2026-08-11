@@ -110,9 +110,7 @@ export function resolveProfile(profile: ProfileId | WeightMap): ResolvedProfile 
     }
     const map = PROFILES[profile];
     if (!map) {
-      throw new Error(
-        `Profile "${profile}" is not available until a later milestone.`,
-      );
+      throw new Error(`Profile "${profile}" is not available until a later milestone.`);
     }
     return weightMapToArrays(map);
   }

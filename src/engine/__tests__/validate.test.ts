@@ -2,11 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { validate, matchesLive, acceptsChar } from '../validate';
 import type { AnswerFormat, Question } from '../types';
 
-function q(
-  format: AnswerFormat,
-  value: number,
-  display?: string,
-): Question {
+function q(format: AnswerFormat, value: number, display?: string): Question {
   return {
     skill: 'ADD_2D',
     prompt: 'test',

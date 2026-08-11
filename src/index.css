@@ -124,7 +124,11 @@
       linear-gradient(var(--grid-line) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
     background-size: 24px 24px;
-    -webkit-mask-image: radial-gradient(120% 120% at 50% 0%, #000 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(
+      120% 120% at 50% 0%,
+      #000 40%,
+      transparent 100%
+    );
     mask-image: radial-gradient(120% 120% at 50% 0%, #000 40%, transparent 100%);
   }
 

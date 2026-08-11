@@ -119,7 +119,7 @@ export function DrillPlayPage() {
 
       <div className="flex flex-1 flex-col items-center justify-center gap-4 px-4 pb-16">
         {phase === 'paused' ? (
-          <div className="animate-overlay-in flex flex-col items-center gap-5 text-center">
+          <div className="flex animate-overlay-in flex-col items-center gap-5 text-center">
             <div className="font-mono text-3xl text-text">Paused</div>
             <div className="flex gap-3">
               <Button

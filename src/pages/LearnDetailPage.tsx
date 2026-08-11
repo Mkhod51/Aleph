@@ -30,13 +30,15 @@ function TechniqueView({ t }: { t: Technique }) {
 
       <Card>
         <Eyebrow>Method</Eyebrow>
-        <p className="mt-2 max-w-[65ch] text-sm leading-relaxed text-text">{t.method}</p>
+        <p className="mt-2 max-w-[65ch] text-sm leading-relaxed text-text">
+          {t.method}
+        </p>
       </Card>
 
       <Card>
         <Eyebrow>Worked examples</Eyebrow>
         {/* Code-block feel: subtle left accent rule (ui-redesign/03 §Learn). */}
-        <ul className="mt-2 space-y-1 border-l-2 border-accent/40 pl-3 font-mono text-sm text-text">
+        <ul className="border-accent/40 mt-2 space-y-1 border-l-2 pl-3 font-mono text-sm text-text">
           {t.examples.map((e) => (
             <li key={e}>{e}</li>
           ))}
@@ -72,9 +74,7 @@ function TechniqueView({ t }: { t: Technique }) {
             <PlayIcon className="mr-2 transition-transform duration-fast ease-spring-t group-hover:translate-x-0.5" />
             Drill this
           </Button>
-          {t.drill.note && (
-            <p className="text-xs text-text-dim">{t.drill.note}</p>
-          )}
+          {t.drill.note && <p className="text-xs text-text-dim">{t.drill.note}</p>}
         </div>
       )}
 
@@ -132,7 +132,7 @@ export function LearnDetailPage() {
             </thead>
             <tbody className="font-mono tabular-nums">
               {reference.rows.map((row, i) => (
-                <tr key={i} className="border-b border-border/50">
+                <tr key={i} className="border-border/50 border-b">
                   {row.map((cell, j) => (
                     <td key={j} className="py-1.5 pr-6 text-text">
                       {cell}

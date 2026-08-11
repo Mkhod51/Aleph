@@ -37,10 +37,7 @@ export function StatTile({
       </div>
       <div className="flex items-baseline gap-2">
         <span
-          className={[
-            mono ? 'readout' : '',
-            'text-2xl font-semibold text-text',
-          ]
+          className={[mono ? 'readout' : '', 'text-2xl font-semibold text-text']
             .filter(Boolean)
             .join(' ')}
         >

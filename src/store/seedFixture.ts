@@ -32,7 +32,10 @@ export async function seedSynthetic(opts: SeedOptions = {}): Promise<{
 
   const sessions: Session[] = [];
   const attempts: Attempt[] = [];
-  const factAgg = new Map<string, { attempts: number; correct: number; ms: number[] }>();
+  const factAgg = new Map<
+    string,
+    { attempts: number; correct: number; ms: number[] }
+  >();
 
   for (let i = 0; i < sessionCount; i++) {
     const startedAt = base + i * (dayMs / 4);

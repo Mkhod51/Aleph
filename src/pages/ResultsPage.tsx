@@ -8,7 +8,14 @@ import { buildDrillFromTag, useDrillStore } from '@/store/drills';
 import { Button } from '@/ui/Button';
 import { BandGauge } from '@/ui/BandGauge';
 import { Card } from '@/ui/primitives';
-import { Chip, HeroReadout, StatTile, SegmentedControl, CheckIcon, CrossIcon } from '@/ui/kit';
+import {
+  Chip,
+  HeroReadout,
+  StatTile,
+  SegmentedControl,
+  CheckIcon,
+  CrossIcon,
+} from '@/ui/kit';
 import type { SkillTag } from '@/engine';
 import type { Attempt } from '@/store/types';
 import {
@@ -107,7 +114,9 @@ export function ResultsPage() {
   const setPending = useDrillStore((s) => s.setPending);
   const drillLike = useCallback(
     (tag: SkillTag) => {
-      setPending(buildDrillFromTag(tag, { count: 10, input: 'flow', tierMode: 'adaptive' }));
+      setPending(
+        buildDrillFromTag(tag, { count: 10, input: 'flow', tierMode: 'adaptive' }),
+      );
       navigate('/drills/play');
     },
     [navigate, setPending],
@@ -208,7 +217,7 @@ export function ResultsPage() {
       </div>
 
       {/* Vitals → StatTile grid */}
-      <Card className="animate-reveal grid grid-cols-3 gap-4 sm:grid-cols-6">
+      <Card className="grid animate-reveal grid-cols-3 gap-4 sm:grid-cols-6">
         <StatTile label="attempted" value={vitals.attempted} />
         <StatTile label="correct" value={vitals.correct} />
         <StatTile label="wrong" value={vitals.wrong} />
@@ -251,7 +260,7 @@ export function ResultsPage() {
             {rows.map((a) => (
               <tr
                 key={a.id}
-                className="border-b border-border/60 transition-colors duration-fast ease-out-t hover:bg-surface-2"
+                className="border-border/60 border-b transition-colors duration-fast ease-out-t hover:bg-surface-2"
               >
                 <td className="py-2 pr-3">
                   {a.correct ? (

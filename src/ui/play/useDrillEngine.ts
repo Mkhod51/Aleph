@@ -11,11 +11,7 @@ import {
 } from '@/engine';
 import { mulberry32, type Rng } from '@/lib/prng';
 import { now as timeNow } from '@/lib/timing';
-import {
-  drawDrillQuestion,
-  resolveDrillWeights,
-  type DrillMeta,
-} from '@/store/drills';
+import { drawDrillQuestion, resolveDrillWeights, type DrillMeta } from '@/store/drills';
 import type { AttemptDraft } from '@/store/sessionService';
 
 function filterInput(q: Question, raw: string): string {
@@ -65,7 +61,8 @@ export function useDrillEngine(meta: DrillMeta, onComplete: () => void): DrillEn
   const makeNext = useCallback((): Question => {
     const tier =
       meta.tierMode === 'adaptive' ? tierFromRating(ratingRef.current) : meta.tierMode;
-    const gen = () => drawDrillQuestion(genRngRef.current, resolvedRef.current, tier, meta.configs);
+    const gen = () =>
+      drawDrillQuestion(genRngRef.current, resolvedRef.current, tier, meta.configs);
     let q = gen();
     let tries = 0;
     const key = (x: Question) =>
@@ -116,8 +113,12 @@ export function useDrillEngine(meta: DrillMeta, onComplete: () => void): DrillEn
         at: Date.now(),
       });
       // Adaptive rating update (doc 04 §7).
-      const fast = isCorrect && t - renderTimeRef.current < targetMsForTag(question.skill);
-      ratingRef.current = nextAdaptiveRating(ratingRef.current, { correct: isCorrect, fast });
+      const fast =
+        isCorrect && t - renderTimeRef.current < targetMsForTag(question.skill);
+      ratingRef.current = nextAdaptiveRating(ratingRef.current, {
+        correct: isCorrect,
+        fast,
+      });
     },
     [index, question],
   );
@@ -141,7 +142,8 @@ export function useDrillEngine(meta: DrillMeta, onComplete: () => void): DrillEn
     (raw: string) => {
       if (advancingRef.current) return;
       const filtered = filterInput(question, raw);
-      if (firstKeyRef.current === null && filtered.length > 0) firstKeyRef.current = timeNow();
+      if (firstKeyRef.current === null && filtered.length > 0)
+        firstKeyRef.current = timeNow();
 
       if (meta.input === 'flow') {
         if (matchesLive(question, filtered)) {

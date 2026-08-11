@@ -1,9 +1,4 @@
-import {
-  SPRINT_BANDS,
-  OPTIVER_BANDS,
-  FLOW_BANDS,
-  type Band,
-} from '@/content/bands';
+import { SPRINT_BANDS, OPTIVER_BANDS, FLOW_BANDS, type Band } from '@/content/bands';
 import { buildPlanFromPreset, ZETAMAC_DEFAULT } from './presets';
 import type { Session } from './types';
 

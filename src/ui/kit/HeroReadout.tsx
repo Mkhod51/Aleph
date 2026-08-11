@@ -28,7 +28,8 @@ export function HeroReadout({
   align?: 'center' | 'left';
   className?: string;
 }) {
-  const alignCls = align === 'left' ? 'items-start text-left' : 'items-center text-center';
+  const alignCls =
+    align === 'left' ? 'items-start text-left' : 'items-center text-center';
   return (
     <div className={['flex flex-col gap-2', alignCls, className].join(' ')}>
       {label && (

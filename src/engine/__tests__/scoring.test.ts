@@ -22,21 +22,18 @@ describe('helpers', () => {
 
   it('p90 uses nearest-rank', () => {
     expect(percentile([1000, 2000, 3000], 90)).toBe(3000);
-    expect(percentile(Array.from({ length: 10 }, (_, i) => (i + 1) * 100), 90)).toBe(
-      900,
-    );
+    expect(
+      percentile(
+        Array.from({ length: 10 }, (_, i) => (i + 1) * 100),
+        90,
+      ),
+    ).toBe(900);
   });
 });
 
 describe('count scoring (sprints/drills, doc 04 §9)', () => {
   it('score is the number of correct; vitals match hand-computed values', () => {
-    const attempts = [
-      correct(1000),
-      correct(2000),
-      correct(3000),
-      wrong(1500),
-      skip(),
-    ];
+    const attempts = [correct(1000), correct(2000), correct(3000), wrong(1500), skip()];
     const { score, vitals } = scoreSession({ kind: 'count' }, attempts, 60000);
     expect(score).toBe(3);
     // count mode: skips excluded from accuracy denominator (flow has no skips).
@@ -58,7 +55,10 @@ describe('net scoring (sims, doc 04 §9)', () => {
       ...Array.from({ length: 12 }, () => wrong(4000)),
       ...Array.from({ length: 8 }, () => skip()),
     ];
-    const { score, vitals } = scoreSession({ kind: 'net', plus: 1, minus: 1 }, attempts);
+    const { score, vitals } = scoreSession(
+      { kind: 'net', plus: 1, minus: 1 },
+      attempts,
+    );
     expect(score).toBe(48);
     // net mode: a skip is a decision and counts as attempted.
     expect(vitals.attempted).toBe(80);
@@ -68,7 +68,10 @@ describe('net scoring (sims, doc 04 §9)', () => {
 
   it('all-skip → net 0, accuracy 0', () => {
     const attempts = Array.from({ length: 10 }, () => skip());
-    const { score, vitals } = scoreSession({ kind: 'net', plus: 1, minus: 1 }, attempts);
+    const { score, vitals } = scoreSession(
+      { kind: 'net', plus: 1, minus: 1 },
+      attempts,
+    );
     expect(score).toBe(0);
     expect(vitals.accuracy).toBe(0);
     expect(vitals.attempted).toBe(10);

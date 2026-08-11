@@ -16,7 +16,11 @@ import { useEffect, useRef, useState, type ReactNode, type SVGProps } from 'reac
  */
 type IconProps = SVGProps<SVGSVGElement>;
 
-function IconBase({ children, className = '', ...props }: IconProps & { children: ReactNode }) {
+function IconBase({
+  children,
+  className = '',
+  ...props
+}: IconProps & { children: ReactNode }) {
   return (
     <svg
       viewBox="0 0 16 16"
@@ -24,7 +28,9 @@ function IconBase({ children, className = '', ...props }: IconProps & { children
       height="1em"
       aria-hidden
       focusable={false}
-      className={['inline-block shrink-0 align-[-0.125em]', className].filter(Boolean).join(' ')}
+      className={['inline-block shrink-0 align-[-0.125em]', className]
+        .filter(Boolean)
+        .join(' ')}
       {...props}
     >
       {children}
@@ -115,7 +121,11 @@ function useIncreaseFlare(value: number | undefined) {
 }
 
 /** Streak mark. Tint with `text-accent`; pass `value` to flare on a new gain. */
-export function FlameIcon({ value, className = '', ...props }: IconProps & { value?: number }) {
+export function FlameIcon({
+  value,
+  className = '',
+  ...props
+}: IconProps & { value?: number }) {
   const flare = useIncreaseFlare(value);
   return (
     <IconBase
@@ -132,7 +142,11 @@ export function FlameIcon({ value, className = '', ...props }: IconProps & { val
 }
 
 /** Due-count mark. Tint with `text-accent`; pass `value` to flare on a new gain. */
-export function BoltIcon({ value, className = '', ...props }: IconProps & { value?: number }) {
+export function BoltIcon({
+  value,
+  className = '',
+  ...props
+}: IconProps & { value?: number }) {
   const flare = useIncreaseFlare(value);
   return (
     <IconBase

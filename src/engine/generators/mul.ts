@@ -32,7 +32,12 @@ export function generateMul1x2(rng: Rng, cfg: GeneratorConfig): Question {
 }
 
 /** MUL_1x3 — a ∈ [3,9], b ∈ [101,999]. Answer: integer product. */
-export const mul1x3Defaults: GeneratorConfig = { aMin: 3, aMax: 9, bMin: 101, bMax: 999 };
+export const mul1x3Defaults: GeneratorConfig = {
+  aMin: 3,
+  aMax: 9,
+  bMin: 101,
+  bMax: 999,
+};
 
 export function generateMul1x3(rng: Rng, cfg: GeneratorConfig): Question {
   const a = intInRange(rng, cfg.aMin ?? 3, cfg.aMax ?? 9);
@@ -53,7 +58,12 @@ export function generateMul1x3(rng: Rng, cfg: GeneratorConfig): Question {
  * MUL_2x2 — a,b ∈ [13,99], excluding operands ending in 0 (tier 1 may allow
  * them via allowRoundMultiples). Answer: integer product.
  */
-export const mul2x2Defaults: GeneratorConfig = { aMin: 13, aMax: 99, bMin: 13, bMax: 99 };
+export const mul2x2Defaults: GeneratorConfig = {
+  aMin: 13,
+  aMax: 99,
+  bMin: 13,
+  bMax: 99,
+};
 
 export function generateMul2x2(rng: Rng, cfg: GeneratorConfig): Question {
   const aMin = cfg.aMin ?? 13;

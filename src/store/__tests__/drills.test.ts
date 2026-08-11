@@ -2,11 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { validate } from '@/engine';
 import { mulberry32 } from '@/lib/prng';
 import { TECHNIQUES } from '@/content/techniques';
-import {
-  buildDrillFromSpec,
-  drawDrillQuestion,
-  resolveDrillWeights,
-} from '../drills';
+import { buildDrillFromSpec, drawDrillQuestion, resolveDrillWeights } from '../drills';
 
 describe('technique → drill mapping (doc 06, doc 09 M4 DoD)', () => {
   it('every technique with a drill resolves to registered generators', () => {

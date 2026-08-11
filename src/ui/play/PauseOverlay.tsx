@@ -20,9 +20,7 @@ export function PauseOverlay({
         <div id="pause-title" className="font-mono text-3xl text-text">
           Paused
         </div>
-        <p className="text-sm text-text-dim">
-          The question is hidden while paused.
-        </p>
+        <p className="text-sm text-text-dim">The question is hidden while paused.</p>
         <div className="flex gap-3">
           <Button variant="primary" size="md" onClick={onResume}>
             Resume
@@ -31,7 +29,9 @@ export function PauseOverlay({
             Quit
           </Button>
         </div>
-        <p className="text-xs text-text-dim">Esc to resume · quitting won&apos;t count</p>
+        <p className="text-xs text-text-dim">
+          Esc to resume · quitting won&apos;t count
+        </p>
       </div>
     </Modal>
   );

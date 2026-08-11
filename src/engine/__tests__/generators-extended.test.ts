@@ -8,16 +8,34 @@ import { generateMul2x2, mul2x2Defaults } from '../generators/mul';
 import { generateDivToDec } from '../generators/div';
 import { generateMul1x3, mul1x3Defaults } from '../generators/mul';
 import { generateAddDec, generateMulDec } from '../generators/dec';
-import { generateFracAdd, generateFracToDec, generateFracCompare } from '../generators/frac';
-import { generatePctOf, generatePctReverse, generatePctChange } from '../generators/pct';
+import {
+  generateFracAdd,
+  generateFracToDec,
+  generateFracCompare,
+} from '../generators/frac';
+import {
+  generatePctOf,
+  generatePctReverse,
+  generatePctChange,
+} from '../generators/pct';
 import { generateMissingAdd, generateMissingMul } from '../generators/missing';
-import { generateSquare, generatePow2, squareDefaults, pow2Defaults } from '../generators/recall';
+import {
+  generateSquare,
+  generatePow2,
+  squareDefaults,
+  pow2Defaults,
+} from '../generators/recall';
 
 const N = 1000;
 type Gen = (rng: ReturnType<typeof mulberry32>, cfg: GeneratorConfig) => Question;
 
 /** Every generator must produce a question its own canonical answer grades correct. */
-function eachSample(seed: number, gen: Gen, cfg: GeneratorConfig, fn: (q: Question) => void) {
+function eachSample(
+  seed: number,
+  gen: Gen,
+  cfg: GeneratorConfig,
+  fn: (q: Question) => void,
+) {
   const rng = mulberry32(seed);
   for (let i = 0; i < N; i++) {
     const q = gen(rng, cfg);
@@ -71,7 +89,9 @@ describe('extended generators — exactness & ranges (doc 04 §3, §10.2)', () =
   it('ADD_DEC exact sum, ≤2dp', () => {
     eachSample(5, generateAddDec, {}, (q) => {
       const [a, b] = q.operands as [number, number];
-      expect(Math.round(q.answer.value * 100)).toBe(Math.round(a * 100) + Math.round(b * 100));
+      expect(Math.round(q.answer.value * 100)).toBe(
+        Math.round(a * 100) + Math.round(b * 100),
+      );
     });
   });
 

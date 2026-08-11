@@ -77,7 +77,7 @@ export function Modal({
 
   return (
     <div
-      className="animate-overlay-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      className="fixed inset-0 z-50 flex animate-overlay-in items-center justify-center bg-black/60 p-4"
       onClick={onClose}
     >
       <div
@@ -88,7 +88,7 @@ export function Modal({
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
         className={[
-          'animate-overlay-in w-full max-w-md rounded-card border border-border p-5 outline-none',
+          'w-full max-w-md animate-overlay-in rounded-card border border-border p-5 outline-none',
           className,
         ]
           .filter(Boolean)

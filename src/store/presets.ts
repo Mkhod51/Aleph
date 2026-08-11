@@ -81,11 +81,17 @@ export function buildPlanFromPreset(
 
   if (preset.ops.add) {
     weights.ADD_2D = 25;
-    generatorConfigs.ADD_2D = { addMin: preset.addRange.min, addMax: preset.addRange.max };
+    generatorConfigs.ADD_2D = {
+      addMin: preset.addRange.min,
+      addMax: preset.addRange.max,
+    };
   }
   if (preset.ops.sub) {
     weights.SUB_2D = 25;
-    generatorConfigs.SUB_2D = { addMin: preset.addRange.min, addMax: preset.addRange.max };
+    generatorConfigs.SUB_2D = {
+      addMin: preset.addRange.min,
+      addMax: preset.addRange.max,
+    };
   }
   if (preset.ops.mul) {
     weights.MUL_1x2 = 25;

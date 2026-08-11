@@ -29,7 +29,7 @@ function Sparkline({ scores }: { scores: number[] }) {
       {scores.map((s, i) => (
         <div
           key={i}
-          className="w-3 rounded-sm border-t-2 border-accent-hi bg-accent/70"
+          className="bg-accent/70 w-3 rounded-sm border-t-2 border-accent-hi"
           style={{ height: `${Math.max(6, (s / max) * 100)}%` }}
           title={String(s)}
         />
@@ -50,8 +50,8 @@ function Onboarding() {
         This trains you for quant trading math tests.
       </h1>
       <p className="text-text-dim">
-        Zetamac-style speed drills, firm test simulators, and a weakness engine,
-        all local to your browser.
+        Zetamac-style speed drills, firm test simulators, and a weakness engine, all
+        local to your browser.
       </p>
       <Button
         variant="primary"
@@ -96,7 +96,13 @@ export function HomePage() {
     let alive = true;
     const { configHash } = buildPlanFromPreset(selected);
     sessionRepo.completedByConfig(configHash).then((list) => {
-      if (alive) setRecent(list.slice(0, 7).reverse().map((s) => s.score));
+      if (alive)
+        setRecent(
+          list
+            .slice(0, 7)
+            .reverse()
+            .map((s) => s.score),
+        );
     });
     return () => {
       alive = false;
@@ -214,7 +220,9 @@ export function HomePage() {
         <Eyebrow>Last 7 sprints · {selected.name}</Eyebrow>
         {recent && recent.length > 0 ? (
           <div className="mt-3 flex items-center gap-4">
-            <span className="font-mono text-sm tabular-nums text-text-dim">{recent[0]}</span>
+            <span className="font-mono text-sm tabular-nums text-text-dim">
+              {recent[0]}
+            </span>
             <Sparkline scores={recent} />
             <span className="font-mono text-sm tabular-nums text-text">
               {recent[recent.length - 1]}
