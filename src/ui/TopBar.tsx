@@ -38,7 +38,10 @@ export function TopBar() {
 
   return (
     <header className="border-b border-border">
-      <nav className="mx-auto flex h-12 w-full max-w-content items-center gap-1 px-4 sm:px-6">
+      <nav
+        aria-label="Primary"
+        className="mx-auto flex h-12 w-full max-w-content items-center gap-1 px-4 sm:px-6"
+      >
         <NavLink
           to="/"
           className="mr-2 flex items-center gap-2 font-mono text-sm font-semibold text-text"
