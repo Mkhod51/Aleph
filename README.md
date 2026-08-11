@@ -1,5 +1,8 @@
 # Aleph
 
+[![CI](https://github.com/Mkhod51/Aleph/actions/workflows/ci.yml/badge.svg)](https://github.com/Mkhod51/Aleph/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+
 A mental-arithmetic trainer for quant trading interview prep — Zetamac-style timed
 drills at the core, wrapped in firm-accurate test simulators, deep progress
 analytics, a technique library wired into targeted drills, and spaced repetition.
@@ -39,3 +42,7 @@ review notes in `docs/ui-redesign/`, `docs/ui-review/`, `docs/ui-cleanup/`, and
 utilities, the zetamac question engine (four generators + validator + scoring)
 with its test suite, Dexie schema v1, settings store with theme switch, routing
 shell, and CI.
+
+## License
+
+MIT — see [LICENSE](./LICENSE). The app is local-first; you own all your data.
