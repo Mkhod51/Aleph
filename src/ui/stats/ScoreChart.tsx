@@ -34,72 +34,77 @@ export default function ScoreChart({
   const points = data.map((d, i) => ({ ...d, i }));
 
   return (
-    <ResponsiveContainer width="100%" height={240}>
-      <LineChart data={points} margin={{ top: 8, right: 8, bottom: 0, left: -20 }}>
-        {bands.map((b, idx) => (
-          <ReferenceArea
-            key={b.label}
-            y1={b.min}
-            y2={idx + 1 < bands.length ? (bands[idx + 1] as Band).min : yMax}
-            fill={b.color}
-            // Graded so higher (target) bands read strongest, drawing the eye up.
-            fillOpacity={0.05 + idx * 0.018}
-            stroke="none"
+    <div
+      role="img"
+      aria-label={`Score-over-time line chart: ${data.length} sessions plotted, latest score ${data.at(-1)?.score ?? 0}.`}
+    >
+      <ResponsiveContainer width="100%" height={240}>
+        <LineChart data={points} margin={{ top: 8, right: 8, bottom: 0, left: -20 }}>
+          {bands.map((b, idx) => (
+            <ReferenceArea
+              key={b.label}
+              y1={b.min}
+              y2={idx + 1 < bands.length ? (bands[idx + 1] as Band).min : yMax}
+              fill={b.color}
+              // Graded so higher (target) bands read strongest, drawing the eye up.
+              fillOpacity={0.05 + idx * 0.018}
+              stroke="none"
+            />
+          ))}
+          <CartesianGrid stroke="var(--grid-line)" strokeWidth={1} />
+          <XAxis
+            dataKey="i"
+            tick={{ fill: 'var(--text-faint)', fontSize: 11 }}
+            tickFormatter={(i: number) => points[i]?.date.slice(5) ?? ''}
+            stroke="var(--border)"
           />
-        ))}
-        <CartesianGrid stroke="var(--grid-line)" strokeWidth={1} />
-        <XAxis
-          dataKey="i"
-          tick={{ fill: 'var(--text-faint)', fontSize: 11 }}
-          tickFormatter={(i: number) => points[i]?.date.slice(5) ?? ''}
-          stroke="var(--border)"
-        />
-        <YAxis
-          domain={[0, yMax]}
-          tick={{ fill: 'var(--text-faint)', fontSize: 11 }}
-          stroke="var(--border)"
-          width={40}
-        />
-        <Tooltip
-          contentStyle={{
-            background: 'var(--surface-3)',
-            border: '1px solid var(--border-2)',
-            borderRadius: 10,
-            color: 'var(--text)',
-            fontSize: 12,
-          }}
-          labelFormatter={(i) => points[i as number]?.date ?? ''}
-          formatter={(v: number) => [v, 'score']}
-        />
-        <Line
-          type="monotone"
-          dataKey="score"
-          stroke="var(--accent)"
-          strokeWidth={2}
-          isAnimationActive={false}
-          dot={(props) => {
-            const p = points[props.index as number];
-            const pb = p?.isPB;
-            return (
-              <circle
-                key={props.index}
-                cx={props.cx}
-                cy={props.cy}
-                r={pb ? 4 : 2.5}
-                fill={pb ? 'var(--accent)' : 'var(--bg)'}
-                stroke="var(--accent)"
-                strokeWidth={1.5}
-                style={{
-                  cursor: 'pointer',
-                  // PB markers carry the amber glow (ui-redesign/02 §C).
-                  filter: pb ? 'drop-shadow(0 0 4px var(--accent-glow))' : undefined,
-                }}
-                onClick={() => p && onPointClick(p.sessionId)}
-              />
-            );
-          }}
-        />
-      </LineChart>
-    </ResponsiveContainer>
+          <YAxis
+            domain={[0, yMax]}
+            tick={{ fill: 'var(--text-faint)', fontSize: 11 }}
+            stroke="var(--border)"
+            width={40}
+          />
+          <Tooltip
+            contentStyle={{
+              background: 'var(--surface-3)',
+              border: '1px solid var(--border-2)',
+              borderRadius: 10,
+              color: 'var(--text)',
+              fontSize: 12,
+            }}
+            labelFormatter={(i) => points[i as number]?.date ?? ''}
+            formatter={(v: number) => [v, 'score']}
+          />
+          <Line
+            type="monotone"
+            dataKey="score"
+            stroke="var(--accent)"
+            strokeWidth={2}
+            isAnimationActive={false}
+            dot={(props) => {
+              const p = points[props.index as number];
+              const pb = p?.isPB;
+              return (
+                <circle
+                  key={props.index}
+                  cx={props.cx}
+                  cy={props.cy}
+                  r={pb ? 4 : 2.5}
+                  fill={pb ? 'var(--accent)' : 'var(--bg)'}
+                  stroke="var(--accent)"
+                  strokeWidth={1.5}
+                  style={{
+                    cursor: 'pointer',
+                    // PB markers carry the amber glow (ui-redesign/02 §C).
+                    filter: pb ? 'drop-shadow(0 0 4px var(--accent-glow))' : undefined,
+                  }}
+                  onClick={() => p && onPointClick(p.sessionId)}
+                />
+              );
+            }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 }
