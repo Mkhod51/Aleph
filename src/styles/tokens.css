@@ -119,3 +119,16 @@
   --ease-spring: cubic-bezier(0.34, 1.4, 0.5, 1); /* pops: PB, checks, chips (NEW) */
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* symmetric fades (NEW) */
 }
+
+:root {
+  /* Motion — one timing system for all UI motion (doc 07 §1, ui-review 02,
+     ui-redesign/01 §5). Reduced-motion collapses every duration below to ~0
+     (see index.css). */
+  --dur-fast: 120ms; /* hovers, presses, overlay fades */
+  --dur-base: 180ms; /* reveals, countdown ticks */
+  --dur-slow: 260ms; /* reveals, view transitions, gauge fills (NEW) */
+  --dur-moment: 400ms; /* the single results / PB moment */
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.5, 1); /* pops: PB, checks, chips (NEW) */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* symmetric fades (NEW) */
+}
