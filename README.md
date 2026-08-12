@@ -26,7 +26,8 @@ npm test           # run the Vitest suite
 npm run typecheck  # tsc --noEmit
 npm run lint       # eslint (incl. engine-purity boundary rule)
 npm run build      # production build
-npm run check      # typecheck + lint + test + build
+npm run e2e        # Playwright smoke tests
+npm run check      # format:check + typecheck + lint + test + build
 ```
 
 ## Documentation
