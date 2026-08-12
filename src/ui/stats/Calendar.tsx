@@ -33,7 +33,11 @@ export function Calendar({ perDay }: { perDay: Record<string, number> }) {
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div
+      role="img"
+      aria-label="26-week consistency calendar of daily questions answered."
+      className="overflow-x-auto"
+    >
       <div className="flex gap-[3px]">
         {columns.map((col, i) => (
           <div key={i} className="flex flex-col gap-[3px]">
