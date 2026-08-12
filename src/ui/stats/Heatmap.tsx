@@ -133,17 +133,17 @@ function FragmentRow({
             referenceMedianMs,
           });
         const norm = has ? (fact.medianLatencyMs - min) / span : 0;
+        const label = has
+          ? `${r} × ${c} · ${formatLatency(fact.medianLatencyMs)} · ${Math.round(accuracy * 100)}%`
+          : `${r} × ${c} · no data`;
         return (
           <button
             key={key}
             type="button"
             disabled={!has}
             onClick={() => onCellClick(key)}
-            title={
-              has
-                ? `${r} × ${c} · ${formatLatency(fact.medianLatencyMs)} · ${Math.round(accuracy * 100)}%`
-                : `${r} × ${c} · no data`
-            }
+            title={label}
+            aria-label={label}
             className="h-5 w-5 rounded-[3px] border transition-transform duration-fast ease-spring-t hover:scale-110 disabled:cursor-default disabled:hover:scale-100"
             style={{
               backgroundColor: has ? heatColor(norm) : 'var(--surface-2)',
