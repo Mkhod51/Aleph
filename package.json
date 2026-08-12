@@ -4,6 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "description": "Aleph — a mental-arithmetic trainer for quant trading interview prep.",
+  "license": "MIT",
+  "author": "Mahmoud Khoder",
+  "keywords": ["mental-math", "quant", "interview-prep", "zetamac", "react", "typescript"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mkhod51/Aleph.git"
+  },
   "engines": {
     "node": "^20.0.0"
   },
